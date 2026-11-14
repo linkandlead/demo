@@ -3,17 +3,17 @@ import { cache } from "react";
 import {
   cases as demoCases,
   people as demoPeople,
-  events as demoEvents,
   posts as demoPosts,
   slugify,
-  spaces as demoSpaces,
   type Case,
   type Person,
   type Post,
-  type Space,
 } from "@/content/nova";
+import { designTokens as blauwdrukTokens, merk as blauwdrukMerk } from "@/content/blauwdruk";
+import { bios, partners as demoPartners } from "@/content/teksten";
 import { leesTabel, supabase, supabaseConfig } from "@/lib/supabase/server";
 import { cmsMedia, cmsUrl, laadCms, type CmsStatus } from "./client";
+import type { CmsNavigatie } from "./valideer";
 
 // Eén plek die bepaalt waar de content vandaan komt. Volgorde: het gekoppelde Link & Lead One-CMS,
 // anders de NOVA-demodatabase in Supabase (project "demo"), anders de vaste demodata uit het ontwerp.
@@ -63,9 +63,11 @@ export async function getCases(): Promise<Collectie<Case>> {
         slug: slugify(s(r.klantnaam)),
         name: s(r.klantnaam),
         type: s(r.sector).toUpperCase(),
-        year: "",
+        year: s(r.resultaat_periode),
         cover: cmsMedia(r.foto),
         desc: s(r.uitdaging),
+        statement: s(r.citaat),
+        diensten: Array.isArray(r.schakels) ? r.schakels.map(s).filter(Boolean) : [],
       }))
       .filter((c) => c.name),
   };
@@ -137,9 +139,13 @@ export async function getPeople(): Promise<Collectie<Person>> {
           name: s(r.naam),
           role: s(r.functie),
           cover: s(r.foto),
+          bio: bios[s(r.naam)] ? `${bios[s(r.naam)].kort} ${bios[s(r.naam)].lang}` : undefined,
         })),
       };
-    return { items: demoPeople, bron: "demo" };
+    return {
+      items: demoPeople.map((p) => ({ ...p, bio: bios[p.name] ? `${bios[p.name].kort} ${bios[p.name].lang}` : undefined })),
+      bron: "demo",
+    };
   }
   return {
     bron: "cms",
@@ -148,62 +154,69 @@ export async function getPeople(): Promise<Collectie<Person>> {
         name: s(r.naam),
         role: s(r.functie),
         cover: cmsMedia(r.foto),
+        bio: s(r.tekst) || undefined,
       }))
       .filter((p) => p.name),
   };
 }
 
-/** Ruimtes: het CMS kent geen ruimtecollectie, dus Supabase of demodata. */
-export async function getSpaces(): Promise<Collectie<Space>> {
-  const db = await leesTabel(
-    "ruimtes",
-    "slug, naam, omschrijving, cover, cover_alt, knoptekst",
-    { kolom: "volgorde", oplopend: true },
-  );
-  if (!db) return { items: demoSpaces, bron: "demo" };
-  return {
-    bron: "supabase",
-    items: db.map((r) => ({
-      slug: s(r.slug),
-      name: s(r.naam),
-      desc: s(r.omschrijving),
-      cover: s(r.cover),
-      alt: s(r.cover_alt),
-      cta: s(r.knoptekst),
-    })),
-  };
-}
+export type Partner = { naam: string; vak: string; tekst: string; uitgelicht: boolean };
 
-export async function getEvents(): Promise<
-  Collectie<{ slug: string; name: string }>
-> {
-  const db = await leesTabel("evenementen", "slug, naam", {
-    kolom: "id",
-    oplopend: true,
-  });
-  if (!db) return { items: demoEvents, bron: "demo" };
-  return {
-    bron: "supabase",
-    items: db.map((r) => ({ slug: s(r.slug), name: s(r.naam) })),
-  };
-}
-
-/** Blokinhoud van een CMS-pagina, per bloktype en volgnummer. Leeg object = gebruik ontwerpcopy. */
-export type BlokLezer = (type: string, n?: number) => Record<string, unknown>;
-
-export async function pagina(slug: string): Promise<BlokLezer> {
+/** Partners (CMS-collectie "partners"); zonder CMS de fictieve partners uit de teksten. */
+export async function getPartners(): Promise<Collectie<Partner>> {
   const st = await cmsStatus();
-  const p =
-    st.bron === "cms"
-      ? st.site.paginas.find((x) => x.slug === slug)
-      : undefined;
-  return (type, n = 0) =>
-    p?.blokken.filter((b) => b.type === type)[n]?.content ?? {};
+  const rij = st.bron === "cms" ? st.site.records.partners : undefined;
+  if (!rij)
+    return {
+      bron: "demo",
+      items: demoPartners.map(([naam, vak, tekst], i) => ({ naam, vak, tekst, uitgelicht: i === 0 })),
+    };
+  return {
+    bron: "cms",
+    items: rij
+      .map((r) => ({
+        naam: s(r.naam),
+        vak: s(r.branche),
+        tekst: s(r.tagline) || s(r.over_tekst),
+        uitgelicht: r.uitgelicht === true,
+      }))
+      .filter((p) => p.naam),
+  };
 }
 
-/** Gedeelde Afsluitende oproep: het eerste cta-blok op de home (gedeeld blok in het CMS). */
-export async function gedeeldeOproep(): Promise<Record<string, unknown>> {
-  return (await pagina("/"))("cta");
+export type SiteInstellingen = {
+  naam: string;
+  navigatie: CmsNavigatie;
+  /** CSS-variabelen uit de twaalf huisstijlkleuren van het CMS. */
+  cssVars: Record<string, string>;
+};
+
+const TOKEN_NAAR_VAR: Record<string, string> = {
+  nacht: "--night",
+  diep: "--deep",
+  wit: "--cream",
+  mist: "--mist",
+  limoen: "--lime",
+  steen: "--muted",
+};
+
+/** Merk, navigatie en huisstijl: uit het CMS, anders uit de blauwdruk. */
+export async function siteInstellingen(): Promise<SiteInstellingen> {
+  const st = await cmsStatus();
+  const nav: CmsNavigatie =
+    st.bron === "cms" && st.site.navigatie.hoofd.length
+      ? st.site.navigatie
+      : {
+          hoofd: blauwdrukMerk.hoofd_nav,
+          footer: blauwdrukMerk.footer_kolommen,
+          actie: blauwdrukMerk.primaire_actie,
+        };
+  const tokens: Record<string, string> =
+    st.bron === "cms" && Object.keys(st.site.designTokens).length ? st.site.designTokens : blauwdrukTokens;
+  const cssVars: Record<string, string> = {};
+  for (const [k, v] of Object.entries(TOKEN_NAAR_VAR)) if (tokens[k]) cssVars[v] = tokens[k];
+  const merkNaam = st.bron === "cms" ? s(st.site.merk.naam) : "";
+  return { naam: merkNaam || blauwdrukMerk.naam, navigatie: nav, cssVars };
 }
 
 export type CmsInfo = {

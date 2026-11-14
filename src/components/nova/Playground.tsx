@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { BLOKVOORBEELDEN } from "@/content/blokvoorbeelden";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
+import { variantWeergave } from "./PreviewVariant";
 import { mediaSrc, mediaSrcSet } from "./ui";
 
 // Block Playground — playground() uit het prototype, nu met de echte veldnamen, de officiële
@@ -52,8 +53,10 @@ export function Playground() {
   const opties = variantOpties(blok.varianten, blok.naam);
   const huidigeVariant =
     variant && opties.includes(variant) ? variant : opties[0];
-  const [, bgKlasse, bgToken] =
+  const weergave = variantWeergave(blok.naam, huidigeVariant);
+  const [, gekozenKlasse, bgToken] =
     ACHTERGRONDEN.find(([n]) => n === achtergrond) ?? ACHTERGRONDEN[0];
+  const bgKlasse = weergave.achtergrond ?? gekozenKlasse;
 
   return (
     <>
@@ -125,7 +128,10 @@ export function Playground() {
               </select>
             </div>
           </div>
-          <div className={`block-preview ${bgKlasse}`}>
+          <div
+            className={`block-preview ${bgKlasse} ${weergave.klasse}`.trim()}
+            data-variant={huidigeVariant}
+          >
             <span
               className="eyebrow"
               style={{ position: "relative", zIndex: 1 }}
@@ -133,12 +139,15 @@ export function Playground() {
               {groep === ALLE ? "NOVA-BLOKKENSHOWCASE" : groep.toUpperCase()}
             </span>
             <h3 style={{ position: "relative", zIndex: 1 }}>
-              {voorbeeld?.kop ?? previewHeadline(blok.naam)}
+              {weergave.kop ?? voorbeeld?.kop ?? previewHeadline(blok.naam)}
             </h3>
             <p style={{ position: "relative", zIndex: 1 }}>
               {voorbeeld?.intro ??
                 `Een visueel voorbeeld van het blok “${blok.naam}”, binnen de NOVA-huisstijl.`}
             </p>
+            {weergave.extra ? (
+              <div style={{ position: "relative", zIndex: 1 }}>{weergave.extra}</div>
+            ) : null}
             <div style={{ position: "relative", zIndex: 1, marginTop: 25 }}>
               <span className="btn btn-lime">
                 {voorbeeld?.knop ?? "Ontdek meer"} ↗

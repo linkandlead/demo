@@ -40,3 +40,27 @@ test("leest pagina’s, blokken en records volgens het CMS-contract", () => {
   assert.deepEqual(site.records.cases, [{ klantnaam: "Aurora" }]);
   assert.equal(site.records.onzin, undefined);
 });
+
+test("leest navigatie en huisstijl en laat onveilige links en kleuren weg", () => {
+  const site = valideerRespons({
+    ok: true,
+    site: {
+      navigatie: {
+        hoofd: [
+          { titel: "Werk", href: "/work" },
+          { titel: "Kwaad", href: "javascript:alert(1)" },
+          { titel: "", href: "/leeg" },
+        ],
+        footer: [{ kop: "Ontdek", links: [{ titel: "Werk", href: "/work" }] }, { kop: "Leeg", links: [] }],
+        actie: { titel: "Neem contact op", href: "/contact" },
+      },
+      design_tokens: { nacht: "#0B1127", limoen: "red;}body{x", wit: 3 },
+    },
+    paginas: [],
+  });
+  assert.ok(site);
+  assert.deepEqual(site.navigatie.hoofd, [{ titel: "Werk", href: "/work" }]);
+  assert.equal(site.navigatie.footer.length, 1);
+  assert.deepEqual(site.navigatie.actie, { titel: "Neem contact op", href: "/contact" });
+  assert.deepEqual(site.designTokens, { nacht: "#0B1127" });
+});

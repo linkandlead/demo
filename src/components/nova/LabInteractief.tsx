@@ -1,28 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { verstuurInzending } from "./LabFormulieren";
 
 // Configurator (calcPrice) en de drie "smart interactions" uit lab() van het prototype.
-export function Configurator() {
-  const [pakket, setPakket] = useState(150);
+export type ConfigOptie = { label: string; prijs: number };
+
+export function Configurator({
+  opties,
+  groep,
+  aantalLabel,
+  vraagAantal,
+  bevestiging,
+}: {
+  opties: ConfigOptie[];
+  groep: string;
+  aantalLabel: string;
+  vraagAantal: boolean;
+  bevestiging: string;
+}) {
+  const [keuze, setKeuze] = useState(0);
   const [mensen, setMensen] = useState(25);
-  const prijs = pakket + mensen * 20;
+  const pakket = opties[keuze]?.prijs ?? 0;
+  const prijs = pakket + (vraagAantal ? mensen * 20 : 0);
   return (
     <>
       <div className="form-field">
-        <label htmlFor="lab-pkg">Type ervaring</label>
+        <label htmlFor="lab-pkg">{groep}</label>
         <select
           id="lab-pkg"
-          value={pakket}
-          onChange={(e) => setPakket(Number(e.target.value))}
+          value={keuze}
+          onChange={(e) => setKeuze(Number(e.target.value))}
         >
-          <option value="150">Creatieve sessie — € 150</option>
-          <option value="300">Meeslepend evenement — € 300</option>
-          <option value="450">Volledige beleving — € 450</option>
+          {opties.map((o, i) => (
+            <option key={o.label} value={i}>
+              {o.label} — € {o.prijs.toLocaleString("nl-NL")}
+            </option>
+          ))}
         </select>
       </div>
+      {vraagAantal ? (
       <div className="form-field">
-        <label htmlFor="lab-people">Aantal deelnemers</label>
+        <label htmlFor="lab-people">{aantalLabel}</label>
         <input
           type="range"
           min="5"
@@ -35,6 +54,7 @@ export function Configurator() {
           <strong id="people-val">{mensen}</strong> personen
         </div>
       </div>
+      ) : null}
       <div
         style={{ background: "var(--mist)", padding: 30 }}
         aria-live="polite"
@@ -43,47 +63,86 @@ export function Configurator() {
         <h3 style={{ fontSize: 70 }} id="lab-price">
           € {prijs.toLocaleString("nl-NL")}
         </h3>
-        <p style={{ fontSize: 12 }}>
-          Dit is een rekenvoorbeeld. Er is nog geen echte reservering of
-          offerteaanvraag gedaan.
-        </p>
+        <p style={{ fontSize: 12 }}>{bevestiging}</p>
       </div>
     </>
   );
 }
 
-export function Nps() {
+export function Nps({
+  vraag,
+  toelichting,
+  knoptekst,
+  bevestiging,
+}: {
+  vraag: string;
+  toelichting: string;
+  knoptekst: string;
+  bevestiging: string;
+}) {
   const [score, setScore] = useState<number | null>(null);
+  const [status, setStatus] = useState<{ soort: "ok" | "fout"; tekst: string } | null>(null);
+  const [bezig, setBezig] = useState(false);
+
+  async function verstuur(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (score === null) {
+      setStatus({ soort: "fout", tekst: "Kies eerst een score van 0 tot 10." });
+      return;
+    }
+    const form = e.currentTarget;
+    setBezig(true);
+    const r = await verstuurInzending(
+      { soort: "nps", score, vraag: new FormData(form).get("vraag") },
+      bevestiging,
+    );
+    setBezig(false);
+    setStatus(r.status);
+    if (r.status.soort === "ok") {
+      form.reset();
+      setScore(null);
+    }
+  }
+
   return (
-    <div>
-      <div className="chip-row" role="group" aria-label="Demoscore">
+    <form onSubmit={verstuur} noValidate>
+      <div className="chip-row" role="radiogroup" aria-label={vraag || "Score van 0 tot 10"}>
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => (
           <button
+            type="button"
             key={x}
+            role="radio"
             className={`chip ${score === x ? "active" : ""}`}
-            aria-pressed={score === x}
+            aria-checked={score === x}
             onClick={() => setScore(x)}
           >
             {x}
           </button>
         ))}
       </div>
-      <p style={{ marginTop: 12 }} aria-live="polite">
-        {score === null
-          ? "Kies een score van 0 tot 10. Je feedback blijft in deze demonstratie."
-          : "Bedankt! Je score is alleen als demonstratie verwerkt."}
+      <div className="form-field" style={{ marginTop: 14 }}>
+        <label htmlFor="nps-waarom">{toelichting || "Waarom geef je deze score?"}</label>
+        <textarea id="nps-waarom" name="vraag" style={{ minHeight: 80 }} maxLength={2000} />
+      </div>
+      <button className="btn btn-dark" style={{ marginTop: 12 }} disabled={bezig}>
+        {bezig ? "Bezig…" : `${knoptekst || "Verstuur"} ↗`}
+      </button>
+      <p className={`form-status${status ? ` ${status.soort}` : ""}`} role="status" aria-live="polite">
+        {status?.tekst}
       </p>
-    </div>
+    </form>
   );
 }
 
 export function Wissel({
   id,
+  eyebrow,
   a,
   b,
   knop,
 }: {
   id: string;
+  eyebrow: string;
   a: string;
   b: string;
   knop: string;
@@ -92,9 +151,7 @@ export function Wissel({
   return (
     <>
       <div>
-        <span className="eyebrow">
-          {id === "ab-text" ? "A/B-TEST" : "PERSONALISATIE"}
-        </span>
+        <span className="eyebrow">{eyebrow}</span>
         <h3 style={{ marginTop: 12 }} id={id} aria-live="polite">
           {eerste ? a : b}
         </h3>

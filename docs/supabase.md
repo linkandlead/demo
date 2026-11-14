@@ -50,3 +50,9 @@ bekijk je in het Supabase-dashboard → Table editor → `aanvragen`.
 
 Supabase-dashboard → Table editor. Zet `gepubliceerd` aan om een rij te tonen; de site ververst
 binnen ongeveer 60 seconden. Nieuwe slugs (bv. een extra ruimte) renderen zonder nieuwe deploy.
+
+## NOVA Lab-formulieren (migratie `20261114180000_nova_lab_formulieren`)
+
+`aanvragen.soort` kent nu ook `formulier` (formulierbouwer; antwoorden in `gegevens` jsonb),
+`review` (sterren 1–5 in `score`, naam, tekst in `vraag`) en `nps` (score 0–10, toelichting in `vraag`).
+Voor die drie is een e-mailadres optioneel. RLS blijft aan; anoniem mag alleen invoegen.

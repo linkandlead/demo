@@ -17,12 +17,15 @@ export function DemoFormulier({
   style,
   demoTekst,
   opslaan,
+  bevestiging,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
   demoTekst: string;
   opslaan?: "contact" | "nieuwsbrief";
+  /** Eigen bevestigingstekst (CMS-veld bevestigingstekst) na een geslaagde inzending. */
+  bevestiging?: string;
 }) {
   const [status, setStatus] = useState<{
     soort: "ok" | "fout";
@@ -73,7 +76,11 @@ export function DemoFormulier({
         melding: string;
       };
       if (data.demo) setStatus({ soort: "ok", tekst: demoTekst });
-      else setStatus({ soort: data.ok ? "ok" : "fout", tekst: data.melding });
+      else
+        setStatus({
+          soort: data.ok ? "ok" : "fout",
+          tekst: data.ok && bevestiging ? bevestiging : data.melding,
+        });
       if (data.ok) form.reset();
     } catch {
       setStatus({

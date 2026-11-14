@@ -16,8 +16,13 @@ export function mediaSrc(bron: string): string {
   return `/media/${bron}.webp`;
 }
 
+/** "/media/hero_arch.webp" of "hero_arch" → "hero_arch"; andere bronnen blijven gelijk. */
+export const mediaSleutel = (bron: string) =>
+  bron.match(/^\/media\/([\w-]+)\.webp$/)?.[1] ?? bron;
+
 /** srcset voor lokale media (640 / 1280 / origineel); leeg voor CMS-URL's. */
 export function mediaSrcSet(bron: string): string | undefined {
+  bron = mediaSleutel(bron);
   const m = MEDIA[bron];
   if (!m) return undefined;
   return [
@@ -55,7 +60,7 @@ export function Photo({
       }
       alt={
         alt ||
-        altTeksten[src] ||
+        altTeksten[mediaSleutel(src)] ||
         "Decoratieve afbeelding van het fictieve NOVA-concept."
       }
       loading={priority ? "eager" : "lazy"}
@@ -125,9 +130,16 @@ export function SectionLabel({
   num: string;
   children: ReactNode;
 }) {
+  // Een eyebrow die al met een nummer begint ("08 / …") krijgt geen tweede nummer.
+  if (typeof children === "string" && /^\d{2} \//.test(children))
+    return <span className="eyebrow">{children}</span>;
   return (
     <span className="eyebrow">
-      <span className="label-index">{num} / </span> {children}
+      <span className="label-index">
+        {num}
+        {children ? " / " : ""}
+      </span>{" "}
+      {children}
     </span>
   );
 }
@@ -139,7 +151,7 @@ export function SectionTitle({
   desc,
 }: {
   num: string;
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   desc?: string;
 }) {
@@ -182,7 +194,7 @@ export function PicCard({
   );
 }
 
-export function StoryCard({ post }: { post: Post }) {
+export function StoryCard({ post }: { post: Post & { lead?: string } }) {
   return (
     <Link href={`/journal/${post.slug}`} className="article-card">
       <div className="image-frame">
@@ -194,7 +206,7 @@ export function StoryCard({ post }: { post: Post }) {
       </div>
       <h3>{post.title}</h3>
       <p>
-        Perspectieven, verhalen en ideeën die ons verder brengen.{" "}
+        {post.lead || "Perspectieven, verhalen en ideeën die ons verder brengen."}{" "}
         <span style={{ whiteSpace: "nowrap" }}>Lees verder ↗</span>
       </p>
     </Link>

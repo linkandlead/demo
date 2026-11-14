@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { Page } from "@/components/nova/Page";
 import { Btn, Photo, SectionTitle, StoryCard } from "@/components/nova/ui";
 import { altTeksten, artikelAlsTekst, artikelen } from "@/content/teksten";
+import { splitsOproep } from "@/components/nova/Blokken";
 import { getPosts } from "@/lib/cms/data";
+import { laadPagina } from "@/lib/cms/paginas";
 
 export async function generateStaticParams() {
   return (await getPosts()).items.map((p) => ({ slug: p.slug }));
@@ -27,6 +29,9 @@ export default async function Artikel({
   const { items, bron } = await getPosts();
   const post = items.find((p) => p.slug === slug);
   if (!post) notFound();
+  // Afsluitende oproep: dezelfde als op het verhalenoverzicht in het CMS.
+  const overzicht = await laadPagina("/journal");
+  const { oproep } = splitsOproep(overzicht?.blokken ?? []);
   const meer = items.filter((p) => p.slug !== post.slug).slice(0, 3);
   // Hoofdtekst uit Supabase/CMS ("## kop" + alinea's); anders de definitieve teksten.
   const tekst = artikelen[post.slug];
@@ -36,7 +41,7 @@ export default async function Artikel({
       ? artikelAlsTekst(tekst).split("\n\n")
       : [];
   return (
-    <Page>
+    <Page oproep={oproep}>
       <article className="container article-page" data-cms="Header + Tekstblok">
         <span className="eyebrow">{post.cat} / VERHALEN</span>
         <h1>{post.title}.</h1>
@@ -60,7 +65,7 @@ export default async function Artikel({
               <p key={i}>{b}</p>
             ),
           )}
-          {tekst?.slot ? <blockquote>{tekst.slot}</blockquote> : null}
+          {!post.body?.length && tekst?.slot ? <blockquote>{tekst.slot}</blockquote> : null}
           {bron !== "cms" ? (
             <p className="meta">
               Voorbeeldartikel voor de fictieve NOVA-website.

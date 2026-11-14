@@ -462,3 +462,71 @@ button.btn:disabled {
     padding-bottom: 28px;
   }
 }
+
+/* Reviewformulier (CMS-blok review_verzamelen): sterren als radiogroep — niet in het prototype. */
+.sterren { border: 0; padding: 0; margin: 0; }
+.sterren legend { font-size: 12px; font-weight: 750; margin-bottom: 8px; }
+.sterren-rij { display: flex; gap: 6px; }
+.sterren-rij button { border: 1px solid #cfd4db; background: white; width: 46px; height: 46px; border-radius: 3px; font-size: 22px; color: #c9d2e1; line-height: 1; }
+.sterren-rij button.aan { color: var(--night); background: var(--lime); border-color: var(--night); }
+
+/* Overgangsblok in donkere stijl (CMS-veld stijl = donker). */
+.one-promo-ribbon.donker { background: var(--night); color: var(--cream); }
+
+/* Statement met cijfer (CMS-velden cijfer / cijfer_label). */
+.stat-cijfer { margin-top: 20px; color: #c9d2e1; }
+.stat-cijfer strong { font-size: 56px; letter-spacing: -.07em; color: var(--lime); margin-right: 8px; }
+
+/* Blokkenverkenner: elke variant verandert de preview zichtbaar (niet in het prototype, waar de
+   variantkeuze alleen een label was). */
+.block-preview { transition: background .2s; }
+.block-preview.v-links { padding-left: calc(34% + 65px); }
+.block-preview.v-links .preview-art { left: 0; right: auto; }
+.block-preview.v-midden { align-items: center; text-align: center; }
+.block-preview.v-midden h3, .block-preview.v-midden p { margin-inline: auto; }
+.block-preview.v-midden .preview-art, .block-preview.v-zonder-beeld .preview-art, .block-preview.v-compact .preview-art { display: none; }
+.block-preview.v-achtergrond { color: white; }
+.block-preview.v-achtergrond .preview-art { width: 100%; opacity: 1; }
+.block-preview.v-achtergrond .preview-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(9,15,36,.9), rgba(9,15,36,.35)); }
+.block-preview.v-compact { height: 300px; }
+.block-preview.v-compact h3 { font-size: clamp(32px, 3.4vw, 48px); }
+.block-preview.v-zonder-beeld h3 { max-width: 760px; }
+.pv-kolommen { display: grid; gap: 10px; margin-top: 8px; max-width: 760px; }
+.pv-kolommen div { background: rgba(255,255,255,.75); color: var(--night); padding: 14px; border-radius: 3px; display: grid; gap: 4px; font-size: 12px; }
+.block-preview.light .pv-kolommen div, .block-preview.soft .pv-kolommen div { background: white; }
+.pv-kolommen b { font-size: 22px; letter-spacing: -.05em; }
+.pv-band { margin-top: 8px; padding: 12px 16px; font-weight: 860; font-size: clamp(18px, 2.4vw, 30px); letter-spacing: -.05em; white-space: nowrap; overflow: hidden; }
+.pv-band-limoen { background: var(--lime); color: var(--night); }
+.pv-band-diep { background: var(--deep); color: var(--cream); }
+.pv-band-nacht { background: var(--night); color: var(--cream); }
+.pv-band-accent { background: #EFF7C7; color: var(--night); }
+.pv-stappen { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.pv-stappen span { font-size: 12px; font-weight: 700; padding: 10px 14px; border: 1px solid currentColor; border-radius: 3px; }
+.pv-stappen b { color: #738900; }
+.block-preview.dark .pv-stappen b, .block-preview.deepest .pv-stappen b { color: var(--lime); }
+.pv-pijl span:not(:last-child)::after { content: " →"; }
+.pv-pijl span { border-radius: 999px; }
+.pv-lijn { gap: 0; border-top: 2px solid currentColor; padding-top: 12px; }
+.pv-lijn span { border: 0; padding: 0 22px 0 0; }
+.pv-cirkel { position: relative; width: 190px; height: 190px; border: 2px dashed currentColor; border-radius: 50%; margin-top: 10px; display: grid; place-items: center; font-size: 11px; font-weight: 750; }
+.pv-cirkel span { position: absolute; top: 50%; left: 50%; translate: -50% -50%; background: var(--lime); color: var(--night); padding: 4px 8px; border-radius: 99px; }
+.pv-cirkel b { font-size: 34px; }
+.pv-logos { display: flex; flex-wrap: wrap; gap: 26px; margin-top: 8px; font-weight: 900; letter-spacing: .12em; font-size: 14px; opacity: .7; }
+.pv-lijst { display: grid; max-width: 520px; margin-top: 4px; }
+.pv-lijst span { display: flex; justify-content: space-between; border-bottom: 1px solid currentColor; padding: 10px 0; font-size: 14px; font-weight: 700; }
+.pv-velden { display: grid; gap: 8px; max-width: 420px; margin-top: 4px; }
+.pv-velden span { background: white; color: #6b7480; border: 1px solid #cfd4db; padding: 11px 14px; border-radius: 3px; font-size: 13px; }
+.pv-sterren { font-size: 38px; letter-spacing: .08em; margin-top: 4px; color: #738900; }
+.block-preview.dark .pv-sterren, .block-preview.deepest .pv-sterren { color: var(--lime); }
+@media (max-width: 760px) {
+  .block-preview.v-links { padding-left: 25px; }
+  .block-preview { height: auto; min-height: 355px; }
+  .pv-kolommen { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* CMS-teksten bevatten geen handmatige afbreekstreepjes (&shy;): lange Nederlandse woorden
+   ("nieuwsgierigheid", "ontwerpvrijheid") mogen op mobiel afbreken in plaats van de pagina te verbreden. */
+@media (max-width: 760px) {
+  h1, h2, h3 { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  .intro-grid > .body-copy, .contact-layout > div { min-width: 0; }
+}

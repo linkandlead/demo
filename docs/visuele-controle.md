@@ -98,3 +98,18 @@ Toelichting op de grotere verschillen:
 Lighthouse is in deze omgeving niet gedraaid. Beelden zijn WebP (128 kB in totaal) en worden onder
 de vouw lazy geladen. Het hero-beeld laadt eager met `fetchpriority=high`. `srcset` heeft geen
 zin zolang er per beeld maar één kleine crop bestaat (zie vervolgstappen).
+
+## CMS-gestuurde pagina's (14 nov 2026)
+
+Alle pagina's worden nu uit CMS-blokken opgebouwd (`src/components/nova/Blokken.tsx`). Bewuste
+afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voor heeft:
+
+- `/one`: de chiprij onder "Eén CMS" en de lijst "Dit beheren je redacteuren zelf" bij het
+  aanvraagformulier vervallen; de overgangsband heeft geen eigen knop.
+- Home: korte toelichtingen naast "Gemaakt om je iets te laten voelen" (cases) en "Goede ideeën…"
+  (artikelen) en de knoppen "Ontmoet de makers"/"Lees de verhalen" vervallen (cases_grid/artikelen_grid
+  hebben geen intro- of knopveld). "Bekijk alle projecten" volgt uit `link_naar_overzicht`.
+- Statistieken hebben geen eyebrow (alleen het sectienummer).
+- Ruimtedetail: de tekst-met-beeld-sectie gebruikt de homevorm (eyebrow en kop links naast het beeld).
+- Blokkenverkenner: elke variant verandert de preview nu zichtbaar (beeld links/rechts, gecentreerd,
+  achtergrondbeeld, compact, kolommen, kleurbanden, stappenvormen, formuliersoort, NPS/sterren …).

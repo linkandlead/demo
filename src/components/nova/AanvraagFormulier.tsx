@@ -16,7 +16,13 @@ const WEBSITETYPES = [
   "Anders",
 ];
 
-export function AanvraagFormulier() {
+export function AanvraagFormulier({
+  knoptekst = "Vraag mijn demo aan",
+  voetnoot = "Ik geef toestemming om contact met mij op te nemen over mijn aanvraag.",
+}: {
+  knoptekst?: string;
+  voetnoot?: string;
+}) {
   const [status, setStatus] = useState<Status>(null);
   const [fouten, setFouten] = useState<Record<string, string>>({});
   const [start] = useState(() => Date.now());
@@ -153,7 +159,7 @@ export function AanvraagFormulier() {
             required
             {...veld("akkoord")}
           />
-          Ik geef toestemming om contact met mij op te nemen over mijn aanvraag.
+          {voetnoot}
         </label>
         {fouten.akkoord ? (
           <span id="fout-akkoord" className="form-status fout">
@@ -169,7 +175,7 @@ export function AanvraagFormulier() {
         >
           {status?.soort === "bezig"
             ? "Bezig met verzenden…"
-            : "Vraag mijn demo aan ↗"}
+            : `${knoptekst} ↗`}
         </button>
         <div
           className={`form-status ${status && status.soort !== "bezig" ? (status.soort === "fout" ? "fout" : "ok") : ""}`}

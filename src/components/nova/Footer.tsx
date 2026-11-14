@@ -1,64 +1,51 @@
 import Link from "next/link";
-import { gedeeldeOproep } from "@/lib/cms/data";
 import { footerTekst } from "@/content/teksten";
-import { Btn, Lines, t } from "./ui";
+import { siteInstellingen } from "@/lib/cms/data";
+import type { Blok } from "@/lib/cms/paginas";
+import { Btn, Lines } from "./ui";
 
-export type Oproep = {
-  eyebrow: string;
-  kop: string;
-  tekst?: string;
-  knop: string;
-  href: string;
-};
+const tx = (c: Record<string, unknown>, k: string) => (typeof c[k] === "string" ? (c[k] as string).trim() : "");
 
-// Afsluitende oproep (gedeeld blok, CMS-type `cta`) + footer met de vaste "Ontdek het CMS"-CTA.
-// Markup gelijk aan callout()/footer() uit het prototype.
-export async function Footer({ oproep }: { oproep?: Oproep }) {
-  const c = await gedeeldeOproep();
-  // Volgorde: CMS (gedeeld blok) > paginaspecifieke oproep > standaard uit de teksten.
-  const o: Oproep = oproep ?? {
-    eyebrow: footerTekst.eyebrow,
-    kop: footerTekst.kop,
-    tekst: footerTekst.tekst,
-    knop: footerTekst.knop,
-    href: "contact",
-  };
-  const tekst = t(c, "tekst", o.tekst ?? "");
+// Afsluitende oproep (laatste cta-blok van de pagina in het CMS) + footer. De footerkolommen komen
+// uit de CMS-navigatie (merk → footer_kolommen). Markup gelijk aan callout()/footer() uit het prototype.
+export async function Footer({ oproep }: { oproep: Blok | null }) {
+  const { naam, navigatie } = await siteInstellingen();
+  const c = oproep?.content ?? {};
+  const knop = tx(c, "knop");
   return (
     <>
-      <section data-cms="Afsluitende oproep · gedeeld" className="footer-cta">
-        <div className="container">
-          <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            {t(c, "eyebrow", o.eyebrow)}
-          </span>
-          <h2>
-            <Lines text={t(c, "titel", o.kop)} />
-          </h2>
-          {tekst ? <p className="footer-cta-tekst">{tekst}</p> : null}
-          <Btn to={t(c, "knop", o.href)}>{t(c, "knoptekst", o.knop)}</Btn>
-        </div>
-      </section>
+      {oproep ? (
+        <section data-cms="Afsluitende oproep (CTA) · Diepst" className="footer-cta">
+          <div className="container">
+            <span className="eyebrow" style={{ color: "var(--lime)" }}>
+              {tx(c, "eyebrow")}
+            </span>
+            <h2>
+              <Lines text={tx(c, "titel")} />
+            </h2>
+            {tx(c, "tekst") ? <p className="footer-cta-tekst">{tx(c, "tekst")}</p> : null}
+            {knop ? <Btn to={knop}>{tx(c, "knoptekst")}</Btn> : null}
+          </div>
+        </section>
+      ) : null}
       <footer className="footer">
         <div className="container">
           <div className="footer-top">
             <Link className="brand" href="/">
-              NOVA<span>.</span>
+              {naam}
+              <span>.</span>
             </Link>
             <div className="footer-links">
-              <div>
-                <span className="eyebrow">Ontdek</span>
-                <Link href="/work">Werk</Link>
-                <Link href="/journal">Verhalen</Link>
-                <Link href="/experiences">Belevingen</Link>
-                <Link href="/spaces">Ruimtes</Link>
-              </div>
-              <div>
-                <span className="eyebrow">Contact</span>
-                <Link href="/community">Community</Link>
-                <Link href="/about">Over ons</Link>
-                <Link href="/contact">Contact</Link>
-                <Link href="/playground">Blokkenbibliotheek</Link>
-              </div>
+              {navigatie.footer.map((kolom) => (
+                <div key={kolom.kop}>
+                  <span className="eyebrow">{kolom.kop}</span>
+                  {kolom.links.map((l) => (
+                    <Link key={l.href + l.titel} href={l.href}>
+                      {l.titel}
+                    </Link>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
           <div className="footer-one-promo">

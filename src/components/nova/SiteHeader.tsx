@@ -3,12 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { mobileExtra, nav } from "@/content/nova";
+import { mobileExtra } from "@/content/nova";
+import type { CmsLink } from "@/lib/cms/valideer";
 
 // Header + mobiel menu, gedrag gelijk aan render()/toggleMenu()/onScroll() uit het prototype.
 const DONKER = ["", "experiences", "members", "lab", "demo", "one"];
 
-export function SiteHeader() {
+export function SiteHeader({
+  naam,
+  hoofd,
+  actie,
+}: {
+  naam: string;
+  /** Hoofdnavigatie uit het CMS (merk → hoofd_nav). */
+  hoofd: CmsLink[];
+  actie: CmsLink | null;
+}) {
+  const nav: Array<[string, string]> = hoofd.map((l) => [l.titel, l.href.startsWith("/") ? l.href.slice(1) : l.href]);
+  const naar = (p: string) => (/^(https:|#)/.test(p) ? p : `/${p}`);
   const pathname = usePathname();
   const path = decodeURIComponent(pathname)
     .replace(/^\//, "")
@@ -56,15 +68,16 @@ export function SiteHeader() {
     <>
       <header className={cls} id="header">
         <div className="header-inner">
-          <Link aria-label="NOVA home" className="brand" href="/">
-            NOVA<span>.</span>
+          <Link aria-label={`${naam} home`} className="brand" href="/">
+            {naam}
+            <span>.</span>
           </Link>
           <nav className="primary-nav" id="primary" aria-label="Hoofdnavigatie">
             {nav.map(([titel, p]) => (
               <Link
                 key={p}
                 className={path === p ? "active" : ""}
-                href={`/${p}`}
+                href={naar(p)}
                 aria-current={path === p ? "page" : undefined}
               >
                 {titel}
@@ -72,9 +85,11 @@ export function SiteHeader() {
             ))}
           </nav>
           <div className="header-actions">
-            <Link className="header-pill" href="/contact">
-              Neem contact op ↗
-            </Link>
+            {actie ? (
+              <Link className="header-pill" href={actie.href}>
+                {actie.titel} ↗
+              </Link>
+            ) : null}
             <button
               aria-label={open ? "Sluit het menu" : "Open het menu"}
               aria-expanded={open}
@@ -94,8 +109,8 @@ export function SiteHeader() {
         aria-label="Mobiel menu"
         style={{ display: open ? "block" : "none" }}
       >
-        {[...nav, ...mobileExtra].map(([titel, p], i) => (
-          <Link key={`${p}-${i}`} href={`/${p}`} onClick={() => setOpen(false)}>
+        {[...nav, ...mobileExtra.filter(([, p]) => !nav.some(([, q]) => q === p))].map(([titel, p], i) => (
+          <Link key={`${p}-${i}`} href={naar(p)} onClick={() => setOpen(false)}>
             {titel} ↗
           </Link>
         ))}

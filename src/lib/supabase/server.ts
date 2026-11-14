@@ -64,13 +64,17 @@ export async function leesTabel(
 }
 
 export type Inzending = {
-  soort: "contact" | "nieuwsbrief" | "demo-aanvraag";
-  email: string;
+  soort: "contact" | "nieuwsbrief" | "demo-aanvraag" | "formulier" | "review" | "nps";
+  email?: string;
   naam?: string;
   bedrijf?: string;
   onderwerp?: string;
   vraag?: string;
   bron_pagina?: string;
+  /** NPS 0–10 of review 1–5. */
+  score?: number;
+  /** Antwoorden uit de formulierbouwer (label → waarde). */
+  gegevens?: Record<string, string>;
 };
 
 /** Slaat een inzending op in public.aanvragen. Er wordt niets gemaild. */

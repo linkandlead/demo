@@ -198,9 +198,63 @@ await page.waitForFunction(() =>
 const contactTekst = await page.locator(".form-status.ok").textContent();
 check(
   "contact: opgeslagen in Supabase of eerlijke demostatus, nooit 'verzonden'",
-  /opgeslagen in de NOVA-demodatabase|bevestigingsweergave/.test(contactTekst),
+  /opgeslagen|bevestigingsweergave/.test(contactTekst) && !/verzonden(?! omdat)/.test(contactTekst),
   contactTekst,
 );
+// NOVA Lab: formulierbouwer (foutmeldingen + opslaan), review en NPS
+await page.goto(SITE + "/lab", { waitUntil: "load" });
+await page.getByRole("button", { name: /Verstuur het formulier/ }).click();
+check(
+  "formulierbouwer: leeg versturen toont foutmeldingen per verplicht veld",
+  (await page.locator('[aria-invalid="true"]').count()) >= 3,
+  String(await page.locator('[aria-invalid="true"]').count()),
+);
+await page.getByLabel("Naam *", { exact: true }).first().fill("E2E-test");
+await page.getByLabel("Soort bijeenkomst *").selectOption("Workshop");
+await page.getByLabel("Wat wil je bereiken? *").fill("E2E-test — mag verwijderd worden");
+await page.getByLabel("Telefoonnummer").fill("12");
+await page.getByRole("button", { name: /Verstuur het formulier/ }).click();
+check(
+  "formulierbouwer: ongeldig telefoonnummer wordt geweigerd",
+  await page.getByText("Vul een geldig telefoonnummer in.").isVisible(),
+);
+await page.getByLabel("Telefoonnummer").fill("+31 20 123 4567");
+await page.getByRole("button", { name: /Verstuur het formulier/ }).click();
+const fbOk = await page
+  .locator(".form-status.ok", { hasText: /antwoorden zijn opgeslagen|Demonstratie/ })
+  .waitFor({ timeout: 10000 })
+  .then(() => true, () => false);
+check("formulierbouwer: geldige inzending wordt opgeslagen", fbOk);
+await page.getByRole("button", { name: /Plaats mijn review/ }).click();
+check("review: zonder sterren een foutmelding", await page.getByText("Kies een aantal sterren van 1 tot 5.").first().isVisible());
+await page.getByRole("radio", { name: "4 sterren" }).click();
+await page.fill("#r-naam", "E2E-test");
+await page.fill("#r-tekst", "E2E-test — mag verwijderd worden");
+await page.check("#r-akkoord");
+await page.getByRole("button", { name: /Plaats mijn review/ }).click();
+const revOk = await page
+  .locator(".form-status.ok", { hasText: /review! Hij is opgeslagen|Demonstratie/ })
+  .waitFor({ timeout: 10000 })
+  .then(() => true, () => false);
+check("review: sterren, naam en tekst worden opgeslagen", revOk);
+await page.getByRole("button", { name: /Geef mijn score door/ }).click();
+check("NPS: zonder score een foutmelding", await page.getByText("Kies eerst een score van 0 tot 10.").isVisible());
+await page.getByRole("radio", { name: "9", exact: true }).click();
+await page.fill("#nps-waarom", "E2E-test");
+await page.getByRole("button", { name: /Geef mijn score door/ }).click();
+const npsOk = await page
+  .locator(".form-status.ok", { hasText: /score is opgeslagen|Demonstratie/ })
+  .waitFor({ timeout: 10000 })
+  .then(() => true, () => false);
+check("NPS: score en toelichting worden opgeslagen", npsOk);
+
+// Blokkenverkenner: een andere variant verandert de preview zichtbaar
+await page.goto(SITE + "/playground", { waitUntil: "load" });
+const klasVoor = await page.locator(".block-preview").getAttribute("class");
+await page.getByLabel("Kies variant").selectOption("achtergrondbeeld");
+const klasNa = await page.locator(".block-preview").getAttribute("class");
+check("blokkenverkenner: variant 'achtergrondbeeld' verandert de preview", klasVoor !== klasNa && /v-achtergrond/.test(klasNa), klasNa);
+
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
 await page
   .getByRole("button", { name: /Bekijk tickets/ })

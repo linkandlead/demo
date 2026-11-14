@@ -1,0 +1,52 @@
+import "server-only";
+import { cache } from "react";
+import type { Metadata } from "next";
+import { paginas as blauwdruk } from "@/content/blauwdruk";
+import { str } from "./valideer";
+import { cmsStatus } from "./data";
+import type { CmsBlok } from "./client";
+
+// Pagina's komen uit het CMS (site "Demo Klant"): titel, beschrijving en de blokken in volgorde.
+// Zonder CMS-koppeling, of voor een pagina die (nog) niet in het CMS staat, valt de site terug op
+// de blauwdruk (src/content/blauwdruk.ts) — dezelfde inhoud die met scripts/cms-push.mjs in het
+// CMS is gezet. Zo is er één bron van waarheid en ziet de site er zonder CMS hetzelfde uit.
+
+export type Blok = CmsBlok;
+export type PaginaInhoud = {
+  slug: string;
+  titel: string;
+  beschrijving: string;
+  blokken: Blok[];
+  bron: "cms" | "blauwdruk";
+};
+
+export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | null> => {
+  const st = await cmsStatus();
+  if (st.bron === "cms") {
+    const p = st.site.paginas.find((x) => x.slug === slug);
+    if (p) return { ...p, bron: "cms" };
+  }
+  const b = blauwdruk.find((x) => x.slug === slug);
+  return b ? { slug: b.slug, titel: b.titel, beschrijving: b.beschrijving, blokken: b.blokken, bron: "blauwdruk" } : null;
+});
+
+/** Alle paginaslugs onder een prefix (bv. "/spaces/"), uit het CMS én de blauwdruk. */
+export async function slugsOnder(prefix: string): Promise<string[]> {
+  const st = await cmsStatus();
+  const uitCms = st.bron === "cms" ? st.site.paginas.map((p) => p.slug) : [];
+  const alle = new Set([...uitCms, ...blauwdruk.map((p) => p.slug)]);
+  return [...alle]
+    .filter((s) => s.startsWith(prefix) && s.length > prefix.length && !s.slice(prefix.length).includes("/"))
+    .map((s) => s.slice(prefix.length));
+}
+
+/** SEO-titel en -beschrijving per pagina, beheerd in het CMS. */
+export async function paginaMetadata(slug: string, absoluut = false): Promise<Metadata> {
+  const p = await laadPagina(slug);
+  if (!p) return {};
+  const titel = str(p.titel);
+  return {
+    title: titel ? (absoluut ? { absolute: titel } : titel) : undefined,
+    description: p.beschrijving || undefined,
+  };
+}

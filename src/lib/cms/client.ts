@@ -52,11 +52,12 @@ export async function laadCms(): Promise<CmsStatus> {
   }
 }
 
-/** Absolute media-URL: CMS-paden (/img/...) wijzen naar het CMS-domein. */
+/** Media-URL uit het CMS: "/media/…" is een beeld uit deze frontend, een volledige https-URL is
+ *  een upload, en elk ander pad ("/img/…") staat op het CMS-domein. */
 export function cmsMedia(pad: unknown): string {
-  const p = str(pad);
+  const p = str(pad).trim();
   if (!p) return "";
-  if (/^https:\/\//.test(p)) return p;
+  if (/^https:\/\//.test(p) || p.startsWith("/media/")) return p;
   const url = cmsUrl();
   return url && p.startsWith("/") ? url + p : "";
 }
