@@ -18,6 +18,13 @@ npm run dev
 Zonder `.env.local` draait de site op vaste demodata en verstuurt hij niets. Met `SUPABASE_URL` en `SUPABASE_PUBLISHABLE_KEY` komen de collecties uit de NOVA-demodatabase en worden formulieren daar opgeslagen (zie [`docs/supabase.md`](docs/supabase.md)). Koppelen aan het CMS: zie
 [`docs/cms-koppeling.md`](docs/cms-koppeling.md).
 
+## Live
+
+**https://demo-link-and-lead.vercel.app** (Vercel-team Link-and-Lead, project `demo`). Productie is
+openbaar; previews (per push) vragen een Vercel-login. Pushes naar deze branch maken automatisch een
+preview. Productie is handmatig bijgewerkt, omdat de repo nog geen `main`-branch heeft. Zodra die er is
+en als productiebranch is ingesteld, gaat dat vanzelf.
+
 ## Routes
 
 `/` · `/work` · `/work/:slug` · `/journal` · `/journal/:slug` · `/experiences` · `/experiences/:slug` ·
