@@ -1,14 +1,35 @@
 // Nep-CMS voor lokale tests van de koppeling. Volgt exact het contract van linkandlead-cms:
 //   GET  /api/cms/content  (Bearer-token, respons zoals src/routes/api/cms/content.ts)
 //   POST /api/cms/lead     (body zoals src/routes/api/cms/lead.ts; schrijft naar LEADS_LOG)
+//   GET  /api/v1/pagina?pad=/x&voorvertoning=<token>  (zoals src/routes/api/v1/pagina.ts: met een
+//        geldig token het concept, `concept: true`; anders de gepubliceerde pagina, `concept: false`)
+//   GET  /test/voorvertoningstoken  maakt een token zoals src/core/auth/voorvertoning.ts (alleen hier,
+//        voor de e2e; het echte CMS maakt tokens alleen in het beheer)
 // Raakt geen echte database en verstuurt niets.
 //   PORT=4000 TOKEN=cms_test LEADS_LOG=./leads.jsonl node scripts/mock-cms.mjs
 import http from "node:http";
 import fs from "node:fs";
+import crypto from "node:crypto";
 
 const PORT = Number(process.env.PORT ?? 4000);
 const TOKEN = process.env.TOKEN ?? "cms_test";
 const LOG = process.env.LEADS_LOG ?? "./mock-leads.jsonl";
+// Nepgeheim en nep-site-id: alleen voor dit nep-CMS.
+const GEHEIM = "nep-voorvertoningsgeheim-alleen-voor-tests";
+const SITE_ID = "00000000-0000-4000-8000-0000000000aa";
+
+const hmac = (data) => crypto.createHmac("sha256", GEHEIM).update(data).digest("hex");
+function maakToken(minuten = 30) {
+  const verloopt = Math.floor(Date.now() / 1000) + minuten * 60;
+  return `${verloopt}.${hmac(`${SITE_ID}.${verloopt}`)}`;
+}
+function tokenGeldig(token) {
+  const [v, sig] = String(token ?? "").split(".");
+  const verloopt = Number(v);
+  if (!sig || !Number.isFinite(verloopt) || verloopt < Math.floor(Date.now() / 1000)) return false;
+  const verwacht = hmac(`${SITE_ID}.${verloopt}`);
+  return sig.length === verwacht.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(verwacht));
+}
 
 const content = {
   ok: true,
@@ -116,9 +137,63 @@ const content = {
   popups: [],
 };
 
+// Het concept: dezelfde homepage met een andere hero (content_concept in het CMS).
+const conceptBlokken = (blokken) =>
+  blokken.map((b, i) =>
+    i === 0 ? { ...b, content: { ...b.content, heading: "Concept\nuit het\nCMS.", subheading: "Nog niet gepubliceerd." } } : b,
+  );
+
+function paginaV1(pad, concept) {
+  const p = content.paginas.find((x) => x.slug === pad);
+  if (!p) return null;
+  return {
+    versie: "v1",
+    taal: "nl",
+    concept,
+    pagina: {
+      slug: p.slug,
+      titel: p.titel,
+      beschrijving: p.beschrijving,
+      type: "pagina",
+      seo: { titel: p.titel, beschrijving: p.beschrijving, social_beeld: null, canonical: null, noindex: concept },
+      blokken: (concept ? conceptBlokken(p.blokken) : p.blokken).map((b, i) => ({
+        id: `blok-${i}`,
+        type: b.type,
+        bg: b.bg,
+        gedeeld: null,
+        inhoud: b.content,
+      })),
+      record: null,
+      records: {},
+    },
+  };
+}
+
 http
   .createServer((req, res) => {
     const url = new URL(req.url ?? "/", "http://x");
+    if (req.method === "GET" && url.pathname === "/test/voorvertoningstoken") {
+      res.writeHead(200, { "content-type": "text/plain" });
+      return res.end(maakToken(Number(url.searchParams.get("minuten") ?? 30)));
+    }
+    if (req.method === "GET" && url.pathname === "/api/v1/pagina") {
+      if (req.headers.authorization !== `Bearer ${TOKEN}`) {
+        res.writeHead(401, { "content-type": "application/json", "cache-control": "no-store" });
+        return res.end(JSON.stringify({ ok: false, melding: "Ongeldig of ontbrekend API-token." }));
+      }
+      const pad = url.searchParams.get("pad") || "/";
+      const concept = tokenGeldig(url.searchParams.get("voorvertoning"));
+      const body = paginaV1(pad, concept);
+      if (!body) {
+        res.writeHead(404, { "content-type": "application/json", "cache-control": "no-store" });
+        return res.end(JSON.stringify({ ok: false, melding: "Pagina niet gevonden." }));
+      }
+      res.writeHead(200, {
+        "content-type": "application/json; charset=utf-8",
+        "cache-control": concept ? "no-store" : "public, max-age=60, stale-while-revalidate=600",
+      });
+      return res.end(JSON.stringify(body));
+    }
     if (req.method === "GET" && url.pathname === "/api/cms/content") {
       if (req.headers.authorization !== `Bearer ${TOKEN}`) {
         res.writeHead(401, { "content-type": "application/json" });

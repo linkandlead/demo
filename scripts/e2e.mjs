@@ -1,5 +1,6 @@
 // End-to-end-controle van NOVA (Playwright, globaal geïnstalleerd) + axe-core toegankelijkheid.
-//   SITE=http://localhost:3000 [SITE_CMS=http://localhost:3001 LEADS_LOG=...] node scripts/e2e.mjs
+//   SITE=http://localhost:3000 [SITE_CMS=http://localhost:3001 LEADS_LOG=... MOCK_CMS=http://localhost:4000] node scripts/e2e.mjs
+//   Alleen de voorvertoning (geen formulieren, geen Supabase): ALLEEN=voorvertoning SITE_CMS=… MOCK_CMS=…
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
@@ -59,6 +60,13 @@ await ctx.route(/\/api\/(inzending|aanvraag)$/, async (route) => {
   } catch {}
   await route.continue({ postData: JSON.stringify({ ...data, _testcode: TESTCODE }) });
 });
+
+if (SITE_CMS && process.env.ALLEEN === "voorvertoning") {
+  await voorvertoning();
+  await browser.close();
+  console.log(`\n${ok} geslaagd, ${fout} mislukt`);
+  process.exit(fout ? 1 : 0);
+}
 
 console.log("Routes, verplichte promotie-elementen en links");
 const links = new Set();
@@ -349,8 +357,85 @@ fs.writeFileSync(
   JSON.stringify(axeRes, null, 2),
 );
 
+
+// "Voorbeeld op de site" (protocol linkandlead-cms UX-002): /__voorvertoning?pad=/x&token=…
+async function voorvertoning() {
+  const MOCK = process.env.MOCK_CMS ?? "http://localhost:4000";
+  console.log("Voorbeeld op de site (/__voorvertoning, nep-CMS)");
+  const token = await (await fetch(`${MOCK}/test/voorvertoningstoken`)).text();
+  const ongeldig = `${Math.floor(Date.now() / 1000) + 1800}.${"0".repeat(64)}`;
+  const vv = (pad, t) => `${SITE_CMS}/__voorvertoning?pad=${encodeURIComponent(pad)}&token=${encodeURIComponent(t)}`;
+
+  // Ondersteuningscontrole van het CMS: GET ?pad=/ met geldig token, redirects volgen, zonder cookies → 2xx.
+  const controle = await fetch(vv("/", token));
+  check("ondersteuningscontrole van het CMS krijgt 200", controle.status === 200, `status ${controle.status}`);
+
+  const los = await fetch(vv("/", token), { redirect: "manual" });
+  const cookie = los.headers.getSetCookie().join("; ");
+  check(
+    "geldig token: 307 naar het pad, draft mode + tokencookie, no-store en noindex",
+    los.status === 307 &&
+      new URL(los.headers.get("location")).pathname === "/" &&
+      cookie.includes("__prerender_bypass=") &&
+      cookie.includes("nova_voorvertoning=") &&
+      /httponly/i.test(cookie) &&
+      (los.headers.get("cache-control") ?? "").includes("no-store") &&
+      (los.headers.get("x-robots-tag") ?? "").includes("noindex"),
+  );
+  const weg = await fetch(vv("//evil.example/x", token), { redirect: "manual" });
+  check(
+    "geen open redirect: //andere-host gaat naar / op de site zelf",
+    weg.status === 307 && new URL(weg.headers.get("location")).origin === new URL(SITE_CMS).origin && !weg.headers.getSetCookie().join().includes("__prerender_bypass="),
+  );
+  const slecht = await fetch(vv("/", ongeldig), { redirect: "manual" });
+  check(
+    "ongeldig token geweigerd: geen draft mode, door naar de gepubliceerde pagina (geen 404)",
+    slecht.status === 307 && !slecht.headers.getSetCookie().join().includes("__prerender_bypass=") && (slecht.headers.get("cache-control") ?? "").includes("no-store"),
+  );
+
+  const vctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const vp = await vctx.newPage();
+  await vp.goto(vv("/", ongeldig), { waitUntil: "load" });
+  check(
+    "ongeldig token in de browser: gepubliceerde inhoud, geen balk",
+    (await vp.locator("h1").first().textContent()).includes("Bewerkt") && (await vp.locator(".voorbeeld-balk").count()) === 0,
+  );
+
+  const res = await vp.goto(vv("/", token), { waitUntil: "load" });
+  check("geldig token: concept zichtbaar", (await vp.locator("h1").first().textContent()).includes("Concept"));
+  check(
+    'balk "Voorbeeld van het concept" met "Voorbeeld sluiten"',
+    (await vp.locator(".voorbeeld-balk").textContent()).includes("Voorbeeld van het concept") &&
+      (await vp.getByRole("link", { name: "Voorbeeld sluiten" }).count()) === 1,
+  );
+  const koppen = res.headers();
+  check(
+    "conceptpagina: no-store en noindex",
+    (koppen["cache-control"] ?? "").includes("no-store") &&
+      (koppen["x-robots-tag"] ?? "").includes("noindex") &&
+      (await vp.locator('meta[name="robots"]').getAttribute("content")).includes("noindex"),
+  );
+  await vp.getByRole("link", { name: "Voorbeeld sluiten" }).click();
+  await vp.waitForLoadState("load");
+  check(
+    "na sluiten: gepubliceerde inhoud, geen balk, geen draft-cookie",
+    (await vp.locator("h1").first().textContent()).includes("Bewerkt") &&
+      (await vp.locator(".voorbeeld-balk").count()) === 0 &&
+      !(await vctx.cookies()).some((c) => c.name === "__prerender_bypass" || c.name === "nova_voorvertoning"),
+  );
+  await vctx.close();
+
+  const gewoon = await fetch(`${SITE_CMS}/`);
+  const html = await gewoon.text();
+  check(
+    "zonder draft mode: gepubliceerde inhoud, geen balk, geen X-Robots-Tag van de proxy",
+    html.includes("Bewerkt") && !html.includes("Concept") && !html.includes("voorbeeld-balk") && !gewoon.headers.get("x-robots-tag"),
+  );
+}
+
 if (SITE_CMS) {
   console.log("Met CMS-koppeling (nep-CMS met het echte contract)");
+  await voorvertoning();
   await page.goto(SITE_CMS + "/", { waitUntil: "load" });
   check(
     "hero-tekst komt uit het CMS",

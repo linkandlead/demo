@@ -74,3 +74,10 @@ PORT=4000 TOKEN=cms_test node scripts/mock-cms.mjs
 ```bash
 CMS_URL=http://localhost:4000 CMS_TOKEN=cms_test npm run build && npm start
 ```
+
+"Voorbeeld op de site" lokaal: het nep-CMS kent ook `GET /api/v1/pagina` (met `concept: true` bij een
+geldig token) en maakt testtokens op `/test/voorvertoningstoken`. Met de site op poort 3001:
+
+```bash
+ALLEEN=voorvertoning SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e
+```
