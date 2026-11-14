@@ -4,12 +4,15 @@ import type { Metadata } from "next";
 import { paginas as blauwdruk } from "@/content/blauwdruk";
 import { str } from "./valideer";
 import { cmsStatus } from "./data";
+import { haalConcept, voorbeeldStand } from "./concept";
+import { kiesInhoud } from "./voorvertoning";
 import type { CmsBlok } from "./client";
 
 // Pagina's komen uit het CMS (site "Demo Klant"): titel, beschrijving en de blokken in volgorde.
 // Zonder CMS-koppeling, of voor een pagina die (nog) niet in het CMS staat, valt de site terug op
 // de blauwdruk (src/content/blauwdruk.ts) — dezelfde inhoud die met scripts/cms-push.mjs in het
 // CMS is gezet. Zo is er één bron van waarheid en ziet de site er zonder CMS hetzelfde uit.
+// In draft mode ("Voorbeeld op de site", zie concept.ts) komt eerst het concept uit het CMS.
 
 export type Blok = CmsBlok;
 export type PaginaInhoud = {
@@ -17,10 +20,10 @@ export type PaginaInhoud = {
   titel: string;
   beschrijving: string;
   blokken: Blok[];
-  bron: "cms" | "blauwdruk";
+  bron: "cms" | "blauwdruk" | "concept";
 };
 
-export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | null> => {
+const laadGepubliceerd = async (slug: string): Promise<PaginaInhoud | null> => {
   const st = await cmsStatus();
   if (st.bron === "cms") {
     const p = st.site.paginas.find((x) => x.slug === slug);
@@ -28,6 +31,15 @@ export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | nul
   }
   const b = blauwdruk.find((x) => x.slug === slug);
   return b ? { slug: b.slug, titel: b.titel, beschrijving: b.beschrijving, blokken: b.blokken, bron: "blauwdruk" } : null;
+};
+
+export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | null> => {
+  const stand = await voorbeeldStand();
+  const concept = stand.aan && stand.token ? await haalConcept(slug, stand.token) : null;
+  const gepubliceerd = concept?.soort === "concept" ? null : await laadGepubliceerd(slug);
+  const gekozen = kiesInhoud({ draftMode: stand.aan, concept, gepubliceerd });
+  if (!gekozen) return null;
+  return "bron" in gekozen ? gekozen : { ...gekozen, bron: "concept" };
 });
 
 /** Alle paginaslugs onder een prefix (bv. "/spaces/"), uit het CMS én de blauwdruk. */
@@ -40,7 +52,7 @@ export async function slugsOnder(prefix: string): Promise<string[]> {
     .map((s) => s.slice(prefix.length));
 }
 
-/** SEO-titel en -beschrijving per pagina, beheerd in het CMS. */
+/** SEO-titel en -beschrijving per pagina, beheerd in het CMS. Een concept wordt nooit geïndexeerd. */
 export async function paginaMetadata(slug: string, absoluut = false): Promise<Metadata> {
   const p = await laadPagina(slug);
   if (!p) return {};
@@ -48,5 +60,6 @@ export async function paginaMetadata(slug: string, absoluut = false): Promise<Me
   return {
     title: titel ? (absoluut ? { absolute: titel } : titel) : undefined,
     description: p.beschrijving || undefined,
+    ...(p.bron === "concept" ? { robots: { index: false, follow: false } } : {}),
   };
 }

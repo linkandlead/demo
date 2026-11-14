@@ -68,6 +68,7 @@ Toelichting op de grotere verschillen:
 | Demopaneel: "One Studio" vervangen door een feitelijke tekst                                                                                                                                                           | Naam niet gevonden in de CMS-repo                                                               |
 | Playground-varianten "Standaard/Compact/Uitgebreid" → officiële PDF-varianten per blok                                                                                                                                 | Masterprompt: alleen officiële varianten                                                        |
 | Skip-link "Naar de inhoud", `aria-*` op menu, filters en paneel                                                                                                                                                        | Toegankelijkheid                                                                                |
+| Nieuwe balk "Voorbeeld van het concept" linksonder (`.voorbeeld-balk`), alleen in draft mode                                                                                                                          | "Voorbeeld op de site" uit het CMS; bezoekers zien hem nooit |
 
 ## Functioneel en toegankelijkheid
 

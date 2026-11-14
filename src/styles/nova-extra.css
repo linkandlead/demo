@@ -530,3 +530,42 @@ button.btn:disabled {
   h1, h2, h3 { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
   .intro-grid > .body-copy, .contact-layout > div { min-width: 0; }
 }
+
+/* Balk "Voorbeeld van het concept" ("Voorbeeld op de site" uit het CMS). Nieuw onderdeel, niet in het
+   prototype; alleen zichtbaar in draft mode. Klein en vast linksonder, zodat de pagina zelf niet verschuift. */
+.voorbeeld-balk {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 300;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  width: max-content;
+  max-width: min(640px, calc(100vw - 100px)); /* rechts blijft ruimte voor de demo-knop */
+  background: var(--night);
+  color: #fff;
+  border: 1px solid var(--lime);
+  border-radius: 14px;
+  padding: 8px 10px 8px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.voorbeeld-balk strong {
+  color: var(--lime);
+  font-weight: 800;
+}
+.voorbeeld-sluiten {
+  color: var(--night);
+  background: var(--lime);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.voorbeeld-sluiten:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

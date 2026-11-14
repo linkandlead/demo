@@ -29,10 +29,43 @@ en als productiebranch is ingesteld, gaat dat vanzelf.
 
 `/` · `/work` · `/work/:slug` · `/journal` · `/journal/:slug` · `/experiences` · `/experiences/:slug` ·
 `/spaces` · `/spaces/:slug` · `/community` · `/about` · `/contact` · `/lab` · `/members` · `/playground` ·
-`/playground/sports` · `/demo` · `/one` (+ `POST /api/aanvraag`)
+`/playground/sports` · `/demo` · `/one` (+ `POST /api/aanvraag`, `GET /__voorvertoning`)
 
 Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 stappen) → blokken
 (`/playground`) → aanvraag (`/one#aanvraag`).
+
+## Voorbeeld op de site (concept vanuit het CMS)
+
+In het CMS-beheer opent de knop **"Voorbeeld op de site"** in de pagina-editor deze route:
+
+`GET /__voorvertoning?pad=/x&token=<token>`
+
+Het protocol komt uit linkandlead-cms (`src/features/voorvertoning/`, `src/core/auth/voorvertoning.ts`,
+`src/routes/api/v1/pagina.ts`, `docs/bouwwijze.md` §6.3). De site kent geen geheim: ze controleert het
+kortlevende token (30 minuten) door het CMS te vragen om `GET {CMS_URL}/api/v1/pagina?pad=…&voorvertoning=<token>`
+met het leestoken (`CMS_TOKEN`). Alleen als het CMS `concept: true` teruggeeft, zet de site Next.js
+draft mode aan, bewaart het token in een httpOnly-cookie en stuurt door naar het (interne) pad. Daarna
+tonen de pagina's het concept (zonder cache), met onderaan de balk "Voorbeeld van het concept" en de
+link "Voorbeeld sluiten" (`/__voorvertoning/sluiten`). Een ongeldig of verlopen token geeft geen
+concept: de bezoeker gaat naar de gepubliceerde pagina. Bezoekers zonder draft mode zien niets anders.
+Alle voorbeeldantwoorden zijn `no-store` en `noindex`.
+
+**Instellen**
+
+1. Vercel-project **demo** → Environment Variables (alleen namen hier; waarden nooit in git):
+   - `CMS_URL`: het adres van het CMS (al ingesteld voor de koppeling);
+   - `CMS_TOKEN`: het leestoken van de site **Demo Klant** (al ingesteld). Het voorvertoningstoken geldt
+     alleen samen met een leestoken van dezelfde site.
+   Er is geen extra variabele nodig.
+2. CMS → **Siteregister** → Demo Klant → **Adres voor "Voorbeeld op de site"**:
+   `https://demo.linkandlead.nl/__voorvertoning`
+3. Het CMS controleert per website (tien minuten bewaard) of `?pad=/` met een geldig token 200 geeft;
+   pas dan staat de knop aan. Het CMS zelf heeft daarvoor `VOORVERTONING_GEHEIM` (of
+   `ADMIN_SESSIE_SECRET`) nodig; dat staat in het CMS-project, niet hier.
+
+Lokaal testen: start het nep-CMS en een build ertegen, en draai dan
+`ALLEEN=voorvertoning SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e`
+(zie [`docs/cms-koppeling.md`](docs/cms-koppeling.md)).
 
 ## Scripts
 
