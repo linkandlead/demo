@@ -3,20 +3,25 @@ import { cache } from "react";
 import {
   cases as demoCases,
   people as demoPeople,
+  events as demoEvents,
   posts as demoPosts,
   slugify,
+  spaces as demoSpaces,
   type Case,
   type Person,
   type Post,
+  type Space,
 } from "@/content/nova";
+import { leesTabel, supabase } from "@/lib/supabase/server";
 import { cmsMedia, cmsUrl, laadCms, type CmsStatus } from "./client";
 
-// Eén plek die bepaalt waar de content vandaan komt: het gekoppelde CMS of de demodata.
+// Eén plek die bepaalt waar de content vandaan komt. Volgorde: het gekoppelde Link & Lead One-CMS,
+// anders de NOVA-demodatabase in Supabase (project "demo"), anders de vaste demodata uit het ontwerp.
 // Alleen velden die écht in de CMS-lees-API bestaan worden gebruikt (allowlist in
 // linkandlead-cms src/features/content/headlessrecords.ts). Velden die het NOVA-ontwerp
 // toont maar die het CMS niet kent (bv. jaartal van een case) blijven dan leeg.
 
-export type Bron = "cms" | "demo";
+export type Bron = "cms" | "supabase" | "demo";
 export type Collectie<T> = { items: T[]; bron: Bron };
 
 export const cmsStatus = cache(laadCms);
@@ -31,7 +36,26 @@ function leestijd(tekst: string): string {
 export async function getCases(): Promise<Collectie<Case>> {
   const st = await cmsStatus();
   const rij = st.bron === "cms" ? st.site.records.cases : undefined;
-  if (!rij) return { items: demoCases, bron: "demo" };
+  if (!rij) {
+    const db = await leesTabel(
+      "cases",
+      "slug, naam, sector, jaar, omschrijving, cover",
+      { kolom: "volgorde", oplopend: true },
+    );
+    if (db)
+      return {
+        bron: "supabase",
+        items: db.map((r) => ({
+          slug: s(r.slug),
+          name: s(r.naam),
+          type: s(r.sector),
+          year: s(r.jaar),
+          cover: s(r.cover),
+          desc: s(r.omschrijving),
+        })),
+      };
+    return { items: demoCases, bron: "demo" };
+  }
   return {
     bron: "cms",
     items: rij
@@ -52,7 +76,33 @@ export type PostDetail = Post & { lead?: string; body?: string[] };
 export async function getPosts(): Promise<Collectie<PostDetail>> {
   const st = await cmsStatus();
   const rij = st.bron === "cms" ? st.site.records.artikelen : undefined;
-  if (!rij) return { items: demoPosts, bron: "demo" };
+  if (!rij) {
+    const db = await leesTabel(
+      "artikelen",
+      "slug, titel, rubriek, leestijd, samenvatting, hoofdtekst, cover",
+      {
+        kolom: "gepubliceerd_op",
+        oplopend: false,
+      },
+    );
+    if (db)
+      return {
+        bron: "supabase",
+        items: db.map((r) => ({
+          slug: s(r.slug),
+          title: s(r.titel),
+          cat: s(r.rubriek),
+          time: s(r.leestijd) || leestijd(s(r.hoofdtekst)),
+          cover: s(r.cover),
+          lead: s(r.samenvatting) || undefined,
+          body: s(r.hoofdtekst)
+            .split(/\n\s*\n/)
+            .map((x) => x.trim())
+            .filter(Boolean),
+        })),
+      };
+    return { items: demoPosts, bron: "demo" };
+  }
   return {
     bron: "cms",
     items: rij
@@ -75,7 +125,22 @@ export async function getPosts(): Promise<Collectie<PostDetail>> {
 export async function getPeople(): Promise<Collectie<Person>> {
   const st = await cmsStatus();
   const rij = st.bron === "cms" ? st.site.records.teamleden : undefined;
-  if (!rij) return { items: demoPeople, bron: "demo" };
+  if (!rij) {
+    const db = await leesTabel("teamleden", "naam, functie, foto", {
+      kolom: "volgorde",
+      oplopend: true,
+    });
+    if (db)
+      return {
+        bron: "supabase",
+        items: db.map((r) => ({
+          name: s(r.naam),
+          role: s(r.functie),
+          cover: s(r.foto),
+        })),
+      };
+    return { items: demoPeople, bron: "demo" };
+  }
   return {
     bron: "cms",
     items: rij
@@ -85,6 +150,41 @@ export async function getPeople(): Promise<Collectie<Person>> {
         cover: cmsMedia(r.foto),
       }))
       .filter((p) => p.name),
+  };
+}
+
+/** Ruimtes: het CMS kent geen ruimtecollectie, dus Supabase of demodata. */
+export async function getSpaces(): Promise<Collectie<Space>> {
+  const db = await leesTabel(
+    "ruimtes",
+    "slug, naam, omschrijving, cover, cover_alt, knoptekst",
+    { kolom: "volgorde", oplopend: true },
+  );
+  if (!db) return { items: demoSpaces, bron: "demo" };
+  return {
+    bron: "supabase",
+    items: db.map((r) => ({
+      slug: s(r.slug),
+      name: s(r.naam),
+      desc: s(r.omschrijving),
+      cover: s(r.cover),
+      alt: s(r.cover_alt),
+      cta: s(r.knoptekst),
+    })),
+  };
+}
+
+export async function getEvents(): Promise<
+  Collectie<{ slug: string; name: string }>
+> {
+  const db = await leesTabel("evenementen", "slug, naam", {
+    kolom: "id",
+    oplopend: true,
+  });
+  if (!db) return { items: demoEvents, bron: "demo" };
+  return {
+    bron: "supabase",
+    items: db.map((r) => ({ slug: s(r.slug), name: s(r.naam) })),
   };
 }
 
@@ -123,10 +223,23 @@ export async function cmsInfo(): Promise<CmsInfo> {
       melding: null,
       beheerUrl: beheer ? `${beheer}/admin/paginas` : null,
     };
+  const sbUrl = process.env.SUPABASE_URL?.trim();
+  if (supabase() && sbUrl) {
+    const ref = new URL(sbUrl).hostname.split(".")[0];
+    return {
+      bron: "supabase",
+      site: "NOVA-demodatabase (Supabase)",
+      melding: st.reden === "fout" ? `CMS: ${st.melding}` : null,
+      beheerUrl: `https://supabase.com/dashboard/project/${ref}/editor`,
+    };
+  }
   return {
     bron: "demo",
     site: null,
-    melding: st.reden === "fout" ? st.melding : "Geen CMS-koppeling ingesteld",
+    melding:
+      st.reden === "fout"
+        ? st.melding
+        : "Geen CMS- of Supabase-koppeling ingesteld",
     beheerUrl: null,
   };
 }

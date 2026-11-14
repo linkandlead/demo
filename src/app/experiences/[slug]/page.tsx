@@ -3,15 +3,17 @@ import { notFound } from "next/navigation";
 import { DemoKnop } from "@/components/nova/DemoKnop";
 import { Page } from "@/components/nova/Page";
 import { Photo, SectionTitle } from "@/components/nova/ui";
-import { events } from "@/content/nova";
+import { getEvents } from "@/lib/cms/data";
 
-export const dynamicParams = false;
-export const generateStaticParams = () => events.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  return (await getEvents()).items.map((e) => ({ slug: e.slug }));
+}
 
 export async function generateMetadata({
   params,
 }: PageProps<"/experiences/[slug]">): Promise<Metadata> {
   const { slug } = await params;
+  const { items: events } = await getEvents();
   return { title: events.find((e) => e.slug === slug)?.name ?? "Event" };
 }
 
@@ -21,6 +23,7 @@ export default async function EventDetail({
   params,
 }: PageProps<"/experiences/[slug]">) {
   const { slug } = await params;
+  const { items: events } = await getEvents();
   const ev = events.find((e) => e.slug === slug);
   if (!ev) notFound();
   return (

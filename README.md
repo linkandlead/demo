@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-Zonder `.env.local` draait de site op demodata en verstuurt hij niets. Koppelen aan het CMS: zie
+Zonder `.env.local` draait de site op vaste demodata en verstuurt hij niets. Met `SUPABASE_URL` en `SUPABASE_PUBLISHABLE_KEY` komen de collecties uit de NOVA-demodatabase en worden formulieren daar opgeslagen (zie [`docs/supabase.md`](docs/supabase.md)). Koppelen aan het CMS: zie
 [`docs/cms-koppeling.md`](docs/cms-koppeling.md).
 
 ## Routes
@@ -38,6 +38,8 @@ Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 
 | `npm run mock-cms`                                | Nep-CMS met het echte API-contract, om de koppeling lokaal te testen   |
 
 ## Documentatie
+
+- [`docs/supabase.md`](docs/supabase.md): NOVA-demodatabase in Supabase (collecties, formulierinzendingen, RLS)
 
 - [`docs/fase-a-audit.md`](docs/fase-a-audit.md): verificatietabel CMS (bevestigd / ontbreekt / simulatie)
 - [`docs/visuele-controle.md`](docs/visuele-controle.md): visuele vergelijking, afwijkingen, toegankelijkheid, performance

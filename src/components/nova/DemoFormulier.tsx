@@ -7,26 +7,31 @@ import {
   type ReactNode,
 } from "react";
 
-// NOVA-formulieren (fictief merk) versturen bewust NIETS: geen mails, geen opslag. Na een geldige
-// inzending tonen ze een duidelijke demonstratiestatus i.p.v. een nep-bevestiging. Validatie en
-// foutstaat zijn echt (native constraint validation + gekoppelde foutmelding).
+// NOVA-formulieren. Met `opslaan` gaat een geldige inzending naar /api/inzending, dat hem in de
+// NOVA-demodatabase (Supabase) bewaart. Er wordt nooit gemaild. Zonder `opslaan` (bv. de
+// ledenlogin) of zonder database blijft het een zichtbare demonstratie, nooit een nep-bevestiging.
+// Validatie en foutstaat zijn echt (native constraint validation).
 export function DemoFormulier({
   children,
   className,
   style,
   demoTekst,
+  opslaan,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
   demoTekst: string;
+  opslaan?: "contact" | "nieuwsbrief";
 }) {
   const [status, setStatus] = useState<{
     soort: "ok" | "fout";
     tekst: string;
   } | null>(null);
+  const [bezig, setBezig] = useState(false);
+  const [start] = useState(() => Date.now());
 
-  function verstuur(e: FormEvent<HTMLFormElement>) {
+  async function verstuur(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const ongeldig = [...form.elements].filter(
@@ -46,11 +51,60 @@ export function DemoFormulier({
       });
       return;
     }
-    setStatus({ soort: "ok", tekst: demoTekst });
+    if (!opslaan) {
+      setStatus({ soort: "ok", tekst: demoTekst });
+      return;
+    }
+    setBezig(true);
+    try {
+      const res = await fetch("/api/inzending", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ...Object.fromEntries(new FormData(form).entries()),
+          soort: opslaan,
+          bron_pagina: window.location.pathname,
+          _ts: start,
+        }),
+      });
+      const data = (await res.json()) as {
+        ok: boolean;
+        demo?: boolean;
+        melding: string;
+      };
+      if (data.demo) setStatus({ soort: "ok", tekst: demoTekst });
+      else setStatus({ soort: data.ok ? "ok" : "fout", tekst: data.melding });
+      if (data.ok) form.reset();
+    } catch {
+      setStatus({
+        soort: "fout",
+        tekst:
+          "Versturen is niet gelukt. Controleer je verbinding en probeer het opnieuw.",
+      });
+    } finally {
+      setBezig(false);
+    }
   }
 
   return (
-    <form className={className} style={style} onSubmit={verstuur} noValidate>
+    <form
+      className={className}
+      style={style}
+      onSubmit={verstuur}
+      noValidate
+      aria-busy={bezig}
+    >
+      {opslaan ? (
+        <div className="honeypot" aria-hidden="true">
+          <label htmlFor={`_website-${opslaan}`}>Laat dit veld leeg</label>
+          <input
+            id={`_website-${opslaan}`}
+            name="_website"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+      ) : null}
       {children}
       <div
         className={`form-status ${status?.soort ?? ""}`}
@@ -58,7 +112,7 @@ export function DemoFormulier({
         aria-live="polite"
         style={{ gridColumn: "1/-1" }}
       >
-        {status?.tekst}
+        {bezig ? "Bezig met versturen…" : status?.tekst}
       </div>
     </form>
   );

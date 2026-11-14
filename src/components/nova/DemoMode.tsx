@@ -17,7 +17,7 @@ import {
 // (alleen bij koppeling getoonde) beheerlink, de mobiele weergave en de rondleiding.
 
 export type CmsInfoProps = {
-  bron: "cms" | "demo";
+  bron: "cms" | "supabase" | "demo";
   site: string | null;
   melding: string | null;
   beheerUrl: string | null;
@@ -154,6 +154,7 @@ export function DemoProvider({
   );
 
   const gekoppeld = info.bron === "cms";
+  const viaSupabase = info.bron === "supabase";
 
   return (
     <DemoCtx.Provider value={ctx}>
@@ -193,7 +194,9 @@ export function DemoProvider({
         <p>
           {gekoppeld
             ? `Deze inhoud komt uit het Link & Lead One-CMS (site: ${info.site ?? "onbekend"}).`
-            : "Dit is een klikbaar visueel prototype. Het is nog niet gekoppeld aan het echte CMS."}
+            : viaSupabase
+              ? "Cases, artikelen, team, ruimtes en events komen uit de NOVA-demodatabase in Supabase. Paginateksten zijn nog ontwerpcopy; het echte CMS is nog niet gekoppeld."
+              : "Dit is een klikbaar visueel prototype. Het is nog niet gekoppeld aan het echte CMS."}
         </p>
         <div className="demo-control" style={{ marginTop: 22 }}>
           Toon CMS-bloklabels
@@ -258,11 +261,17 @@ export function DemoProvider({
         </div>
         <div className="demo-control">
           Databron
-          <span className={`demo-bron ${gekoppeld ? "live" : ""}`}>
-            {gekoppeld ? "CMS · live" : "Demodata"}
+          <span
+            className={`demo-bron ${gekoppeld || viaSupabase ? "live" : ""}`}
+          >
+            {gekoppeld
+              ? "CMS · live"
+              : viaSupabase
+                ? "Supabase · live"
+                : "Demodata"}
           </span>
         </div>
-        {gekoppeld && info.beheerUrl ? (
+        {(gekoppeld || viaSupabase) && info.beheerUrl ? (
           <div className="demo-control">
             Inhoud bewerken
             <a
@@ -271,14 +280,16 @@ export function DemoProvider({
               target="_blank"
               rel="noopener"
             >
-              Open CMS-beheer ↗
+              {gekoppeld ? "Open CMS-beheer ↗" : "Open Supabase ↗"}
             </a>
           </div>
         ) : null}
         <p style={{ marginTop: 10 }}>
           {gekoppeld
             ? "Wijzigingen in het CMS-beheer verschijnen hier na ongeveer een minuut. Inloggen in het beheer is vereist."
-            : `Live content wijzigen kan pas na koppeling met een eigen, afgeschermde NOVA-demosite in het CMS.${info.melding ? ` (${info.melding})` : ""}`}
+            : viaSupabase
+              ? "Wijzigingen in de Supabase-tabellen verschijnen hier na ongeveer een minuut (inloggen bij Supabase vereist). Formulieren slaan inzendingen op in de tabel aanvragen; er wordt niets gemaild."
+              : `Live content wijzigen kan pas na koppeling met een eigen, afgeschermde NOVA-demosite in het CMS.${info.melding ? ` (${info.melding})` : ""}`}
         </p>
       </div>
 

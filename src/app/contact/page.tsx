@@ -48,12 +48,14 @@ export default function Contact() {
           <div>
             <DemoFormulier
               className="form-grid"
+              opslaan="contact"
               demoTekst="Demonstratie: er is niets verstuurd of opgeslagen. In een live site koppelt dit formulier aan het CMS-blok Formulier (soort: contact)."
             >
               <div className="form-field">
                 <label htmlFor="first-name">Voornaam *</label>
                 <input
                   id="first-name"
+                  name="naam"
                   required
                   placeholder="Je voornaam"
                   autoComplete="given-name"
@@ -63,6 +65,7 @@ export default function Contact() {
                 <label htmlFor="email">E-mailadres *</label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   required
                   placeholder="jij@voorbeeld.nl"
@@ -71,7 +74,7 @@ export default function Contact() {
               </div>
               <div className="form-field full">
                 <label htmlFor="interest">Waar gaat je idee over?</label>
-                <select id="interest">
+                <select id="interest" name="onderwerp">
                   <option>Een creatief project</option>
                   <option>Een evenement</option>
                   <option>Een ruimte huren</option>
@@ -82,6 +85,7 @@ export default function Contact() {
                 <label htmlFor="message">Vertel ons meer *</label>
                 <textarea
                   id="message"
+                  name="vraag"
                   placeholder="Wat kunnen we samen maken?"
                   required
                 />

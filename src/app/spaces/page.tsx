@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Page } from "@/components/nova/Page";
 import { Photo, SectionTitle } from "@/components/nova/ui";
-import { spaces } from "@/content/nova";
+import { getSpaces } from "@/lib/cms/data";
 
 export const metadata: Metadata = { title: "Spaces" };
 
-export default function Spaces() {
+export default async function Spaces() {
+  const { items: spaces } = await getSpaces();
   return (
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">

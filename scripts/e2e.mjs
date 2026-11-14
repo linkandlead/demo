@@ -139,8 +139,10 @@ console.log("Demo Mode-paneel");
 await page.getByRole("button", { name: "Open demonstratiemodus" }).click();
 check("paneel opent", await page.locator("#demoPanel.open").isVisible());
 check(
-  "databron zichtbaar gelabeld als demodata",
-  (await page.locator(".demo-bron").textContent()).includes("Demodata"),
+  "databron zichtbaar gelabeld (Demodata of Supabase · live)",
+  /Demodata|Supabase · live/.test(
+    await page.locator(".demo-bron").textContent(),
+  ),
 );
 await page.getByRole("button", { name: "Roze" }).click();
 check(
@@ -182,13 +184,21 @@ check(
 );
 await page.fill("#first-name", "Sam");
 await page.fill("#email", "sam@voorbeeld.nl");
-await page.fill("#message", "Hallo");
+await page.fill("#message", "E2E-test — mag verwijderd worden");
+await page.waitForTimeout(2100); // spamfilter: inzendingen binnen 2 s gelden als bot
 await page.getByRole("button", { name: /Verstuur je bericht/ }).click();
-check(
-  "contact: geldige inzending → demonstratiestatus, geen nep-succes",
-  (await page.locator(".form-status.ok").textContent()).startsWith(
-    "Demonstratie: er is niets verstuurd",
+await page.waitForFunction(() =>
+  /Demonstratie|opgeslagen/.test(
+    document.querySelector(".form-status.ok")?.textContent ?? "",
   ),
+);
+const contactTekst = await page.locator(".form-status.ok").textContent();
+check(
+  "contact: opgeslagen in Supabase of eerlijke demostatus, nooit 'verzonden'",
+  /opgeslagen in de NOVA-demodatabase|Demonstratie: er is niets verstuurd/.test(
+    contactTekst,
+  ) && !/verzonden/.test(contactTekst),
+  contactTekst,
 );
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
 await page
@@ -214,9 +224,11 @@ async function aanvraag(basis) {
   );
   return page.locator("#aanvraag .form-status").last().textContent();
 }
+const aanvraagTekst = await aanvraag(SITE);
 check(
-  'aanvraag zonder configuratie → eerlijk "níet verzonden"',
-  (await aanvraag(SITE)).includes("níet verzonden"),
+  'aanvraag zonder CMS → opgeslagen in Supabase of eerlijk "níet verzonden"',
+  /níet verzonden|opgeslagen in de NOVA-demodatabase/.test(aanvraagTekst),
+  aanvraagTekst,
 );
 
 console.log("Mobiel menu (390px)");

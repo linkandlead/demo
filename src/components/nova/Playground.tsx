@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
-import { mediaSrc } from "./ui";
+import { mediaSrc, mediaSrcSet } from "./ui";
 
 // Block Playground — playground() uit het prototype, nu met de echte veldnamen, de officiële
 // varianten uit de PDF en het bijbehorende CMS-bloktype per blok. De preview zelf blijft een
@@ -143,6 +143,8 @@ export function Playground() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={mediaSrc("work_color")}
+                srcSet={mediaSrcSet("work_color")}
+                sizes="(max-width: 760px) 30vw, 340px"
                 alt="Abstracte ontwerpvisual"
                 loading="lazy"
                 decoding="async"

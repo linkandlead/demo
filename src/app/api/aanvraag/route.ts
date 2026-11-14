@@ -1,9 +1,11 @@
 import { lijktSpam, valideerAanvraag } from "@/lib/lead/aanvraag";
+import { bewaarInzending } from "@/lib/supabase/server";
 
 // Demo-aanvraag voor Link & Lead One → bestaande CMS-leadflow (linkandlead-cms
 // src/routes/api/cms/lead.ts). Server-to-server, dus zonder Origin-header (toegestaan door het
-// CMS) en zonder token in de browser. Niet geconfigureerd = er wordt NIETS verzonden en de
-// bezoeker krijgt een eerlijke demonstratiestatus.
+// CMS) en zonder token in de browser. Daarnaast wordt elke aanvraag bewaard in de NOVA-
+// demodatabase (Supabase, tabel aanvragen). Zonder beide = er gebeurt niets en de bezoeker
+// krijgt een eerlijke demonstratiestatus.
 //
 //   CMS_URL            basis-URL van het CMS (bv. https://linkandlead.nl)
 //   CMS_LEAD_SITE_ID   site-id (uuid) die de aanvragen ontvangt — de Link & Lead-verkoopsite,
@@ -33,9 +35,25 @@ export async function POST(request: Request) {
       { status: 400 },
     );
 
+  // Altijd eerst bewaren in de NOVA-demodatabase (Supabase), als die is ingesteld.
+  const opgeslagen = await bewaarInzending({
+    soort: "demo-aanvraag",
+    naam: v.data.naam,
+    email: v.data.email,
+    bedrijf: v.data.bedrijf,
+    vraag: v.data.vraag,
+    bron_pagina: "/one",
+  });
+
   const cms = process.env.CMS_URL?.trim().replace(/\/$/, "");
   const siteId = process.env.CMS_LEAD_SITE_ID?.trim();
   if (!cms || !siteId) {
+    if (opgeslagen === "opgeslagen")
+      return Response.json({
+        ok: true,
+        melding:
+          "Bedankt! Je aanvraag is opgeslagen in de NOVA-demodatabase. Doorsturen naar het Link & Lead One-team is nog niet ingesteld, dus er volgt geen automatische e-mail.",
+      });
     return Response.json(
       {
         ok: false,

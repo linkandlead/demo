@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
+import { MEDIA } from "@/content/media";
 import type { Case, Person, Post } from "@/content/nova";
 
 // Herbruikbare NOVA-bouwstenen. DOM en klassen zijn exact die van het prototype
@@ -14,22 +15,43 @@ export function mediaSrc(bron: string): string {
   return `/media/${bron}.webp`;
 }
 
+/** srcset voor lokale media (640 / 1280 / origineel); leeg voor CMS-URL's. */
+export function mediaSrcSet(bron: string): string | undefined {
+  const m = MEDIA[bron];
+  if (!m) return undefined;
+  return [
+    ...m.varianten.map((b) => `/media/${bron}-${b}.webp ${b}w`),
+    `/media/${bron}.webp ${m.w}w`,
+  ].join(", ");
+}
+
 export function Photo({
   src,
   alt = "",
   priority = false,
+  sizes,
 }: {
   src: string;
   alt?: string;
   priority?: boolean;
+  /** Hoe breed het beeld getoond wordt; bepaalt welke srcset-breedte de browser kiest. */
+  sizes?: string;
 }) {
   const url = mediaSrc(src);
   if (!url) return null;
+  const srcSet = mediaSrcSet(src);
   return (
     // biome-ignore: bewust <img>; de CSS van het ontwerp stijlt img direct (object-fit, hover-zoom).
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={url}
+      srcSet={srcSet}
+      // Hero-beelden (priority) zijn schermbreed; de rest is hooguit een halve kolom.
+      sizes={
+        srcSet
+          ? (sizes ?? (priority ? "100vw" : "(max-width: 760px) 100vw, 50vw"))
+          : undefined
+      }
       alt={alt || "Conceptbeeld in de NOVA demonstratiewebsite"}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}

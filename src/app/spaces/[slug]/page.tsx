@@ -2,20 +2,24 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Page } from "@/components/nova/Page";
 import { Btn, Photo, SectionTitle } from "@/components/nova/ui";
-import { spaces } from "@/content/nova";
+import { getSpaces } from "@/lib/cms/data";
 
-export const dynamicParams = false;
-export const generateStaticParams = () => spaces.map((s) => ({ slug: s.slug }));
+// Nieuwe ruimtes uit Supabase renderen op aanvraag (dynamicParams staat standaard aan).
+export async function generateStaticParams() {
+  return (await getSpaces()).items.map((s) => ({ slug: s.slug }));
+}
 
 export async function generateMetadata({
   params,
 }: PageProps<"/spaces/[slug]">): Promise<Metadata> {
   const { slug } = await params;
+  const { items: spaces } = await getSpaces();
   return { title: spaces.find((s) => s.slug === slug)?.name ?? "Ruimte" };
 }
 
 export default async function Ruimte({ params }: PageProps<"/spaces/[slug]">) {
   const { slug } = await params;
+  const { items: spaces } = await getSpaces();
   const ruimte = spaces.find((s) => s.slug === slug);
   if (!ruimte) notFound();
   // Ontwerp is uitgewerkt voor Studio One; andere ruimtes gebruiken hetzelfde detailtemplate.

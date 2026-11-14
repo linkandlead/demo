@@ -122,12 +122,16 @@ export default async function Journal() {
               A little more inspiration in your inbox.
             </h2>
           </div>
-          <DemoFormulier demoTekst="Demonstratie: er is niets verzonden en geen e-mailadres opgeslagen. In een live site koppelt dit aan het CMS-blok Formulier (soort: nieuwsbrief).">
+          <DemoFormulier
+            opslaan="nieuwsbrief"
+            demoTekst="Demonstratie: er is niets verzonden en geen e-mailadres opgeslagen. In een live site koppelt dit aan het CMS-blok Formulier (soort: nieuwsbrief)."
+          >
             <div className="form-field">
               <label htmlFor="newsletter">E-mailadres</label>
               <input
                 type="email"
                 id="newsletter"
+                name="email"
                 placeholder="jij@voorbeeld.nl"
                 required
                 autoComplete="email"

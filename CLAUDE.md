@@ -16,14 +16,16 @@ uit `GET {CMS_URL}/api/cms/content` (token per site); zonder koppeling uit `src/
 ## Structuur
 
 - `src/app/` routes · `src/components/nova/` NOVA-componenten · `src/content/` demodata + 43 kernblokken
+- `src/lib/supabase/` NOVA-demodatabase (project "demo"; schema in `supabase/migrations/`, zie `docs/supabase.md`)
 - `src/lib/cms/` CMS-koppeling (server-only, runtime-validatie) · `src/lib/lead/` aanvraagvalidatie
 - `cms/nova-blauwdruk.mjs` blauwdruk voor de CMS-sync · `scripts/` e2e, visuele vergelijking, nep-CMS
 
 ## Eerlijkheid en veiligheid
 
 - Claim geen CMS-functies die niet in de CMS-repo bevestigd zijn (zie `docs/fase-a-audit.md`).
-- NOVA-formulieren versturen niets en tonen een demostatus. Alleen `/api/aanvraag` stuurt echt door,
-  en alleen met `CMS_LEAD_SITE_ID`.
+- NOVA-formulieren mailen nooit. Contact, nieuwsbrief en demo-aanvraag worden opgeslagen in Supabase
+  (`aanvragen`); alleen `/api/aanvraag` stuurt daarnaast door naar het CMS, en alleen met `CMS_LEAD_SITE_ID`.
+- Databaseschema alleen via migraties in `supabase/migrations/`; RLS blijft altijd aan.
 - Nooit schrijven naar productie-CMS-data of naar andere sites ("Nova Studio" en "Stadstheater Nova"
   zijn andere sites). Secrets nooit committen.
 

@@ -270,3 +270,33 @@ button.btn:disabled {
     font-size: clamp(50px, 15.2vw, 65px);
   }
 }
+
+/* Selected work (home): nova.css richt de 2-rijen-lay-out op `.portfolio-grid > div`, maar de
+   kaarten zijn <a class="tagged-card">. Daardoor viel de derde case onder de eerste en bleef
+   rechts een gat (ook in het prototype). Zelfde bedoelde maten, nu op de linkkaarten. */
+.portfolio-grid > a:first-child {
+  grid-row: span 2;
+}
+.portfolio-grid > a .image-frame {
+  height: 330px;
+}
+.portfolio-grid > a:first-child .image-frame {
+  height: 675px;
+}
+@media (max-width: 1050px) {
+  .portfolio-grid > a .image-frame {
+    height: 270px;
+  }
+  .portfolio-grid > a:first-child .image-frame {
+    height: 555px;
+  }
+}
+@media (max-width: 760px) {
+  .portfolio-grid > a:first-child {
+    grid-row: auto;
+  }
+  .portfolio-grid > a .image-frame,
+  .portfolio-grid > a:first-child .image-frame {
+    height: 410px;
+  }
+}

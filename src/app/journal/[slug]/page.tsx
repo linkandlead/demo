@@ -35,7 +35,9 @@ export default async function Artikel({
         </p>
         <div className="meta" style={{ marginBottom: 30 }}>
           NOVA EDITORIAL{post.time ? <> &nbsp; · &nbsp; {post.time}</> : null}
-          {bron === "demo" ? <> &nbsp; · &nbsp; VOORBEELDARTIKEL</> : null}
+          {bron !== "cms" && !post.body?.length ? (
+            <> &nbsp; · &nbsp; VOORBEELDARTIKEL</>
+          ) : null}
         </div>
         <div className="wide-photo">
           <Photo src={post.cover} alt={post.title} priority />
