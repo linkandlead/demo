@@ -22,15 +22,20 @@ export async function POST(request: Request) {
 
   const soort = body.soort === "nieuwsbrief" ? "nieuwsbrief" : "contact";
   const email = tekst(body.email, 254);
-  const naam = tekst(body.naam, 200);
+  const naam = [tekst(body.naam, 100), tekst(body.achternaam, 100)]
+    .filter(Boolean)
+    .join(" ");
   const vraag = tekst(body.vraag, 2000);
   const fouten: Record<string, string> = {};
   if (!EMAIL.test(email)) fouten.email = "Vul een geldig e-mailadres in.";
-  if (soort === "contact" && !naam) fouten.naam = "Vul je voornaam in.";
-  if (soort === "contact" && !vraag) fouten.vraag = "Vertel ons wat meer.";
+  if (soort === "contact" && !naam) fouten.naam = "Vul dit veld in.";
+  if (soort === "contact" && vraag.length < 10)
+    fouten.vraag = "Vertel iets meer, zodat we je goed kunnen helpen.";
+  if (body.akkoord !== "on")
+    fouten.akkoord = "Geef toestemming om je aanvraag te verwerken.";
   if (Object.keys(fouten).length)
     return Response.json(
-      { ok: false, melding: "Controleer de gemarkeerde velden.", fouten },
+      { ok: false, melding: Object.values(fouten).join(" "), fouten },
       { status: 400 },
     );
 
@@ -38,6 +43,7 @@ export async function POST(request: Request) {
     soort,
     email,
     naam: naam || undefined,
+    bedrijf: tekst(body.bedrijf, 200) || undefined,
     onderwerp: tekst(body.onderwerp, 200) || undefined,
     vraag: vraag || undefined,
     bron_pagina: tekst(body.bron_pagina, 200) || undefined,
@@ -47,8 +53,8 @@ export async function POST(request: Request) {
       ok: true,
       melding:
         soort === "nieuwsbrief"
-          ? "Bedankt! Je aanmelding is opgeslagen in de NOVA-demodatabase. Er wordt geen e-mail verstuurd."
-          : "Bedankt! Je bericht is opgeslagen in de NOVA-demodatabase. Er wordt geen e-mail verstuurd.",
+          ? "Je aanmelding is ontvangen en opgeslagen in de NOVA-demodatabase. Er wordt geen bevestigingsmail verstuurd."
+          : "Bedankt! Je bericht is ontvangen en opgeslagen in de NOVA-demodatabase. Er wordt geen e-mail verstuurd.",
     });
   if (r === "niet-ingesteld")
     return Response.json(
@@ -63,7 +69,8 @@ export async function POST(request: Request) {
   return Response.json(
     {
       ok: false,
-      melding: "Opslaan is niet gelukt. Probeer het later opnieuw.",
+      melding:
+        "Het verzenden is niet gelukt. Controleer je gegevens en probeer het opnieuw.",
     },
     { status: 502 },
   );

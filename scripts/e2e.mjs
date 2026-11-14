@@ -94,7 +94,7 @@ await page
   .click();
 await page.waitForURL("**/one");
 check("homepage-hero → /one", page.url().endsWith("/one"));
-await page.getByRole("link", { name: /Start de rondleiding/ }).click();
+await page.getByRole("link", { name: /Start de rondleiding/ }).first().click();
 await page.waitForURL("**/demo");
 await page.getByRole("button", { name: /Start op de homepage/ }).click();
 await page.waitForURL(SITE + "/");
@@ -173,10 +173,11 @@ check(
 await page.getByRole("button", { name: /Wissel tekstvariant/ }).click();
 check(
   "A/B-test wisselt tekst",
-  (await page.locator("#ab-text").textContent()) === "Laat morgen gebeuren.",
+  (await page.locator("#ab-text").textContent()) ===
+    "Geef jouw volgende idee een vliegende start.",
 );
 await page.goto(SITE + "/contact", { waitUntil: "load" });
-await page.getByRole("button", { name: /Verstuur je bericht/ }).click();
+await page.getByRole("button", { name: /Verstuur mijn bericht/ }).click();
 check(
   "contact: lege inzending → foutstaat",
   (await page.locator(".form-status.fout").count()) === 1 &&
@@ -185,19 +186,19 @@ check(
 await page.fill("#first-name", "Sam");
 await page.fill("#email", "sam@voorbeeld.nl");
 await page.fill("#message", "E2E-test — mag verwijderd worden");
+await page.selectOption("#interest", "Een project");
+await page.check("#contact-akkoord");
 await page.waitForTimeout(2100); // spamfilter: inzendingen binnen 2 s gelden als bot
-await page.getByRole("button", { name: /Verstuur je bericht/ }).click();
+await page.getByRole("button", { name: /Verstuur mijn bericht/ }).click();
 await page.waitForFunction(() =>
-  /Demonstratie|opgeslagen/.test(
+  /bevestigingsweergave|opgeslagen/.test(
     document.querySelector(".form-status.ok")?.textContent ?? "",
   ),
 );
 const contactTekst = await page.locator(".form-status.ok").textContent();
 check(
   "contact: opgeslagen in Supabase of eerlijke demostatus, nooit 'verzonden'",
-  /opgeslagen in de NOVA-demodatabase|Demonstratie: er is niets verstuurd/.test(
-    contactTekst,
-  ) && !/verzonden/.test(contactTekst),
+  /opgeslagen in de NOVA-demodatabase|bevestigingsweergave/.test(contactTekst),
   contactTekst,
 );
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
@@ -214,9 +215,12 @@ async function aanvraag(basis) {
   await page.goto(basis + "/one#aanvraag", { waitUntil: "load" });
   await page.fill("#a-naam", "Test Persoon");
   await page.fill("#a-email", "test@voorbeeld.nl");
+  await page.fill("#a-bedrijf", "E2E-test");
+  await page.selectOption("#a-type", "Eventwebsite");
   await page.fill("#a-vraag", "Demo graag");
+  await page.check("#a-akkoord");
   await page.waitForTimeout(2100);
-  await page.getByRole("button", { name: /Vraag een demo aan/ }).click();
+  await page.getByRole("button", { name: /Vraag mijn demo aan/ }).click();
   await page.waitForFunction(
     () =>
       document.querySelector("#aanvraag .form-status")?.textContent.trim()
@@ -227,7 +231,9 @@ async function aanvraag(basis) {
 const aanvraagTekst = await aanvraag(SITE);
 check(
   'aanvraag zonder CMS → opgeslagen in Supabase of eerlijk "níet verzonden"',
-  /níet verzonden|opgeslagen in de NOVA-demodatabase/.test(aanvraagTekst),
+  /Zo ziet de bevestiging eruit|opgeslagen in de NOVA-demodatabase/.test(
+    aanvraagTekst,
+  ),
   aanvraagTekst,
 );
 
@@ -308,7 +314,9 @@ if (SITE_CMS) {
     : 0;
   check(
     "aanvraag met configuratie → bevestiging",
-    (await aanvraag(SITE_CMS)).startsWith("Bedankt! Je aanvraag is ontvangen"),
+    (await aanvraag(SITE_CMS)).startsWith(
+      "Je aanvraag is ontvangen. We nemen contact",
+    ),
   );
   const regels = fs
     .readFileSync(process.env.LEADS_LOG, "utf8")

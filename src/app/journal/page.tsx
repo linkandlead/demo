@@ -10,7 +10,11 @@ import {
 } from "@/components/nova/ui";
 import { getPosts } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Verhalen" };
+export const metadata: Metadata = {
+  title: "Verhalen & inzichten",
+  description:
+    "Lees zes inspirerende voorbeeldartikelen over meeslepende belevingen, ontwerp, technologie en community in de NOVA-verhalen.",
+};
 
 export default async function Journal() {
   const { items } = await getPosts();
@@ -28,8 +32,9 @@ export default async function Journal() {
           <div className="hero-description">
             <span className="meta">DENKEN / BEVRAGEN / VERBEELDEN</span>
             <p>
-              Verdiepende verhalen, interviews en nieuws over creativiteit,
-              technologie en de toekomst.
+              Verhalen over de toekomst van creativiteit. Over mensen die anders
+              durven denken, plekken die iets losmaken en technologie die nieuwe
+              vragen oproept.
             </p>
           </div>
         </div>
@@ -52,8 +57,8 @@ export default async function Journal() {
                 <div>
                   <h2>{featured.title}.</h2>
                   <p style={{ marginTop: 20 }}>
-                    Hoe beleving merken, mensen en plekken dichter bij elkaar
-                    brengt.
+                    Wat gebeurt er als een verhaal niet alleen te lezen of te
+                    bekijken is, maar te beleven?
                   </p>
                 </div>
                 <span className="meta">LEES HET ARTIKEL &nbsp; ↗</span>
@@ -69,8 +74,9 @@ export default async function Journal() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="MEER OM TE ONTDEKKEN"
-            title="Ideeën die het delen waard zijn."
+            eyebrow="NIEUWSTE VERHALEN"
+            title="Frisse perspectieven. Nieuwe mogelijkheden."
+            desc="Zes verhalen om even anders naar de wereld te kijken."
           />
           <div
             className="chip-row"
@@ -113,7 +119,7 @@ export default async function Journal() {
           }}
         >
           <div>
-            <span className="eyebrow">NOVA-NOTITIES</span>
+            <span className="eyebrow">NOVA NOTES</span>
             <h2
               style={{
                 fontSize: "clamp(55px,7vw,108px)",
@@ -123,10 +129,14 @@ export default async function Journal() {
             >
               Een beetje meer inspiratie in je inbox.
             </h2>
+            <p style={{ marginTop: 20, maxWidth: 520 }}>
+              Verhalen, nieuwe ideeën en creatieve inspiratie. Niet vaker dan
+              nodig.
+            </p>
           </div>
           <DemoFormulier
             opslaan="nieuwsbrief"
-            demoTekst="Demonstratie: er is niets verzonden en geen e-mailadres opgeslagen. In een live site koppelt dit aan het CMS-blok Formulier (soort: nieuwsbrief)."
+            demoTekst="Dit is een voorbeeld van de aanmeldbevestiging. Er is geen inschrijving opgeslagen."
           >
             <div className="form-field">
               <label htmlFor="newsletter">E-mailadres</label>
@@ -140,8 +150,17 @@ export default async function Journal() {
                 style={{ minWidth: 250 }}
               />
             </div>
+            <label className="form-check" htmlFor="nieuwsbrief-akkoord">
+              <input
+                id="nieuwsbrief-akkoord"
+                name="akkoord"
+                type="checkbox"
+                required
+              />
+              Ik wil NOVA Notes ontvangen en kan me later afmelden.
+            </label>
             <button className="btn btn-dark" style={{ marginTop: 10 }}>
-              Aanmelden ↗
+              Aanmelden voor NOVA Notes ↗
             </button>
           </DemoFormulier>
         </div>

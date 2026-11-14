@@ -1,26 +1,41 @@
 import Link from "next/link";
 import { gedeeldeOproep } from "@/lib/cms/data";
+import { footerTekst } from "@/content/teksten";
 import { Btn, Lines, t } from "./ui";
+
+export type Oproep = {
+  eyebrow: string;
+  kop: string;
+  tekst?: string;
+  knop: string;
+  href: string;
+};
 
 // Afsluitende oproep (gedeeld blok, CMS-type `cta`) + footer met de vaste "Ontdek het CMS"-CTA.
 // Markup gelijk aan callout()/footer() uit het prototype.
-export async function Footer() {
+export async function Footer({ oproep }: { oproep?: Oproep }) {
   const c = await gedeeldeOproep();
+  // Volgorde: CMS (gedeeld blok) > paginaspecifieke oproep > standaard uit de teksten.
+  const o: Oproep = oproep ?? {
+    eyebrow: footerTekst.eyebrow,
+    kop: footerTekst.kop,
+    tekst: footerTekst.tekst,
+    knop: footerTekst.knop,
+    href: "contact",
+  };
+  const tekst = t(c, "tekst", o.tekst ?? "");
   return (
     <>
       <section data-cms="Afsluitende oproep · gedeeld" className="footer-cta">
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            {t(c, "eyebrow", "WAT IS DE VOLGENDE STAP?")}
+            {t(c, "eyebrow", o.eyebrow)}
           </span>
           <h2>
-            <Lines
-              text={t(c, "titel", "Heb je iets bijzonders in gedachten?")}
-            />
+            <Lines text={t(c, "titel", o.kop)} />
           </h2>
-          <Btn to={t(c, "knop", "contact")}>
-            {t(c, "knoptekst", "Start een gesprek")}
-          </Btn>
+          {tekst ? <p className="footer-cta-tekst">{tekst}</p> : null}
+          <Btn to={t(c, "knop", o.href)}>{t(c, "knoptekst", o.knop)}</Btn>
         </div>
       </section>
       <footer className="footer">
@@ -48,25 +63,16 @@ export async function Footer() {
           </div>
           <div className="footer-one-promo">
             <div>
-              <strong>
-                Gemaakt om te inspireren. Ontworpen voor Link & Lead One.
-              </strong>
-              <span>
-                Ontdek de technologie en CMS-blokken achter deze fictieve
-                website.
-              </span>
+              <strong>{footerTekst.cmsKop}</strong>
+              <span>{footerTekst.cmsTekst}</span>
             </div>
             <Link href="/one" className="btn btn-mini btn-lime">
               Ontdek het CMS ↗
             </Link>
           </div>
           <div className="footer-end">
-            <span>
-              © NOVA 2026 — Fictief merk voor de CMS-ontwerpdemonstratie.
-            </span>
-            <span>
-              Visueel ontwerpconcept van Link & Lead One · Geen live website
-            </span>
+            <span>{footerTekst.copyright}</span>
+            <span>{footerTekst.disclaimer}</span>
           </div>
         </div>
       </footer>

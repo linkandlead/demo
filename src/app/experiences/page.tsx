@@ -3,37 +3,43 @@ import Link from "next/link";
 import { DemoKnop } from "@/components/nova/DemoKnop";
 import { Page } from "@/components/nova/Page";
 import { Btn, PersonCard, Photo, SectionTitle } from "@/components/nova/ui";
+import { altTeksten, sprekers } from "@/content/teksten";
 import { getPeople } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Belevingen" };
+export const metadata: Metadata = {
+  title: "Belevingen — Pulse Festival",
+  description:
+    "Ontdek Pulse Festival, het fictieve NOVA-demo-evenement met programma, sprekers en voorbeeldtickets.",
+};
 
 const TICKETS = [
-  ["Dagkaart", "€ 49", "Toegang voor één inspirerende festivaldag."],
+  ["Dagkaart", "€ 49", "Toegang tot één programmadag en de centrale expo."],
   [
-    "Volledige beleving",
+    "Volledig festival",
     "€ 119",
-    "Alle dagen, alle sessies en alle inspiratie.",
+    "Drie dagen inspiratie, installaties en sessies.",
   ],
-  [
-    "Communitykaart",
-    "€ 179",
-    "Met extra netwerkervaring en besloten programma.",
-  ],
+  ["Makerspas", "€ 189", "Het volledige programma plus een kleine werksessie."],
 ];
 
 export default async function Experiences() {
   const { items: people } = await getPeople();
   return (
-    <Page>
+    <Page
+      oproep={{
+        eyebrow: "05 / GA VERDER",
+        kop: "Meer dan een evenement. Een gedeelde ervaring.",
+        tekst:
+          "Bekijk hoe evenementen, sprekers en prijskaarten in het CMS worden gepresenteerd.",
+        knop: "Ontdek de CMS-blokken",
+        href: "playground",
+      }}
+    >
       <section data-cms="Header (hero) · Diepst" className="feature-media">
-        <Photo
-          src="event_lights"
-          alt="Publiek bij een creatieve lichtshow"
-          priority
-        />
+        <Photo src="event_lights" alt={altTeksten.event_lights} priority />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            KOMENDE BELEVINGEN
+            KOMENDE BELEVING / DEMO-EVENEMENT
           </span>
           <h1>
             Pulse
@@ -41,13 +47,14 @@ export default async function Experiences() {
             Festival.
           </h1>
           <p>
-            Een driedaags festival over creativiteit, technologie en de mens van
-            morgen.
+            Een driedaagse ontmoeting tussen creativiteit, technologie en
+            cultuur. Vol verrassende perspectieven, nieuwe verbindingen en
+            bijzondere verhalen.
           </p>
           <div className="hero-actions">
-            <Btn to="experiences/nova-sessions">Bekijk het programma</Btn>
+            <Btn to="experiences/pulse-festival">Bekijk het programma</Btn>
             <Link className="btn btn-outline" href="/experiences/nova-sessions">
-              Ontdek het evenement ↗
+              Bekijk NOVA Sessions ↗
             </Link>
           </div>
         </div>
@@ -57,23 +64,24 @@ export default async function Experiences() {
           <SectionTitle
             num="01"
             eyebrow="WAT JE KUNT VERWACHTEN"
-            title="Meer dan een evenement."
+            title="Drie dagen. Eindeloos veel perspectieven."
+            desc="Niet alleen luisteren, maar ontdekken en meedoen."
           />
           <div className="card-3">
             <div className="info-tile">
               <span className="eyebrow">01</span>
-              <strong>Inspirerende sprekers.</strong>
-              <p>Nieuwe perspectieven van makers en denkers.</p>
+              <strong>Inspirerende stemmen.</strong>
+              <p>Nieuwe ideeën van ontwerpers, makers en vernieuwers.</p>
             </div>
             <div className="info-tile">
               <span className="eyebrow">02</span>
-              <strong>Meeslepende kunst.</strong>
-              <p>Ervaar de toekomst met al je zintuigen.</p>
+              <strong>Meeslepende werelden.</strong>
+              <p>Installaties die je anders laten kijken en voelen.</p>
             </div>
             <div className="info-tile">
               <span className="eyebrow">03</span>
               <strong>Echte verbindingen.</strong>
-              <p>Ontmoet mensen die iets in beweging brengen.</p>
+              <p>Ontmoet mensen die dezelfde nieuwsgierigheid delen.</p>
             </div>
           </div>
         </div>
@@ -86,16 +94,21 @@ export default async function Experiences() {
           <SectionTitle
             num="02"
             eyebrow="HET PROGRAMMA"
-            title="Een beleving om te onthouden."
-            desc="Drie inspirerende dagen. Hier tonen we de visuele uitwerking van een programma en tijdlijn."
+            title="Een programma vol mogelijkheden."
+            desc="Elke dag een eigen ritme, van eerste idee tot laatste ontmoeting."
           />
           <div className="schedule">
             <div>
               {[
-                ["10:00", "Opening Pulse Festival"],
-                ["11:15", "Ontwerpen voor morgen"],
-                ["13:30", "Belevingen voorbij het scherm"],
-                ["16:00", "Ontmoet de makers"],
+                [
+                  "DAG 1",
+                  "Ontdekken — nieuwe vragen, nieuwe geluiden, nieuwe perspectieven.",
+                ],
+                ["DAG 2", "Creëren — workshops, experimenten en samenwerking."],
+                [
+                  "DAG 3",
+                  "Verbinden — inzichten delen en ideeën verder brengen.",
+                ],
               ].map(([tijd, titel]) => (
                 <div className="schedule-row" key={tijd}>
                   <strong>{tijd}</strong>
@@ -105,10 +118,7 @@ export default async function Experiences() {
               ))}
             </div>
             <div className="image-frame" style={{ height: 360 }}>
-              <Photo
-                src="event_gradient"
-                alt="Lichtkunst en festivalatmosfeer"
-              />
+              <Photo src="event_gradient" alt={altTeksten.event_gradient} />
             </div>
           </div>
         </div>
@@ -118,11 +128,16 @@ export default async function Experiences() {
           <SectionTitle
             num="03"
             eyebrow="OP HET PODIUM"
-            title="Nieuwe stemmen. Grote ideeën."
+            title="Ontmoet de denkers achter de ideeën."
+            desc="Vier fictieve sprekers met elk hun eigen invalshoek."
           />
           <div className="people-grid">
             {people.slice(0, 4).map((p) => (
-              <PersonCard key={p.name} p={p} prefix="Spreker · " />
+              <PersonCard
+                key={p.name}
+                p={{ ...p, role: sprekers[p.name] ?? p.role }}
+                prefix="Spreker · "
+              />
             ))}
           </div>
         </div>
@@ -132,7 +147,12 @@ export default async function Experiences() {
         className="section section-dark"
       >
         <div className="container">
-          <SectionTitle num="04" eyebrow="DOE MEE" title="Vind je ticket." />
+          <SectionTitle
+            num="04"
+            eyebrow="KIES JE BELEVING"
+            title="Jouw beleving, op jouw manier."
+            desc="Vergelijk voorbeeldtickets. Deze prijzen zijn fictief; bestellen of betalen is niet mogelijk in de demo."
+          />
           <div className="tickets">
             {TICKETS.map((tk, i) => (
               <div
@@ -159,7 +179,8 @@ export default async function Experiences() {
             ))}
           </div>
           <p style={{ fontSize: 12, marginTop: 20, color: "#cbd2e0" }}>
-            Fictieve ticketprijzen uitsluitend voor het ontwerp.
+            Fictieve prijzen en fictief evenement. Er worden geen tickets
+            verkocht.
           </p>
         </div>
       </section>

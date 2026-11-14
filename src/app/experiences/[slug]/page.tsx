@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DemoKnop } from "@/components/nova/DemoKnop";
 import { Page } from "@/components/nova/Page";
 import { Photo, SectionTitle } from "@/components/nova/ui";
+import { altTeksten, evenementen } from "@/content/teksten";
 import { getEvents } from "@/lib/cms/data";
 
 export async function generateStaticParams() {
@@ -14,10 +15,10 @@ export async function generateMetadata({
 }: PageProps<"/experiences/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const { items: events } = await getEvents();
-  return { title: events.find((e) => e.slug === slug)?.name ?? "Event" };
+  const ev = events.find((e) => e.slug === slug);
+  const tekst = evenementen.find((e) => e.slug === slug);
+  return { title: ev?.name ?? "Evenement", description: tekst?.intro };
 }
-
-const MELDING = "Visuele demo: er wordt geen ticket verkocht.";
 
 export default async function EventDetail({
   params,
@@ -26,87 +27,119 @@ export default async function EventDetail({
   const { items: events } = await getEvents();
   const ev = events.find((e) => e.slug === slug);
   if (!ev) notFound();
+  // Programma, tickets en teksten uit de definitieve teksten; de naam uit de collectie.
+  const d = evenementen.find((e) => e.slug === slug);
+  const beeld = d?.beeld ?? "event_lights";
+
   return (
-    <Page>
+    <Page
+      oproep={{
+        eyebrow: "GA VERDER",
+        kop: "Meer dan een evenement. Een gedeelde ervaring.",
+        tekst:
+          "Bekijk hoe evenementen, programma's en prijskaarten in het CMS worden gepresenteerd.",
+        knop: "Ontdek de CMS-blokken",
+        href: "playground",
+      }}
+    >
       <section data-cms="Header · eventdetail" className="detail-hero">
-        <Photo src="event_lights" alt="Creatief festival" priority />
+        <Photo src={beeld} alt={altTeksten[beeld]} priority />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            NOVA SESSIONS / EVENEMENT
+            {d?.eyebrow ?? "NOVA BELEVINGEN / DEMO-EVENEMENT"}
           </span>
           <h1>{ev.name}.</h1>
-          <p>
-            Drie dagen vol verhalen, makers en ideeën die perspectief bieden.
-            Datum en programma zijn fictief.
-          </p>
+          <p>{d ? `${d.payoff} ${d.intro}` : "Fictief voorbeeldevenement."}</p>
         </div>
       </section>
-      <div className="container mini-info" data-cms="Feiten">
-        <div>
-          <span>DATUM</span>
-          <strong>12–14 september 2027</strong>
-        </div>
-        <div>
-          <span>LOCATIE</span>
-          <strong>NOVA Creatieve Campus (fictief)</strong>
-        </div>
-        <div>
-          <span>DOELGROEP</span>
-          <strong>Makers en innovators</strong>
-        </div>
-      </div>
-      <section className="section" data-cms="Reeks stappen · programma">
-        <div className="container">
-          <SectionTitle
-            num="01"
-            eyebrow="HET PROGRAMMA"
-            title="Drie dagen. Eindeloos veel ideeën."
-          />
-          <div className="schedule">
+      {d ? (
+        <>
+          <div className="container mini-info" data-cms="Feiten">
             <div>
-              {[
-                ["10:00", "Welkom & creatieve toekomsten"],
-                ["11:30", "Voorbij het verwachte"],
-                ["14:00", "Ontmoet de makers"],
-              ].map(([tijd, titel]) => (
-                <div className="schedule-row" key={tijd}>
-                  <strong>{tijd}</strong>
-                  <span>{titel}</span>
-                  <span aria-hidden="true">↗</span>
+              <span>DATUM</span>
+              <strong>{d.datum}</strong>
+            </div>
+            <div>
+              <span>LOCATIE</span>
+              <strong>{d.locatie}</strong>
+            </div>
+            <div>
+              <span>DOELGROEP</span>
+              <strong>{d.doelgroep}</strong>
+            </div>
+          </div>
+          <section className="section" data-cms="Reeks stappen · programma">
+            <div className="container">
+              <SectionTitle
+                num="01"
+                eyebrow="HET PROGRAMMA"
+                title={
+                  d.dagen.length > 1
+                    ? "Drie dagen. Eindeloos veel ideeën."
+                    : "Eén middag. Betere vragen."
+                }
+              />
+              <div className="schedule">
+                <div>
+                  {d.dagen.map((dag) => (
+                    <div key={dag.titel} style={{ marginBottom: 28 }}>
+                      <span className="eyebrow">{dag.titel}</span>
+                      {dag.items.map(([tijd, titel]) => (
+                        <div className="schedule-row" key={tijd + titel}>
+                          <strong>{tijd}</strong>
+                          <span>{titel}</span>
+                          <span aria-hidden="true">↗</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="image-frame" style={{ height: 360 }}>
-              <Photo src="journal_event" />
-            </div>
-          </div>
-        </div>
-      </section>
-      <section
-        className="section section-soft"
-        data-cms="Prijskaarten / tickets"
-      >
-        <div className="container">
-          <SectionTitle
-            num="02"
-            eyebrow="JOUW TICKET"
-            title="Kies je beleving."
-          />
-          <div className="tickets">
-            {[
-              ["Dagticket.", "€ 49", ""],
-              ["Volledige pas.", "€ 119", "featured"],
-              ["Groepspas.", "€ 399", ""],
-            ].map(([naam, prijs, cl]) => (
-              <div className={`ticket ${cl}`} key={naam}>
-                <h3>{naam}</h3>
-                <strong>{prijs}</strong>
-                <DemoKnop melding={MELDING}>Ticket bekijken ↗</DemoKnop>
+                <div className="image-frame" style={{ height: 360 }}>
+                  <Photo src="event_gradient" alt={altTeksten.event_gradient} />
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
+          <section
+            className="section section-soft"
+            data-cms="Prijskaarten / tickets"
+          >
+            <div className="container">
+              <SectionTitle
+                num="02"
+                eyebrow="JOUW TICKET"
+                title="Kies je beleving."
+                desc="Demoprijzen: bestellen of betalen is niet mogelijk."
+              />
+              <div className="tickets">
+                {d.tickets.map(([naam, prijs, tekst], i) => (
+                  <div
+                    className={`ticket ${i === 1 ? "featured" : ""}`}
+                    key={naam}
+                  >
+                    <div>
+                      <h3>{naam}</h3>
+                      <p style={{ marginTop: 12 }}>{tekst}</p>
+                    </div>
+                    <div>
+                      <strong>{prijs}</strong>
+                      <DemoKnop
+                        style={{ display: "flex", marginTop: 15 }}
+                        melding={d.disclaimer}
+                      >
+                        Bekijk voorbeeldtickets ↗
+                      </DemoKnop>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="demo-note" style={{ marginTop: 20 }}>
+                {d.disclaimer}
+              </p>
+            </div>
+          </section>
+        </>
+      ) : null}
     </Page>
   );
 }

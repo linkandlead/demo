@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Page } from "@/components/nova/Page";
-import { Photo, SectionTitle, StoryCard } from "@/components/nova/ui";
+import { Btn, Photo, SectionTitle, StoryCard } from "@/components/nova/ui";
+import { altTeksten, artikelAlsTekst, artikelen } from "@/content/teksten";
 import { getPosts } from "@/lib/cms/data";
 
 export async function generateStaticParams() {
@@ -13,7 +14,10 @@ export async function generateMetadata({
 }: PageProps<"/journal/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const post = (await getPosts()).items.find((p) => p.slug === slug);
-  return { title: post?.title ?? "Artikel" };
+  return {
+    title: post?.title ?? "Artikel",
+    description: post?.lead || (post ? artikelen[post.slug]?.intro : undefined),
+  };
 }
 
 export default async function Artikel({
@@ -24,58 +28,47 @@ export default async function Artikel({
   const post = items.find((p) => p.slug === slug);
   if (!post) notFound();
   const meer = items.filter((p) => p.slug !== post.slug).slice(0, 3);
+  // Hoofdtekst uit Supabase/CMS ("## kop" + alinea's); anders de definitieve teksten.
+  const tekst = artikelen[post.slug];
+  const blokken = post.body?.length
+    ? post.body
+    : tekst
+      ? artikelAlsTekst(tekst).split("\n\n")
+      : [];
   return (
     <Page>
       <article className="container article-page" data-cms="Header + Tekstblok">
         <span className="eyebrow">{post.cat} / VERHALEN</span>
         <h1>{post.title}.</h1>
-        <p className="lead">
-          {post.lead ||
-            "Waarom nieuwe ideeën, mensen en plekken een steeds belangrijkere rol spelen in de manier waarop we samenkomen en creëren."}
-        </p>
+        <p className="lead">{post.lead || tekst?.intro || ""}</p>
         <div className="meta" style={{ marginBottom: 30 }}>
           NOVA-REDACTIE{post.time ? <> &nbsp; · &nbsp; {post.time}</> : null}
-          {bron !== "cms" && !post.body?.length ? (
-            <> &nbsp; · &nbsp; VOORBEELDARTIKEL</>
-          ) : null}
+          {bron !== "cms" ? <> &nbsp; · &nbsp; VOORBEELDARTIKEL</> : null}
         </div>
         <div className="wide-photo">
-          <Photo src={post.cover} alt={post.title} priority />
+          <Photo
+            src={post.cover}
+            alt={altTeksten[post.cover] ?? post.title}
+            priority
+          />
         </div>
         <div className="article-body">
-          {post.body?.length ? (
-            post.body.map((alinea, i) => <p key={i}>{alinea}</p>)
-          ) : (
-            <>
-              <p>
-                De mooiste ideeën ontstaan vaak op de grens tussen disciplines.
-                Waar architectuur, technologie en cultuur elkaar raken, groeit
-                ruimte voor onverwachte ervaringen.
-              </p>
-              <p>
-                Bij NOVA geloven we dat vernieuwen begint met nieuwsgierigheid.
-                Niet met de nieuwste techniek of het grootste podium, maar met
-                de vraag wat we voor mensen mogelijk willen maken.
-              </p>
-              <h2>Beleving eerst.</h2>
-              <p>
-                Een sterke ervaring vertelt een verhaal zonder alles uit te
-                leggen. Ze maakt bezoekers niet alleen toeschouwer, maar
-                onderdeel van wat er gebeurt. Dat vraagt om ruimte, ritme en een
-                scherp gevoel voor detail.
-              </p>
-              <blockquote>Goed ontwerp laat mensen iets voelen.</blockquote>
-              <p>
-                Van een intieme studio tot een grootschalig festival: de
-                uitgangspunten blijven hetzelfde. Zoek naar wat verbindt, laat
-                ruimte voor verwondering en maak iets dat betekenis heeft.
-              </p>
-              <p>
-                Dit artikel bevat fictieve voorbeeldcontent, speciaal geschreven
-                voor het visuele CMS-ontwerp.
-              </p>
-            </>
+          {blokken.map((b, i) =>
+            b.startsWith("## ") ? (
+              <h2 key={i}>{b.slice(3)}</h2>
+            ) : (
+              <p key={i}>{b}</p>
+            ),
           )}
+          {tekst?.slot ? <blockquote>{tekst.slot}</blockquote> : null}
+          {bron !== "cms" ? (
+            <p className="meta">
+              Voorbeeldartikel voor de fictieve NOVA-website.
+            </p>
+          ) : null}
+          <Btn to="journal" cl="btn-dark">
+            Bekijk meer verhalen
+          </Btn>
         </div>
       </article>
       {meer.length ? (
@@ -84,7 +77,7 @@ export default async function Artikel({
             <SectionTitle
               num="VERDER"
               eyebrow="LEES MEER"
-              title="Verhalen die het delen waard zijn."
+              title="Meer verhalen die het delen waard zijn."
             />
             <div className="article-grid">
               {meer.map((p) => (

@@ -41,6 +41,7 @@ export async function POST(request: Request) {
     naam: v.data.naam,
     email: v.data.email,
     bedrijf: v.data.bedrijf,
+    onderwerp: v.data.websiteType,
     vraag: v.data.vraag,
     bron_pagina: "/one",
   });
@@ -52,14 +53,14 @@ export async function POST(request: Request) {
       return Response.json({
         ok: true,
         melding:
-          "Bedankt! Je aanvraag is opgeslagen in de NOVA-demodatabase. Doorsturen naar het Link & Lead One-team is nog niet ingesteld, dus er volgt geen automatische e-mail.",
+          "Je aanvraag is ontvangen en opgeslagen in de NOVA-demodatabase. Doorsturen naar het Link & Lead One-team is nog niet ingesteld, dus er volgt geen automatische e-mail.",
       });
     return Response.json(
       {
         ok: false,
         demo: true,
         melding:
-          "Demonstratiestatus: je aanvraag is níet verzonden. De aanvraagroute naar Link & Lead One is in deze omgeving nog niet ingesteld.",
+          "Zo ziet de bevestiging eruit. Er is nog geen echte demo-aanvraag verstuurd.",
       },
       { status: 503 },
     );
@@ -82,9 +83,7 @@ export async function POST(request: Request) {
         naam: v.data.naam,
         email: v.data.email,
         bedrijf: v.data.bedrijf,
-        vraag: v.data.vraag
-          ? `Demo-aanvraag Link & Lead One: ${v.data.vraag}`
-          : "Demo-aanvraag Link & Lead One (via NOVA)",
+        vraag: `Demo-aanvraag Link & Lead One (${v.data.websiteType})${v.data.vraag ? `: ${v.data.vraag}` : ""}`,
         bron_pagina: "/one",
         herkomst: "nova-demo",
         ...(geheim && ip ? { bezoeker_ip: ip } : {}),
@@ -101,7 +100,7 @@ export async function POST(request: Request) {
           ok: false,
           melding:
             data.melding ||
-            "Versturen is niet gelukt. Probeer het later opnieuw.",
+            "Je aanvraag kon niet worden verzonden. Probeer het opnieuw.",
         },
         { status: 502 },
       );
@@ -109,7 +108,7 @@ export async function POST(request: Request) {
     return Response.json({
       ok: true,
       melding:
-        "Bedankt! Je aanvraag is ontvangen. We nemen contact met je op om een demo in te plannen.",
+        "Je aanvraag is ontvangen. We nemen contact met je op om een demonstratie af te stemmen.",
     });
   } catch {
     return Response.json(

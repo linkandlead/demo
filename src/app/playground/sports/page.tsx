@@ -2,11 +2,23 @@ import type { Metadata } from "next";
 import { Page } from "@/components/nova/Page";
 import { SectionTitle } from "@/components/nova/ui";
 
-export const metadata: Metadata = { title: "Sport" };
+export const metadata: Metadata = {
+  title: "Sportblokken — wedstrijden & volgende wedstrijd",
+  description:
+    "Bekijk de fictieve sportclub NOVA United en ontdek de CMS-blokken Wedstrijden en Volgende wedstrijd.",
+};
 
 export default function Sports() {
   return (
-    <Page>
+    <Page
+      oproep={{
+        eyebrow: "03 / TERUG NAAR DE BIBLIOTHEEK",
+        kop: "Gebouwd voor meer dan één soort website.",
+        tekst: "Dit zijn twee van de 43 algemene CMS-blokken.",
+        knop: "Bekijk alle blokken",
+        href: "playground",
+      }}
+    >
       <section className="inner-hero">
         <div className="container">
           <span className="eyebrow">BLOKKENBIBLIOTHEEK / SPORT</span>
@@ -16,8 +28,8 @@ export default function Sports() {
             Elk moment.
           </h1>
           <p>
-            Een aparte visuele omgeving voor de bestaande blokken Wedstrijden en
-            Volgende wedstrijd.
+            Een afzonderlijke demo voor wedstrijdoverzichten en de volgende
+            wedstrijd. Ontworpen voor sportclubs met een eigen identiteit.
           </p>
         </div>
       </section>
@@ -28,8 +40,9 @@ export default function Sports() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="DE VOLGENDE WEDSTRIJD"
-            title="NOVA United."
+            eyebrow="VOLGENDE WEDSTRIJD"
+            title="De volgende wedstrijd begint hier."
+            desc="NOVA United tegen Atlas FC. Geen live wedstrijdfeed; de datum is voorbeeldcontent."
           />
           <div
             className="featured-story"
@@ -43,7 +56,7 @@ export default function Sports() {
               <span className="eyebrow">VOLGENDE WEDSTRIJD / THUIS</span>
               <h2 style={{ fontSize: 80, marginTop: 15 }}>NOVA / ATLAS</h2>
               <p style={{ fontSize: 15, color: "#1b2b3c", marginTop: 15 }}>
-                Fictieve wedstrijd · 24 april 2027 · 16:00
+                Voorbeeldwedstrijd · 24 april 2027 · 16.00 uur
               </p>
             </div>
             <div
@@ -68,19 +81,23 @@ export default function Sports() {
           </div>
           <div className="schedule" style={{ marginTop: 40 }}>
             <div>
-              <div className="schedule-row">
-                <strong>24 APR</strong>
-                <span>NOVA United — Atlas FC</span>
-                <span aria-hidden="true">↗</span>
-              </div>
-              <div className="schedule-row">
-                <strong>1 MEI</strong>
-                <span>Harbor City — NOVA United</span>
-                <span aria-hidden="true">↗</span>
-              </div>
+              <span className="eyebrow">
+                02 / HET PROGRAMMA · HET HELE SEIZOEN IN ÉÉN OOGOPSLAG
+              </span>
+              {[
+                ["24 APR", "NOVA United — Atlas FC · thuis · 16.00 uur"],
+                ["1 MEI", "Harbor City — NOVA United · uit · 14.30 uur"],
+                ["8 MEI", "NOVA United — Riverside SC · thuis · 15.00 uur"],
+              ].map(([datum, wedstrijd]) => (
+                <div className="schedule-row" key={datum}>
+                  <strong>{datum}</strong>
+                  <span>{wedstrijd}</span>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              ))}
             </div>
             <div className="demo-note">
-              Uitsluitend fictieve uitslagen en wedstrijddatums.
+              Alle clubs, tijden en wedstrijden zijn fictief.
             </div>
           </div>
         </div>

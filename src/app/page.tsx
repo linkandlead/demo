@@ -12,7 +12,14 @@ import {
   StoryCard,
   t,
 } from "@/components/nova/ui";
+import { altTeksten } from "@/content/teksten";
 import { getCases, getPeople, getPosts, pagina } from "@/lib/cms/data";
+
+export const metadata = {
+  title: { absolute: "NOVA — Ideeën verdienen werkelijkheid" },
+  description:
+    "Ontdek NOVA: een fictieve creatieve wereld vol projecten, verhalen, evenementen en bijzondere ruimtes. De visuele showcase van Link & Lead One.",
+};
 
 // Homepage — 1-op-1 home() uit het prototype. Elke sectie is een CMS-kernblok (data-cms).
 export default async function Home() {
@@ -26,14 +33,19 @@ export default async function Home() {
     cases.length >= 4 ? [cases[1], cases[0], cases[3]] : cases.slice(0, 3);
 
   return (
-    <Page>
+    <Page
+      oproep={{
+        eyebrow: "07 / DE VOLGENDE STAP",
+        kop: "Je volgende idee begint hier.",
+        tekst:
+          "En achter deze website? Daar zit Link & Lead One. Bekijk de interactieve rondleiding of ontdek alle CMS-blokken.",
+        knop: "Ontdek het CMS",
+        href: "one",
+      }}
+    >
       <section data-cms="Header (hero) · Diepst" className="hero-home">
         <div className="hero-visual">
-          <Photo
-            src="hero_arch"
-            alt="Sculpturale blauwe architectuur met warm oranje licht"
-            priority
-          />
+          <Photo src="hero_arch" alt={altTeksten.hero_arch} priority />
         </div>
         <div className="container hero-copy">
           <div className="eyebrow" style={{ color: "var(--lime)" }}>
@@ -64,7 +76,7 @@ export default async function Home() {
             {t(
               hero,
               "subheading",
-              "Een plek voor nieuwe ideeën, inspirerende mensen en bijzondere ervaringen.",
+              "Een plek voor nieuwe ideeën, inspirerende mensen en bijzondere ervaringen. Ontdek wat er mogelijk wordt als verschillende werelden elkaar ontmoeten.",
             )}
           </p>
           <div className="hero-actions">
@@ -114,16 +126,17 @@ export default async function Home() {
             </SectionLabel>
             <h2>{t(intro, "titel", "Waar ideeën hun mensen vinden.")}</h2>
             <p>
-              Wij geloven in de kracht van ontmoetingen. In ruimtes die
-              uitdagen, verhalen die blijven hangen en ideeën die de wereld
-              verder brengen.
+              NOVA brengt een nieuwe manier van denken tot leven. We laten zien
+              hoe creativiteit, architectuur, technologie en cultuur samen
+              verhalen kunnen vertellen. Van een intiem gesprek tot een grootse
+              ervaring: het begint met nieuwsgierigheid.
             </p>
             <Btn to={t(intro, "knop", "about")} cl="btn-dark">
               {t(intro, "knoptekst", "Ontdek ons verhaal")}
             </Btn>
           </div>
           <div className="image-frame intro-image">
-            <Photo src="work_color" alt="Kleurrijke lichtinstallatie" />
+            <Photo src="work_color" alt={altTeksten.work_color} />
             <span className="image-tag">CREATIVITEIT IN BEWEGING</span>
           </div>
         </div>
@@ -134,8 +147,8 @@ export default async function Home() {
           <SectionTitle
             num="02"
             eyebrow="GESELECTEERD WERK"
-            title="Gemaakt om mensen te raken."
-            desc="Van architectuur en ervaringen tot digitale ideeën. Werk dat niet alleen mooi is, maar ook iets losmaakt."
+            title="Gemaakt om je iets te laten voelen."
+            desc="Ontdek zes voorbeeldprojecten waarin beeld, verhaal en ruimte samenkomen. Elk project heeft een eigen identiteit, precies zoals iedere website een eigen uitstraling verdient."
           />
           {uitgelicht.length ? (
             <div className="portfolio-grid">
@@ -144,7 +157,7 @@ export default async function Home() {
               ))}
             </div>
           ) : (
-            <EmptyState>Er zijn nog geen cases gepubliceerd.</EmptyState>
+            <EmptyState>Er zijn nog geen projecten toegevoegd.</EmptyState>
           )}
           <div style={{ marginTop: 33 }}>
             <Btn to="work" cl="btn-dark">
@@ -172,8 +185,8 @@ export default async function Home() {
               </>
             )}
           </h2>
-          <Btn to={t(statement, "knop", "community")}>
-            {t(statement, "knoptekst", "Ontmoet onze community")}
+          <Btn to={t(statement, "knop", "about")}>
+            {t(statement, "knoptekst", "Maak kennis met NOVA")}
           </Btn>
         </div>
       </section>
@@ -182,24 +195,26 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="04"
-            eyebrow="HET IDEE IN CIJFERS"
+            eyebrow="IN DEZE DEMO"
             title="Een wereld vol mogelijkheden."
-            desc="Fictieve voorbeeldcijfers voor de demonstratie van het CMS-statistiekenblok."
+            desc="Geen verzonnen impactcijfers, maar aantallen die je in de demo zelf kunt bekijken."
           />
-          <div className="stats-grid">
+          <div className="stats-grid stats-4">
             <div className="stat">
-              <strong>
-                120<span style={{ color: "#8fa616" }}>+</span>
-              </strong>
-              <p>Ideeën tot leven gebracht</p>
+              <strong>43</strong>
+              <p>Algemene CMS-blokken</p>
             </div>
             <div className="stat">
-              <strong>38</strong>
-              <p>Creatieve samenwerkingspartners</p>
+              <strong>5</strong>
+              <p>Achtergrondvarianten</p>
             </div>
             <div className="stat">
-              <strong>12k</strong>
-              <p>Geïnspireerde geesten</p>
+              <strong>6</strong>
+              <p>Fictieve projectcases</p>
+            </div>
+            <div className="stat">
+              <strong>3</strong>
+              <p>Voorbeeldruimtes</p>
             </div>
           </div>
         </div>
@@ -209,9 +224,9 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="05"
-            eyebrow="MENSEN"
-            title="Ontmoet de denkers."
-            desc="Ideeën worden pas bijzonder door de mensen die ze vormgeven."
+            eyebrow="DE MENSEN"
+            title="Verschillende denkers. Gedeelde energie."
+            desc="Vier fictieve makers, vier perspectieven. Hun profielen laten zien hoe je een teamcollectie in het CMS beheert."
           />
           {people.length ? (
             <div className="people-grid">
@@ -220,11 +235,11 @@ export default async function Home() {
               ))}
             </div>
           ) : (
-            <EmptyState>Er zijn nog geen teamleden gepubliceerd.</EmptyState>
+            <EmptyState>Er zijn nog geen teamleden beschikbaar.</EmptyState>
           )}
           <div style={{ marginTop: 32 }}>
             <Btn to="community" cl="btn-dark">
-              Ontmoet onze community
+              Ontmoet de makers
             </Btn>
           </div>
         </div>
@@ -238,8 +253,8 @@ export default async function Home() {
           <SectionTitle
             num="06"
             eyebrow="VERHALEN"
-            title="Frisse perspectieven."
-            desc="Verhalen om bij stil te staan. En om daarna weer vooruit te kijken."
+            title="Goede ideeën verdienen een goed verhaal."
+            desc="Verhalen over ontwerp, beleving, technologie en samenkomen. Ontdek hoe een redactionele collectie van overzicht tot detailpagina werkt."
           />
           {posts.length ? (
             <div className="article-grid">
@@ -252,7 +267,7 @@ export default async function Home() {
           )}
           <div style={{ marginTop: 34 }}>
             <Btn to="journal" cl="btn-dark">
-              Bekijk alle verhalen
+              Lees de verhalen
             </Btn>
           </div>
         </div>

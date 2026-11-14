@@ -78,8 +78,7 @@ export function DemoFormulier({
     } catch {
       setStatus({
         soort: "fout",
-        tekst:
-          "Versturen is niet gelukt. Controleer je verbinding en probeer het opnieuw.",
+        tekst: "Je lijkt offline te zijn. Controleer je verbinding.",
       });
     } finally {
       setBezig(false);
@@ -112,7 +111,7 @@ export function DemoFormulier({
         aria-live="polite"
         style={{ gridColumn: "1/-1" }}
       >
-        {bezig ? "Bezig met versturen…" : status?.tekst}
+        {bezig ? "Bezig met verzenden…" : status?.tekst}
       </div>
     </form>
   );

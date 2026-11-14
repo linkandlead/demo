@@ -3,11 +3,12 @@ import Link from "next/link";
 import { AanvraagFormulier } from "@/components/nova/AanvraagFormulier";
 import { Page } from "@/components/nova/Page";
 import { Btn, Photo, SectionLabel, SectionTitle } from "@/components/nova/ui";
+import { altTeksten, faq } from "@/content/teksten";
 
 export const metadata: Metadata = {
-  title: "Het CMS — Link & Lead One",
+  title: { absolute: "Link & Lead One — ontdek het CMS achter NOVA" },
   description:
-    "Je zag de website. Ontdek wat erachter zit: de blokken, collecties en mogelijkheden van Link & Lead One.",
+    "Ontdek Link & Lead One: 43 algemene CMS-blokken, vijf achtergrondvarianten, sitegebonden huisstijl en contentcollecties. Bekijk de demo.",
 };
 
 // Wat redacteurs beheren — alleen onderdelen die in de linkandlead-cms-repo zijn aangetroffen
@@ -20,6 +21,19 @@ const BEHEER = [
   "Formulieren waarvan aanvragen in het CMS binnenkomen",
 ];
 
+const STAPPEN: Array<[string, string]> = [
+  ["Ontwerp", "Maak een visuele website die precies bij het merk past."],
+  ["Structuur", "Koppel secties aan bestaande CMS-blokken en collecties."],
+  [
+    "Beheer",
+    "Vul teksten, media en contentitems in via de daarvoor bedoelde velden.",
+  ],
+  [
+    "Publiceer",
+    "Controleer desktop en mobiel en publiceer via de geconfigureerde omgeving.",
+  ],
+];
+
 export default function One() {
   const extern = process.env.DEMO_AANVRAAG_URL?.trim();
   return (
@@ -30,7 +44,7 @@ export default function One() {
       >
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            LINK & LEAD ONE / HET CMS ACHTER DE ERVARING
+            LINK & LEAD ONE / HET CMS ACHTER NOVA
           </span>
           <h1>
             Je zag de website.
@@ -41,8 +55,9 @@ export default function One() {
           </h1>
           <p className="one-intro">
             NOVA laat zien hoeveel ontwerpvrijheid je kunt combineren met
-            overzichtelijk contentbeheer. Ontdek de blokken, collecties en
-            mogelijkheden van Link & Lead One in een interactieve demonstratie.
+            overzichtelijk contentbeheer. Link & Lead One brengt pagina’s,
+            contentblokken en collecties samen, met ruimte voor een volledig
+            eigen uitstraling.
           </p>
           <div className="one-cta-row">
             <Link className="btn btn-lime" href="/demo">
@@ -62,8 +77,8 @@ export default function One() {
               <small>achtergrondvarianten</small>
             </div>
             <div>
-              <strong>01</strong>
-              <small>centrale contentervaring</small>
+              <strong>12</strong>
+              <small>instelbare huisstijlkleuren</small>
             </div>
           </div>
         </div>
@@ -72,7 +87,7 @@ export default function One() {
       <section className="section" data-cms="Tekst met beeld">
         <div className="container one-split">
           <div>
-            <SectionLabel num="01">LIVE ONTWERPSHOWCASE</SectionLabel>
+            <SectionLabel num="01">WAAROM HET WERKT</SectionLabel>
             <h2
               style={{
                 fontSize: "clamp(50px,6.5vw,90px)",
@@ -83,21 +98,19 @@ export default function One() {
               Mooi van buiten. Slim ingericht.
             </h2>
             <p>
-              Van een krachtige hero tot dynamische artikelen, van testimonials
-              tot een configurator: laat zien hoe een echte website is opgebouwd
-              uit beheersbare onderdelen.
+              Een krachtige website hoeft geen ingewikkeld beheer te hebben. Van
+              de eerste indruk tot de laatste oproep: ieder onderdeel heeft een
+              functie. In Link & Lead One krijgt een redacteur grip op de
+              inhoud, terwijl de voorkant ruimte houdt voor een eigen design.
             </p>
             <div style={{ marginTop: 26 }}>
-              <Btn to="" cl="btn-dark">
-                Bekijk NOVA live
+              <Btn to="demo" cl="btn-dark">
+                Bekijk hoe NOVA is opgebouwd
               </Btn>
             </div>
           </div>
           <div className="one-shot">
-            <Photo
-              src="hero_arch"
-              alt="NOVA visualisatie: architecturaal lichtobject"
-            />
+            <Photo src="hero_arch" alt={altTeksten.hero_arch} />
           </div>
         </div>
       </section>
@@ -106,33 +119,33 @@ export default function One() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="WAT JE KUNT LATEN ZIEN"
-            title="Ontworpen om te ontdekken."
-            desc="Alle onderstaande onderdelen komen voor in de bijgevoegde CMS-specificatie. Hun volledige integratie moet binnen de bestaande codebase worden bevestigd."
+            eyebrow="DRIE REDENEN"
+            title="Het design is van jou. De inhoud houd je zelf bij."
+            desc="Drie sterke bouwstenen voor een website die blijft groeien."
           />
           <div className="one-benefits">
             <div className="one-benefit">
-              <span className="one-index">01 / REDACTIE</span>
-              <h3>Van tekst tot beeld.</h3>
+              <span className="one-index">01 / ONTWERPVRIJHEID</span>
+              <h3>Jouw merk, jouw design.</h3>
               <p>
-                Beheer paginaonderdelen met vaste velden, media en verschillende
-                lay-outs. Content staat centraal.
+                Een eigen frontend laat het design aansluiten op je merk. Geen
+                verplichte standaarduitstraling.
               </p>
             </div>
             <div className="one-benefit">
-              <span className="one-index">02 / CONTENT</span>
-              <h3>Collecties die meebewegen.</h3>
+              <span className="one-index">02 / OVERZICHTELIJKE CONTENT</span>
+              <h3>Alles op een vaste plek.</h3>
               <p>
-                Toon cases, artikelen, teamleden en reviews waar ze relevant
-                zijn, vanuit aparte verzamelingen.
+                Beheer paginaonderdelen, afbeeldingen en collecties op vaste
+                plekken in het CMS.
               </p>
             </div>
             <div className="one-benefit">
-              <span className="one-index">03 / CONVERSIE</span>
+              <span className="one-index">03 / MEER INTERACTIE</span>
               <h3>Meer dan een brochure.</h3>
               <p>
-                Gebruik formulieren, enquêtes, prijskaarten en configurators om
-                bezoekers actief te betrekken.
+                Gebruik de aanwezige blokken voor formulieren, configurators,
+                testimonials en meer.
               </p>
             </div>
           </div>
@@ -141,7 +154,7 @@ export default function One() {
 
       <section className="section one-dark" data-cms="Statement">
         <div className="container">
-          <SectionLabel num="03">DE ECHTE KRACHT</SectionLabel>
+          <SectionLabel num="03">ÉÉN SYSTEEM</SectionLabel>
           <h2
             style={{
               fontSize: "clamp(55px,8vw,126px)",
@@ -150,16 +163,17 @@ export default function One() {
               margin: "24px 0",
             }}
           >
-            Eén systeem.
+            Eén CMS.
             <br />
             <span style={{ color: "var(--lime)" }}>
-              Jouw eigen uitstraling.
+              Heel veel mogelijk&shy;heden.
             </span>
           </h2>
           <p style={{ maxWidth: 650 }}>
-            Een eigen frontend geeft ontwerpvrijheid. Het CMS zorgt dat
-            redacteuren inhoud, blokken en collecties kunnen beheren. NOVA is
-            het visuele bewijs van die combinatie.
+            43 algemene blokken. Vijf achtergrondvarianten. Twaalf instelbare
+            huisstijlkleuren. Dat zijn geen willekeurige aantallen: ze komen uit
+            de huidige CMS-ontwerpspecificatie. De werkelijke beschikbaarheid in
+            een installatie controleren we tijdens de technische demo.
           </p>
           <div className="one-chip-row">
             {[
@@ -167,71 +181,100 @@ export default function One() {
               "Blokken & varianten",
               "Dynamische collecties",
               "Formulieren & interactie",
-              "Responsive weergave",
+              "Responsieve weergave",
             ].map((c) => (
               <span className="one-chip" key={c}>
                 {c}
               </span>
             ))}
           </div>
-          <Btn to="playground">Ontdek de blokkenbibliotheek</Btn>
+          <Btn to="playground">Ontdek de blokken</Btn>
         </div>
       </section>
 
-      <section className="section" data-cms="Reeks stappen">
+      <section className="section" data-cms="Tekst met beeld · beeld links">
+        <div className="container one-split">
+          <div className="one-shot">
+            <Photo src="work_color" alt={altTeksten.work_color} />
+          </div>
+          <div>
+            <SectionLabel num="04">JOUW MERK</SectionLabel>
+            <h2
+              style={{
+                fontSize: "clamp(50px,6.5vw,90px)",
+                lineHeight: 0.96,
+                margin: "20px 0 25px",
+              }}
+            >
+              Eén systeem. Jouw eigen uitstraling.
+            </h2>
+            <p>
+              Een herkenbaar merk bouw je niet met een verzameling identieke
+              templates. NOVA heeft haar eigen beeldtaal, ritme en sfeer. Via de
+              site-instellingen leg je kleuren en typografie per website vast.
+              Met een eigen frontend bepaal je bovendien de vormgeving van de
+              blokken.
+            </p>
+            <div style={{ marginTop: 26 }}>
+              <Btn to="" cl="btn-dark">
+                Bekijk het design van NOVA
+              </Btn>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-soft" data-cms="Reeks stappen">
         <div className="container">
           <SectionTitle
-            num="04"
-            eyebrow="IN VIJF MINUTEN"
-            title="Zie het verschil."
-            desc="Niet alleen over functies praten. Laat de bezoeker zelf ervaren wat er in het CMS kan."
+            num="05"
+            eyebrow="ZO WERKT HET"
+            title="Van mooi ontwerp naar beheerbare website."
+            desc="Een helder proces verbindt ontwerp, bouw en redactie."
           />
-          <div className="steps">
-            {[
-              "Bekijk de indrukwekkende NOVA-homepage",
-              "Markeer het onderliggende CMS-blok",
-              "Open de bijbehorende editor (na koppeling)",
-              "Ontdek collecties, formulieren en varianten",
-              "Bekijk dezelfde website op mobiel",
-            ].map((s, i) => (
-              <div className="step" key={s}>
-                <span>0{i + 1}</span> {s} <b aria-hidden="true">↗</b>
+          <div className="timeline">
+            {STAPPEN.map(([titel, tekst], i) => (
+              <div className="timeline-item" key={titel}>
+                <strong>0{i + 1}</strong>
+                <h3>{titel}</h3>
+                <p>{tekst}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section section-soft" data-cms="Flexibel blok">
+      <section className="section" data-cms="Flexibel blok">
         <div className="container">
           <SectionTitle
-            num="05"
+            num="06"
             eyebrow="VOOR WIE"
-            title="Voor wie het niet standaard mag zijn."
+            title="Gemaakt voor mensen die iets willen maken."
+            desc="Of je nu een nieuwe website bouwt of dagelijks content publiceert: een duidelijke inhoudsstructuur helpt."
           />
           <div className="one-benefits">
             <div className="one-benefit">
               <span className="one-index">TEAMS</span>
-              <h3>Marketingteams</h3>
+              <h3>Voor marketingteams</h3>
               <p>
-                Maak aantrekkelijke pagina&apos;s met consistente bouwstenen en
-                beheersbare content.
+                Werk aan nieuwe pagina’s, campagnes en updates zonder telkens de
+                hele website opnieuw te ontwerpen.
               </p>
             </div>
             <div className="one-benefit">
               <span className="one-index">BUREAUS</span>
-              <h3>Creatieve bureaus</h3>
+              <h3>Voor creatieve bureaus</h3>
               <p>
-                Ontwerp bijzondere frontends, terwijl de klant de inhoud
-                overzichtelijk kan beheren.
+                Houd de vrijheid van een eigen frontend en geef opdrachtgevers
+                een begrijpelijke manier om content te beheren.
               </p>
             </div>
             <div className="one-benefit">
               <span className="one-index">ORGANISATIES</span>
-              <h3>Meerdere merken</h3>
+              <h3>Voor organisaties</h3>
               <p>
-                Gebruik per site een eigen huisstijl. Bevestig multi-sitebeheer
-                en rechten binnen de echte CMS-omgeving.
+                Breng cases, mensen, artikelen en andere content overzichtelijk
+                samen. Gebruik per site de passende huisstijl.
               </p>
             </div>
           </div>
@@ -241,7 +284,7 @@ export default function One() {
                 Probeer niet te verbeelden wat er mogelijk is. Bekijk het.
               </strong>
               <p>
-                Start de interactieve demonstratie of open direct de
+                Start de interactieve rondleiding of open direct de
                 blokkenbibliotheek.
               </p>
             </div>
@@ -252,25 +295,48 @@ export default function One() {
         </div>
       </section>
 
+      <section className="section section-soft" data-cms="Veelgestelde vragen">
+        <div className="container">
+          <SectionTitle
+            num="07"
+            eyebrow="GOED OM TE WETEN"
+            title="Veelgestelde vragen over Link & Lead One."
+            desc="Van blokken en collecties tot integratie met je eigen ontwerp."
+          />
+          <div className="faq-lijst">
+            {faq.map(([vraag, antwoord]) => (
+              <details key={vraag}>
+                <summary>{vraag}</summary>
+                <p>{antwoord}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="one-end" data-cms="Afsluitende oproep / product">
         <div className="container">
-          <span className="eyebrow">DE WEBSITE IS HET BEWIJS</span>
-          <h2>Mooie websites verdienen een betere manier van werken.</h2>
+          <span className="eyebrow">08 / ERVAAR HET ZELF</span>
+          <h2>Laat de website overtuigen. Ontdek zelf hoe het CMS werkt.</h2>
+          <p style={{ maxWidth: 620, marginTop: 20 }}>
+            Begin met de interactieve rondleiding, bekijk de blokkenbibliotheek
+            of vraag een persoonlijke demonstratie aan.
+          </p>
           <div className="one-cta-row">
-            <Link className="btn btn-dark" href="/demo">
-              Ontdek Link & Lead One <span className="arrow">↗</span>
+            <Link className="btn btn-dark" href="#aanvraag">
+              Vraag een persoonlijke demo aan <span className="arrow">↗</span>
             </Link>
             <Link
               className="btn btn-outline"
               style={{ color: "var(--night)" }}
-              href="/playground"
+              href="/demo"
             >
-              Bekijk alle mogelijkheden <span className="arrow">↗</span>
+              Start de rondleiding <span className="arrow">↗</span>
             </Link>
           </div>
           <p className="one-honest">
-            Dit is een visueel prototype. Voor een live saleswebsite moet de
-            echte CMS-koppeling en aanvraagroute nog worden ingesteld.
+            Dit is een demonstratie. Voor een live saleswebsite moeten de echte
+            CMS-koppeling en aanvraagroute nog worden ingesteld.
           </p>
         </div>
       </section>
@@ -282,11 +348,13 @@ export default function One() {
       >
         <div className="container contact-layout">
           <div>
-            <SectionLabel num="06">VOLGENDE STAP / KENNISMAKING</SectionLabel>
-            <h2 style={{ marginTop: 18 }}>Zie wat het voor jouw site doet.</h2>
+            <SectionLabel num="09">DEMO AANVRAGEN</SectionLabel>
+            <h2 style={{ marginTop: 18 }}>
+              Ontdek wat Link & Lead One voor jouw website kan betekenen.
+            </h2>
             <p className="side-note">
-              Vertel kort wat je zoekt. We laten je in een demo zien wat je
-              redacteuren in Link & Lead One zelf beheren:
+              Vertel ons wat voor website je wilt maken. Dan kijken we samen
+              welke onderdelen relevant zijn. Dit beheren je redacteuren zelf:
             </p>
             <ul
               style={{

@@ -4,6 +4,7 @@ export type Aanvraag = {
   naam: string;
   email: string;
   bedrijf?: string;
+  websiteType?: string;
   vraag?: string;
 };
 export type Validatie =
@@ -21,15 +22,22 @@ export function valideerAanvraag(body: unknown): Validatie {
   const naam = tekst(b.naam, 200);
   const email = tekst(b.email, 254);
   const fouten: Record<string, string> = {};
-  if (!naam) fouten.naam = "Vul je naam in.";
+  const bedrijf = tekst(b.bedrijf, 200);
+  const websiteType = tekst(b.websiteType, 80);
+  if (!naam) fouten.naam = "Vul dit veld in.";
   if (!EMAIL.test(email)) fouten.email = "Vul een geldig e-mailadres in.";
+  if (!bedrijf) fouten.bedrijf = "Vul dit veld in.";
+  if (!websiteType) fouten.websiteType = "Vul dit veld in.";
+  if (b.akkoord !== "on")
+    fouten.akkoord = "Geef toestemming om je aanvraag te verwerken.";
   if (Object.keys(fouten).length) return { ok: false, fouten };
   return {
     ok: true,
     data: {
       naam,
       email,
-      bedrijf: tekst(b.bedrijf, 200) || undefined,
+      bedrijf,
+      websiteType,
       vraag: tekst(b.vraag) || undefined,
     },
   };

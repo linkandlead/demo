@@ -39,12 +39,13 @@ export function Configurator() {
         style={{ background: "var(--mist)", padding: 30 }}
         aria-live="polite"
       >
-        <span className="eyebrow">INDICATIEVE DEMOPRIJS</span>
+        <span className="eyebrow">INDICATIEVE VOORBEELDPRIJS</span>
         <h3 style={{ fontSize: 70 }} id="lab-price">
           € {prijs.toLocaleString("nl-NL")}
         </h3>
         <p style={{ fontSize: 12 }}>
-          Demonstratie zonder offerte of betaalverplichting.
+          Dit is een rekenvoorbeeld. Er is nog geen echte reservering of
+          offerteaanvraag gedaan.
         </p>
       </div>
     </>
@@ -56,7 +57,7 @@ export function Nps() {
   return (
     <div>
       <div className="chip-row" role="group" aria-label="Demoscore">
-        {[7, 8, 9, 10].map((x) => (
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => (
           <button
             key={x}
             className={`chip ${score === x ? "active" : ""}`}
@@ -67,7 +68,11 @@ export function Nps() {
           </button>
         ))}
       </div>
-      <p style={{ marginTop: 12 }}>Selecteer een demoscore.</p>
+      <p style={{ marginTop: 12 }} aria-live="polite">
+        {score === null
+          ? "Kies een score van 0 tot 10. Je feedback blijft in deze demonstratie."
+          : "Bedankt! Je score is alleen als demonstratie verwerkt."}
+      </p>
     </div>
   );
 }

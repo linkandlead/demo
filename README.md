@@ -46,6 +46,8 @@ Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 
 
 ## Documentatie
 
+- `src/content/teksten.ts`: alle definitieve websiteteksten (Nederlands), gebaseerd op _NOVA — alle definitieve websiteteksten_
+
 - [`docs/supabase.md`](docs/supabase.md): NOVA-demodatabase in Supabase (collecties, formulierinzendingen, RLS)
 
 - [`docs/fase-a-audit.md`](docs/fase-a-audit.md): verificatietabel CMS (bevestigd / ontbreekt / simulatie)

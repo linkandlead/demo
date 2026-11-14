@@ -7,6 +7,15 @@ type Status =
 
 // Aanvraag/demo-afspraak: laatste stap van de verkoopflow. Stuurt naar /api/aanvraag, dat
 // doorstuurt naar de bestaande CMS-leadflow — of eerlijk meldt dat er niets verstuurd is.
+const WEBSITETYPES = [
+  "Corporate website",
+  "Portfolio of bureauwebsite",
+  "Eventwebsite",
+  "Locatie- of reserveringswebsite",
+  "Community of ledenomgeving",
+  "Anders",
+];
+
 export function AanvraagFormulier() {
   const [status, setStatus] = useState<Status>(null);
   const [fouten, setFouten] = useState<Record<string, string>>({});
@@ -40,8 +49,7 @@ export function AanvraagFormulier() {
     } catch {
       setStatus({
         soort: "fout",
-        tekst:
-          "Versturen is niet gelukt. Controleer je verbinding en probeer het opnieuw.",
+        tekst: "Je lijkt offline te zijn. Controleer je verbinding.",
       });
     }
   }
@@ -64,7 +72,7 @@ export function AanvraagFormulier() {
           name="naam"
           required
           autoComplete="name"
-          placeholder="Je naam"
+          placeholder="Voor- en achternaam"
           {...veld("naam")}
         />
         {fouten.naam ? (
@@ -74,14 +82,14 @@ export function AanvraagFormulier() {
         ) : null}
       </div>
       <div className="form-field">
-        <label htmlFor="a-email">E-mailadres *</label>
+        <label htmlFor="a-email">Zakelijk e-mailadres *</label>
         <input
           id="a-email"
           name="email"
           type="email"
           required
           autoComplete="email"
-          placeholder="jij@organisatie.nl"
+          placeholder="naam@organisatie.nl"
           {...veld("email")}
         />
         {fouten.email ? (
@@ -90,22 +98,68 @@ export function AanvraagFormulier() {
           </span>
         ) : null}
       </div>
-      <div className="form-field full">
-        <label htmlFor="a-bedrijf">Organisatie</label>
+      <div className="form-field">
+        <label htmlFor="a-bedrijf">Organisatie *</label>
         <input
           id="a-bedrijf"
           name="bedrijf"
+          required
           autoComplete="organization"
-          placeholder="Naam van je organisatie"
+          placeholder="Jouw organisatie"
+          {...veld("bedrijf")}
         />
+        {fouten.bedrijf ? (
+          <span id="fout-bedrijf" className="form-status fout">
+            {fouten.bedrijf}
+          </span>
+        ) : null}
+      </div>
+      <div className="form-field">
+        <label htmlFor="a-type">Wat voor website wil je bouwen? *</label>
+        <select
+          id="a-type"
+          name="websiteType"
+          required
+          defaultValue=""
+          {...veld("websiteType")}
+        >
+          <option value="" disabled>
+            Kies een type
+          </option>
+          {WEBSITETYPES.map((w) => (
+            <option key={w}>{w}</option>
+          ))}
+        </select>
+        {fouten.websiteType ? (
+          <span id="fout-websiteType" className="form-status fout">
+            {fouten.websiteType}
+          </span>
+        ) : null}
       </div>
       <div className="form-field full">
-        <label htmlFor="a-vraag">Waar wil je meer over weten?</label>
+        <label htmlFor="a-vraag">Wat wil je graag zien?</label>
         <textarea
           id="a-vraag"
           name="vraag"
-          placeholder="Bijvoorbeeld: een eigen frontend voor ons merk, de blokken, collecties…"
+          placeholder="Bijvoorbeeld collecties, formulieren of meerdere websites"
         />
+      </div>
+      <div className="form-field full">
+        <label className="form-check" htmlFor="a-akkoord">
+          <input
+            id="a-akkoord"
+            name="akkoord"
+            type="checkbox"
+            required
+            {...veld("akkoord")}
+          />
+          Ik geef toestemming om contact met mij op te nemen over mijn aanvraag.
+        </label>
+        {fouten.akkoord ? (
+          <span id="fout-akkoord" className="form-status fout">
+            {fouten.akkoord}
+          </span>
+        ) : null}
       </div>
       <div className="form-field full">
         <button
@@ -114,8 +168,8 @@ export function AanvraagFormulier() {
           disabled={status?.soort === "bezig"}
         >
           {status?.soort === "bezig"
-            ? "Bezig met versturen…"
-            : "Vraag een demo aan ↗"}
+            ? "Bezig met verzenden…"
+            : "Vraag mijn demo aan ↗"}
         </button>
         <div
           className={`form-status ${status && status.soort !== "bezig" ? (status.soort === "fout" ? "fout" : "ok") : ""}`}

@@ -1,12 +1,19 @@
 import type { ReactNode } from "react";
-import { Footer } from "./Footer";
+import { Footer, type Oproep } from "./Footer";
 
-/** Paginaomhulsel zoals in het prototype: <div class="page"> … callout + footer. */
-export function Page({ children }: { children: ReactNode }) {
+/** Paginaomhulsel zoals in het prototype: <div class="page"> … callout + footer.
+ *  `oproep` geeft een pagina een eigen afsluitende oproep; zonder valt hij terug op de gedeelde. */
+export function Page({
+  children,
+  oproep,
+}: {
+  children: ReactNode;
+  oproep?: Oproep;
+}) {
   return (
     <div className="page">
       {children}
-      <Footer />
+      <Footer oproep={oproep} />
     </div>
   );
 }

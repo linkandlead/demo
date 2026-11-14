@@ -5,20 +5,31 @@ import { lijktSpam, valideerAanvraag } from "./aanvraag.ts";
 test("verplichte velden geven Nederlandse foutmeldingen", () => {
   const v = valideerAanvraag({ naam: " ", email: "geen-mail" });
   assert.equal(v.ok, false);
-  if (!v.ok) assert.deepEqual(Object.keys(v.fouten).sort(), ["email", "naam"]);
+  if (!v.ok)
+    assert.deepEqual(Object.keys(v.fouten).sort(), [
+      "akkoord",
+      "bedrijf",
+      "email",
+      "naam",
+      "websiteType",
+    ]);
 });
 
 test("geldige aanvraag wordt getrimd en begrensd", () => {
   const v = valideerAanvraag({
     naam: "  Sam ",
     email: "sam@voorbeeld.nl",
+    bedrijf: " Studio ",
+    websiteType: "Eventwebsite",
+    akkoord: "on",
     vraag: "x".repeat(5000),
   });
   assert.ok(v.ok);
   if (v.ok) {
     assert.equal(v.data.naam, "Sam");
     assert.equal(v.data.vraag?.length, 2000);
-    assert.equal(v.data.bedrijf, undefined);
+    assert.equal(v.data.bedrijf, "Studio");
+    assert.equal(v.data.websiteType, "Eventwebsite");
   }
 });
 

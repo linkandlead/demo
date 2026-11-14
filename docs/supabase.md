@@ -30,7 +30,7 @@ demopaneel toont de actieve bron ("CMS · live", "Supabase · live" of "Demodata
 | `aanvragen`   | soort (contact / nieuwsbrief / demo-aanvraag), naam, email, bedrijf, onderwerp, vraag, bron_pagina | **alleen invoegen**: niet lezen, wijzigen of verwijderen |
 
 `cover`/`foto` is een mediasleutel uit `public/media` (bv. `hero_arch`) of een volledige https-URL.
-Hoofdtekst: alinea's gescheiden door een lege regel. Constraints bewaken lengtes, slugs en e-mailformaat.
+Hoofdtekst: alinea's gescheiden door een lege regel, tussenkopjes beginnen met `## `. Is de hoofdtekst leeg, dan toont de site de standaardtekst uit `src/content/teksten.ts`. Constraints bewaken lengtes, slugs en e-mailformaat.
 De security-advisor van Supabase meldt geen problemen. Geverifieerd met de publieke sleutel: lezen
 van `aanvragen` wordt geweigerd, ongeldige inzendingen geven 400 en updates op collecties hebben
 geen effect.

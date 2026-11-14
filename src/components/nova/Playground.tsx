@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { BLOKVOORBEELDEN } from "@/content/blokvoorbeelden";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
 import { mediaSrc, mediaSrcSet } from "./ui";
 
@@ -47,6 +48,7 @@ export function Playground() {
       ? KERNBLOKKEN
       : KERNBLOKKEN.filter((b) => b.categorie === groep);
   const blok = blokken.find((b) => b.naam === blokNaam) ?? blokken[0];
+  const voorbeeld = BLOKVOORBEELDEN[blok.naam];
   const opties = variantOpties(blok.varianten, blok.naam);
   const huidigeVariant =
     variant && opties.includes(variant) ? variant : opties[0];
@@ -131,15 +133,16 @@ export function Playground() {
               {groep === ALLE ? "NOVA-BLOKKENSHOWCASE" : groep.toUpperCase()}
             </span>
             <h3 style={{ position: "relative", zIndex: 1 }}>
-              {previewHeadline(blok.naam)}
+              {voorbeeld?.kop ?? previewHeadline(blok.naam)}
             </h3>
             <p style={{ position: "relative", zIndex: 1 }}>
-              Een visueel voorbeeld van het blok “{blok.naam}”, binnen de
-              NOVA-huisstijl. Wissel hierboven tussen achtergronden en
-              weergaven.
+              {voorbeeld?.intro ??
+                `Een visueel voorbeeld van het blok “${blok.naam}”, binnen de NOVA-huisstijl.`}
             </p>
             <div style={{ position: "relative", zIndex: 1, marginTop: 25 }}>
-              <span className="btn btn-lime">Ontdek meer ↗</span>
+              <span className="btn btn-lime">
+                {voorbeeld?.knop ?? "Ontdek meer"} ↗
+              </span>
             </div>
             <div className="preview-art">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -190,9 +193,9 @@ export function Playground() {
             </ul>
           </div>
           <div className="demo-note" style={{ marginTop: 14 }}>
-            De 43 namen komen uit de CMS-specificatie. De preview is een visuele
-            indicatie; de precieze velden en varianten worden in de bouwfase
-            gekoppeld aan de bestaande CMS-implementatie.{" "}
+            Visuele demo — geen live CMS-bewerking. De blokpreview is een
+            ontwerpdemonstratie; de 43 namen, velden en varianten komen uit de
+            CMS-specificatie.{" "}
             <Link href="/one#aanvraag" style={{ textDecoration: "underline" }}>
               Plan een kennismaking ↗
             </Link>

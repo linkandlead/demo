@@ -310,3 +310,126 @@ button.btn:disabled {
     height: 410px;
   }
 }
+
+/* Toelichting onder de kop van de afsluitende oproep (definitieve teksten). */
+.footer-cta-tekst {
+  max-width: 560px;
+  margin: -12px auto 28px;
+  color: #c9d2e1;
+  font-size: 16px;
+}
+
+/* Vier cijfers in de demo-statistieken (definitieve teksten) i.p.v. drie. */
+.stats-grid.stats-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 760px) {
+  .stats-grid.stats-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tussenkopjes in de projectbeschrijving (De vraag / Het concept / …). */
+.body-copy .body-kop {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+
+/* Toestemmingsvakje in formulieren. */
+.form-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-top: 12px;
+  max-width: 420px;
+  cursor: pointer;
+}
+.form-check input {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--night);
+  flex: none;
+}
+
+/* Kenmerkenlijst op ruimtedetailpagina's (definitieve teksten). */
+.kenmerken {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.kenmerken li {
+  font-size: 12px;
+  border: 1px solid #cfd3d7;
+  border-radius: 999px;
+  padding: 7px 12px;
+}
+
+/* Vier partnerkaarten naast elkaar; korte bio onder teamkaarten. */
+.card-3.card-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 1050px) {
+  .card-3.card-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .card-3.card-4 {
+    grid-template-columns: 1fr;
+  }
+}
+.person-bio {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Veelgestelde vragen op /one: uitklapbaar, en zonder JavaScript leesbaar (native <details>). */
+.faq-lijst {
+  display: grid;
+  gap: 10px;
+  max-width: 980px;
+}
+.faq-lijst details {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e4e5e4;
+}
+.faq-lijst summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 20px 24px;
+  font-size: 19px;
+  font-weight: 760;
+  letter-spacing: -0.03em;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.faq-lijst summary::-webkit-details-marker {
+  display: none;
+}
+.faq-lijst summary::after {
+  content: "+";
+  font-size: 22px;
+  line-height: 1;
+}
+.faq-lijst details[open] summary::after {
+  content: "−";
+}
+.faq-lijst details p {
+  padding: 0 24px 22px;
+  font-size: 15px;
+  color: #465263;
+  max-width: 760px;
+}
+.one-aanvraag .contact-layout h2 {
+  font-size: clamp(40px, 4.4vw, 64px);
+}

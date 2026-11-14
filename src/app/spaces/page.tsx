@@ -4,12 +4,25 @@ import { Page } from "@/components/nova/Page";
 import { Photo, SectionTitle } from "@/components/nova/ui";
 import { getSpaces } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Ruimtes" };
+export const metadata: Metadata = {
+  title: "Ruimtes — bijzondere ruimtes",
+  description:
+    "Ontdek The Atrium, Studio One en Light Lab: drie fictieve NOVA-ruimtes voor workshops, bijeenkomsten en evenementen.",
+};
 
 export default async function Spaces() {
   const { items: spaces } = await getSpaces();
   return (
-    <Page>
+    <Page
+      oproep={{
+        eyebrow: "03 / PLAN IETS",
+        kop: "Jouw ruimte. Jouw verhaal.",
+        tekst:
+          "Bekijk de configurator en de aanvraagstappen zonder een echte boeking te plaatsen.",
+        knop: "Probeer de configurator",
+        href: "lab",
+      }}
+    >
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
           <span className="eyebrow">ONZE RUIMTES / ANDERS ONTMOETEN</span>
@@ -23,8 +36,8 @@ export default async function Spaces() {
           <div className="hero-description">
             <span className="meta">RUIMTES DIE INSPIREREN</span>
             <p>
-              Flexibele, inspirerende locaties voor evenementen, producties,
-              workshops en meetings.
+              Een goed idee verdient de juiste omgeving. Ontdek drie fictieve
+              ruimtes voor ontmoetingen, presentaties, workshops en ervaringen.
             </p>
           </div>
         </div>
@@ -63,21 +76,22 @@ export default async function Spaces() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="FEITEN OVER DE RUIMTES"
-            title="Je volgende idee begint hier."
+            eyebrow="RUIMTE OM TE CREËREN"
+            title="Elk idee verdient een eigen ruimte."
+            desc="Drie voorbeeldruimtes, ieder met een andere sfeer. Capaciteiten zijn alleen voorbeeldgegevens voor deze demo."
           />
           <div className="stats-grid">
             <div className="stat">
-              <strong>03</strong>
-              <p>Unieke ruimtes</p>
+              <strong>3</strong>
+              <p>Fictieve ruimtes</p>
             </div>
             <div className="stat">
               <strong>10–500</strong>
-              <p>Personen per opstelling</p>
+              <p>Voorbeeldcapaciteit, afhankelijk van opstelling</p>
             </div>
             <div className="stat">
-              <strong>∞</strong>
-              <p>Mogelijkheden om te creëren</p>
+              <strong>1</strong>
+              <p>Interactieve configurator</p>
             </div>
           </div>
         </div>

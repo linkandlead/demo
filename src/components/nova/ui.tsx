@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { MEDIA } from "@/content/media";
+import { altTeksten } from "@/content/teksten";
 import type { Case, Person, Post } from "@/content/nova";
 
 // Herbruikbare NOVA-bouwstenen. DOM en klassen zijn exact die van het prototype
@@ -52,7 +53,11 @@ export function Photo({
           ? (sizes ?? (priority ? "100vw" : "(max-width: 760px) 100vw, 50vw"))
           : undefined
       }
-      alt={alt || "Conceptbeeld in de NOVA demonstratiewebsite"}
+      alt={
+        alt ||
+        altTeksten[src] ||
+        "Decoratieve afbeelding van het fictieve NOVA-concept."
+      }
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
       decoding="async"
