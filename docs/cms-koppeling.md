@@ -25,6 +25,10 @@ Formulieren (contact, nieuwsbrief, formulierbouwer, review, NPS) nemen hun tekst
 knoptekst, voetnoot, bevestiging, velden) uit het blok. Inzendingen gaan naar Supabase (`aanvragen`),
 nooit per mail. Alleen de demo-aanvraag op `/one` gaat daarnaast naar de CMS-leadflow (met `CMS_LEAD_SITE_ID`).
 
+Opsommingen: regels die met `- ` beginnen in een tekstveld (bv. de tekst van het statement of de
+intro van het aanvraagformulier op `/one`) worden chips of een lijst. In een overgangsblok is de
+eerste regel de kop en zijn de volgende regels de toelichting.
+
 Hoe een blok eruitziet volgt uit de NOVA-vormgeving (`src/components/nova/Blokken.tsx`): bijvoorbeeld
 kaarten mét beeld en link worden ruimtekaarten, een `reeks` met labels wordt een programma, een `header`
 met hoogte "fullscreen" wordt de home-hero. Onbekende bloktypes worden overgeslagen.
@@ -45,6 +49,8 @@ Zonder `CMS_URL`/`CMS_TOKEN`, of als het CMS onbereikbaar is, rendert de site de
 ```bash
 CMS_URL=https://linkandlead.nl CMS_TOKEN_FILE=<pad-naar-token> node scripts/cms-push.mjs
 ```
+
+Alleen bepaalde pagina's (zonder merk/huisstijl): `CMS_PAGINAS=/one node scripts/cms-push.mjs`.
 
 Let op: dit **overschrijft** de blokken van de pagina's in de blauwdruk (upsert op slug), dus ook
 wijzigingen die een redacteur intussen in het CMS deed. De collecties staan in `cms/demo-klant-*.sql`.

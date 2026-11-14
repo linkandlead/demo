@@ -4,6 +4,9 @@
 //
 //   CMS_URL=https://linkandlead.nl CMS_TOKEN_FILE=/pad/naar/token node scripts/cms-push.mjs
 //   (of CMS_TOKEN=... in de omgeving)
+//
+// Alleen bepaalde pagina's (en dan geen merk/huisstijl):  CMS_PAGINAS=/one,/lab node scripts/cms-push.mjs
+// Let op: de blokken van elke meegestuurde pagina worden vervangen, ook wijzigingen uit het CMS.
 import fs from "node:fs";
 import { designTokens, merk, paginas } from "../src/content/blauwdruk.ts";
 
@@ -16,18 +19,25 @@ if (!url || !token) {
   process.exit(1);
 }
 
+const filter = (process.env.CMS_PAGINAS || "").split(",").map((x) => x.trim()).filter(Boolean);
+const selectie = filter.length ? paginas.filter((x) => filter.includes(x.slug)) : paginas;
+if (filter.length && selectie.length !== filter.length) {
+  console.error("Onbekende pagina in CMS_PAGINAS:", filter.filter((f) => !paginas.some((x) => x.slug === f)).join(", "));
+  process.exit(1);
+}
+
 const CHUNK = 8;
 let p = 0;
 let b = 0;
-for (let i = 0; i < paginas.length; i += CHUNK) {
-  const eerste = i === 0;
+for (let i = 0; i < selectie.length; i += CHUNK) {
+  const eerste = i === 0 && !filter.length;
   const res = await fetch(`${url}/api/cms/sync`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
     body: JSON.stringify({
       design_tokens: eerste ? designTokens : undefined,
       merk: eerste ? merk : undefined,
-      paginas: paginas.slice(i, i + CHUNK),
+      paginas: selectie.slice(i, i + CHUNK),
     }),
   });
   const j = await res.json().catch(() => ({}));

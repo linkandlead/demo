@@ -970,7 +970,7 @@ const hetCms: BlauwdrukPagina = {
       eyebrow: "ÉÉN SYSTEEM",
       titel: "Eén CMS.\n*Heel veel mogelijk­heden.*",
       tekst:
-        "43 algemene blokken. Vijf achtergrondvarianten. Twaalf instelbare huisstijlkleuren. Dat zijn geen willekeurige aantallen: ze komen uit de huidige CMS-ontwerpspecificatie.",
+        "43 algemene blokken. Vijf achtergrondvarianten. Twaalf instelbare huisstijlkleuren. Dat zijn geen willekeurige aantallen: ze komen uit de huidige CMS-ontwerpspecificatie. De werkelijke beschikbaarheid in een installatie controleren we tijdens de technische demo.\n- Eigen huisstijl per site\n- Blokken & varianten\n- Dynamische collecties\n- Formulieren & interactie\n- Responsieve weergave",
       knop: "/playground",
       knoptekst: "Ontdek de blokken",
     }),
@@ -1019,7 +1019,10 @@ const hetCms: BlauwdrukPagina = {
         },
       ],
     }),
-    blok("overgang", "limoenlicht", { tekst: "Probeer niet te verbeelden wat er mogelijk is. Bekijk het.", stijl: "limoenlicht" }),
+    blok("overgang", "limoenlicht", {
+      tekst: "Probeer niet te verbeelden wat er mogelijk is. Bekijk het.\nStart de interactieve rondleiding of open direct de blokkenbibliotheek.",
+      stijl: "limoenlicht",
+    }),
     blok("faq", "mist", { titel: "Veelgestelde vragen over Link & Lead One.", vragen: faq.map(([vraag, antwoord]) => ({ vraag, antwoord })) }),
     blok("cta", "limoenlicht", {
       eyebrow: "08 / ERVAAR HET ZELF",
@@ -1033,7 +1036,8 @@ const hetCms: BlauwdrukPagina = {
       soort: "contact",
       eyebrow: "DEMO AANVRAGEN",
       titel: "Ontdek wat Link & Lead One voor jouw website kan betekenen.",
-      intro: "Vertel ons wat voor website je wilt maken. Dan kijken we samen welke onderdelen relevant zijn.",
+      intro:
+        "Vertel ons wat voor website je wilt maken. Dan kijken we samen welke onderdelen relevant zijn. Dit beheren je redacteuren zelf:\n- Pagina's samenstellen uit blokken, in vijf achtergronden\n- Cases, artikelen, teamleden en reviews als aparte collecties\n- Huisstijl per site: twaalf kleurvelden en twee lettertypes\n- Merk, navigatie en redirects zonder nieuwe deploy\n- Formulieren waarvan aanvragen in het CMS binnenkomen",
       knoptekst: "Vraag mijn demo aan",
       voetnoot: "Ik geef toestemming om contact met mij op te nemen over mijn aanvraag.",
       bevestigingstekst: "Je aanvraag is ontvangen. We nemen contact met je op om een demonstratie af te stemmen.",
