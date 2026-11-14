@@ -433,3 +433,32 @@ button.btn:disabled {
 .one-aanvraag .contact-layout h2 {
   font-size: clamp(40px, 4.4vw, 64px);
 }
+
+/* Homepage-hero: in nova.css staat de cijferbalk absoluut onderaan een hero met vaste hoogte. Met
+   de langere introtekst of op lagere schermen schoven knoppen en cijfers over elkaar. Nu groeit de
+   hero mee met de inhoud en volgt de cijferbalk altijd ná de knoppen. Op 1440×900 oogt het gelijk. */
+.hero-home {
+  height: auto;
+  min-height: max(670px, min(900px, 100svh));
+  display: flex;
+  flex-direction: column;
+}
+.hero-home .hero-copy {
+  flex: 1 0 auto;
+  padding-bottom: 48px;
+}
+.hero-home .hero-bottom {
+  position: relative;
+  bottom: auto;
+  margin-top: auto;
+  padding-bottom: 30px;
+}
+@media (max-width: 760px) {
+  .hero-home {
+    height: auto;
+    min-height: 740px;
+  }
+  .hero-home .hero-bottom {
+    padding-bottom: 28px;
+  }
+}
