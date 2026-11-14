@@ -1,4 +1,5 @@
 import { lijktSpam, valideerAanvraag } from "@/lib/lead/aanvraag";
+import { testcode } from "@/lib/lead/inzending";
 import { bewaarInzending } from "@/lib/supabase/server";
 
 // Demo-aanvraag voor Link & Lead One → bestaande CMS-leadflow (linkandlead-cms
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
     onderwerp: v.data.websiteType,
     vraag: v.data.vraag,
     bron_pagina: "/one",
+    testcode: testcode(body),
   });
 
   const cms = process.env.CMS_URL?.trim().replace(/\/$/, "");

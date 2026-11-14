@@ -28,3 +28,11 @@ test("formulierbouwer bewaart antwoorden per label en weigert een leeg formulier
   assert.ok(r.ok);
   if (r.ok) assert.deepEqual(r.inzending.gegevens, { Naam: "Sam" });
 });
+
+test("alleen een geldige uuid wordt als opruimcode bewaard", () => {
+  const goed = valideerInzending({ soort: "nps", score: 5, _testcode: "0F8FAD5B-D9CB-469F-A165-70867728950E" });
+  const fout = valideerInzending({ soort: "nps", score: 5, _testcode: "'; drop table aanvragen; --" });
+  assert.ok(goed.ok && fout.ok);
+  if (goed.ok) assert.equal(goed.inzending.testcode, "0f8fad5b-d9cb-469f-a165-70867728950e");
+  if (fout.ok) assert.equal(fout.inzending.testcode, undefined);
+});

@@ -5,6 +5,14 @@ import type { Inzending } from "../supabase/server.ts";
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const tekst = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Opruimcode die een E2E-test meestuurt (`_testcode`), zodat de test zijn eigen rijen kan wissen. */
+export function testcode(body: unknown): string | undefined {
+  const code = body && typeof body === "object" ? (body as Record<string, unknown>)._testcode : undefined;
+  return typeof code === "string" && UUID.test(code) ? code.toLowerCase() : undefined;
+}
+
 export type Resultaat = { ok: true; inzending: Inzending } | { ok: false; fouten: Record<string, string> };
 
 const SOORTEN = ["contact", "nieuwsbrief", "formulier", "review", "nps"] as const;
@@ -15,7 +23,7 @@ export function valideerInzending(body: Record<string, unknown>): Resultaat {
   const email = tekst(body.email, 254);
   const naam = [tekst(body.naam, 100), tekst(body.achternaam, 100)].filter(Boolean).join(" ");
   const vraag = tekst(body.vraag, 2000);
-  const basis = { soort, bron_pagina: tekst(body.bron_pagina, 200) || undefined };
+  const basis = { soort, bron_pagina: tekst(body.bron_pagina, 200) || undefined, testcode: testcode(body) };
 
   if (soort === "nps" || soort === "review") {
     const score = Number(body.score);

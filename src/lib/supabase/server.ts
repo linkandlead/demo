@@ -75,6 +75,8 @@ export type Inzending = {
   score?: number;
   /** Antwoorden uit de formulierbouwer (label → waarde). */
   gegevens?: Record<string, string>;
+  /** Opruimcode van een E2E-testinzending (zie migratie nova_testinzendingen_opruimen). */
+  testcode?: string;
 };
 
 /** Slaat een inzending op in public.aanvragen. Er wordt niets gemaild. */

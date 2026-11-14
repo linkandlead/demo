@@ -56,3 +56,10 @@ binnen ongeveer 60 seconden. Nieuwe slugs (bv. een extra ruimte) renderen zonder
 `aanvragen.soort` kent nu ook `formulier` (formulierbouwer; antwoorden in `gegevens` jsonb),
 `review` (sterren 1–5 in `score`, naam, tekst in `vraag`) en `nps` (score 0–10, toelichting in `vraag`).
 Voor die drie is een e-mailadres optioneel. RLS blijft aan; anoniem mag alleen invoegen.
+
+## E2E-tests ruimen zelf op (migratie `20261114200000_nova_testinzendingen_opruimen`)
+
+`npm run e2e` stuurt bij elke inzending een willekeurige opruimcode mee (`_testcode`, kolom
+`testcode`). Aan het eind roept de test `ruim_testinzendingen_op(code)` aan, die alleen rijen met
+precies die code van het afgelopen uur wist. Er komen geen algemene lees- of verwijderrechten bij.
+Breekt een testrun halverwege af, dan blijven de rijen van die run staan (herkenbaar aan `testcode`).

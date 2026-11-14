@@ -2,6 +2,7 @@
 //   SITE=http://localhost:3000 [SITE_CMS=http://localhost:3001 LEADS_LOG=...] node scripts/e2e.mjs
 import { createRequire } from "node:module";
 import fs from "node:fs";
+import { randomUUID } from "node:crypto";
 const require = createRequire(import.meta.url);
 const { chromium } = require("playwright");
 const AXE = require.resolve("axe-core/axe.min.js");
@@ -46,6 +47,18 @@ const ctx = await browser.newContext({
   viewport: { width: 1440, height: 900 },
 });
 const page = await ctx.newPage();
+
+// Testinzendingen krijgen een opruimcode; aan het eind wist de test precies die rijen weer
+// (Supabase-functie ruim_testinzendingen_op). Echte inzendingen blijven onaangeroerd.
+const TESTCODE = randomUUID();
+await ctx.route(/\/api\/(inzending|aanvraag)$/, async (route) => {
+  const req = route.request();
+  let data = {};
+  try {
+    data = JSON.parse(req.postData() ?? "{}");
+  } catch {}
+  await route.continue({ postData: JSON.stringify({ ...data, _testcode: TESTCODE }) });
+});
 
 console.log("Routes, verplichte promotie-elementen en links");
 const links = new Set();
@@ -139,8 +152,8 @@ console.log("Demo Mode-paneel");
 await page.getByRole("button", { name: "Open demonstratiemodus" }).click();
 check("paneel opent", await page.locator("#demoPanel.open").isVisible());
 check(
-  "databron zichtbaar gelabeld (Demodata of Supabase · live)",
-  /Demodata|Supabase · live/.test(
+  "databron zichtbaar gelabeld (CMS, Supabase of Demodata)",
+  /CMS · live|Supabase · live|Demodata/.test(
     await page.locator(".demo-bron").textContent(),
   ),
 );
@@ -385,6 +398,25 @@ if (SITE_CMS) {
       lead.origin === null &&
       lead.body.email === "test@voorbeeld.nl",
   );
+}
+
+console.log("Opruimen");
+{
+  // Zelfde Supabase-project als de site (src/lib/supabase/server.ts); de publieke sleutel volstaat.
+  const bron = fs.readFileSync(new URL("../src/lib/supabase/server.ts", import.meta.url), "utf8");
+  const url = (process.env.SUPABASE_URL ?? bron.match(/STANDAARD_URL = "([^"]+)"/)?.[1] ?? "").trim();
+  const key = (process.env.SUPABASE_PUBLISHABLE_KEY ?? bron.match(/STANDAARD_KEY = "([^"]+)"/)?.[1] ?? "").trim();
+  if (!url || !key) console.log("  – geen Supabase ingesteld, niets op te ruimen");
+  else {
+    const res = await fetch(`${url}/rest/v1/rpc/ruim_testinzendingen_op`, {
+      method: "POST",
+      headers: { apikey: key, authorization: `Bearer ${key}`, "content-type": "application/json" },
+      body: JSON.stringify({ code: TESTCODE }),
+    });
+    const aantal = res.ok ? await res.json() : null;
+    check("testinzendingen opgeruimd", res.ok, `status ${res.status}`);
+    if (res.ok) console.log(`    ${aantal} testinzending(en) verwijderd`);
+  }
 }
 
 await browser.close();
