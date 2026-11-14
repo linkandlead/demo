@@ -569,3 +569,19 @@ button.btn:disabled {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
+
+/* Hero met achtergrondbeeld (bv. Pulse Festival): in het prototype staan de knoppen tegen de
+   onderrand. Ruimte eronder, en de kop iets compacter zodat beeld en tekst in balans blijven. */
+.feature-media { min-height: 640px; display: flex; flex-direction: column; justify-content: flex-end; }
+.feature-media .copy { padding-top: 150px; padding-bottom: 96px; }
+.feature-media h1 { font-size: clamp(64px, 7.6vw, 124px); }
+.feature-media p { font-size: 16px; max-width: 470px; }
+.feature-media::before { background: linear-gradient(90deg, rgba(9,15,36,.92) 0%, rgba(9,15,36,.6) 45%, rgba(9,15,36,.08) 100%), linear-gradient(0deg, rgba(9,15,36,.55) 0%, transparent 35%); }
+@media (max-width: 760px) {
+  .feature-media .copy { padding-top: 140px; padding-bottom: 64px; }
+  .feature-media h1 { font-size: clamp(56px, 15vw, 72px); }
+}
+
+/* Actief menu-item: het streepje eronder mag de tekst niet omhoog duwen (prototype: 4px hoger). */
+.primary-nav a { position: relative; }
+.primary-nav a.active::after { position: absolute; left: 0; right: 0; top: 100%; }

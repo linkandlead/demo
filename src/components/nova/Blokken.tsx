@@ -45,6 +45,16 @@ const link = (c: Inhoud, k: string) => {
   return /^(\/|#|https:\/\/)/.test(v) ? v : "";
 };
 
+/** Tekstveld met regels die met "- " beginnen: die regels worden een lijst (chips of opsomming),
+ *  de overige regels gewone alinea's. Zo blijft een opsomming in het CMS te beheren. */
+function metLijst(tekst: string): { alineas: string[]; punten: string[] } {
+  const regels = tekst.split("\n").map((r) => r.trim()).filter(Boolean);
+  return {
+    alineas: regels.filter((r) => !r.startsWith("- ")),
+    punten: regels.filter((r) => r.startsWith("- ")).map((r) => r.slice(2).trim()),
+  };
+}
+
 const BG: Record<string, string> = {
   wit: "Licht",
   mist: "Zacht",
@@ -329,8 +339,25 @@ function Statement({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
           <h2 style={{ fontSize: "clamp(55px,8vw,126px)", lineHeight: 0.98, maxWidth: 1020, margin: "24px 0" }}>
             <Rijk tekst={tx(c, "titel")} accent="limoen" />
           </h2>
-          {tx(c, "tekst") ? <p style={{ maxWidth: 650, marginBottom: 30 }}>{tx(c, "tekst")}</p> : null}
-          {knop ? <Btn to={knop}>{tx(c, "knoptekst")}</Btn> : null}
+          {metLijst(tx(c, "tekst")).alineas.map((a) => (
+            <p key={a} style={{ maxWidth: 650 }}>
+              {a}
+            </p>
+          ))}
+          {metLijst(tx(c, "tekst")).punten.length ? (
+            <div className="one-chip-row">
+              {metLijst(tx(c, "tekst")).punten.map((p) => (
+                <span className="one-chip" key={p}>
+                  {p}
+                </span>
+              ))}
+            </div>
+          ) : null}
+          {knop ? (
+            <div style={{ marginTop: 30 }}>
+              <Btn to={knop}>{tx(c, "knoptekst")}</Btn>
+            </div>
+          ) : null}
         </div>
       </section>
     );
@@ -695,16 +722,25 @@ function Faq({ b, n }: { b: Blok; n: number }) {
   );
 }
 
-function Overgang({ b }: { b: Blok }) {
-  const tekst = tx(b.content, "tekst");
-  if (!tekst) return null;
+function Overgang({ b, ctx }: { b: Blok; ctx: Ctx }) {
+  // Eerste regel = kop, volgende regels = toelichting.
+  const [kop, ...rest] = tx(b.content, "tekst").split("\n").map((r) => r.trim()).filter(Boolean);
+  if (!kop) return null;
   return (
     <section className="section" style={{ padding: "0 0 40px" }} data-cms={label(b)}>
       <div className="container">
         <div className={`one-promo-ribbon${tx(b.content, "stijl") === "donker" ? " donker" : ""}`}>
           <div>
-            <strong>{tekst}</strong>
+            <strong>{kop}</strong>
+            {rest.map((r) => (
+              <p key={r}>{r}</p>
+            ))}
           </div>
+          {ctx.one ? (
+            <Link href="/demo" className="btn btn-dark">
+              Open de demo <span className="arrow">↗</span>
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>
@@ -729,6 +765,11 @@ function Cta({ b, n }: { b: Blok; n: number }) {
             <Btn to={knop} cl="btn-dark">
               {tx(c, "knoptekst")}
             </Btn>
+            {knop !== "/demo" ? (
+              <Link className="btn btn-outline" style={{ color: "var(--night)" }} href="/demo">
+                Start de rondleiding <span className="arrow">↗</span>
+              </Link>
+            ) : null}
           </div>
         ) : null}
         {meta.map((m) => (
@@ -1177,7 +1218,27 @@ function Formulier({ b, ctx, n, kaart }: { b: Blok; ctx: Ctx; n: number; kaart?:
           <div>
             <SectionLabel num={nr(n)}>{tx(c, "eyebrow")}</SectionLabel>
             <h2 style={{ marginTop: 18 }}>{tx(c, "titel")}</h2>
-            {tx(c, "intro") ? <p className="side-note">{tx(c, "intro")}</p> : null}
+            {metLijst(tx(c, "intro")).alineas.map((a) => (
+              <p className="side-note" key={a}>
+                {a}
+              </p>
+            ))}
+            {metLijst(tx(c, "intro")).punten.length ? (
+              <ul style={{ listStyle: "none", padding: 0, marginTop: 24, display: "grid", gap: 8 }}>
+                {metLijst(tx(c, "intro")).punten.map((p) => (
+                  <li className="info-tile" key={p} style={{ minHeight: 0, padding: "14px 18px", fontSize: 14 }}>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            {process.env.DEMO_AANVRAAG_URL?.trim().startsWith("https://") ? (
+              <div style={{ marginTop: 24 }}>
+                <a className="btn btn-outline" href={process.env.DEMO_AANVRAAG_URL.trim()} rel="noopener">
+                  Plan direct een afspraak <span className="arrow">↗</span>
+                </a>
+              </div>
+            ) : null}
           </div>
           <div>
             <AanvraagFormulier knoptekst={tx(c, "knoptekst") || undefined} voetnoot={tx(c, "voetnoot") || undefined} />
@@ -1474,7 +1535,7 @@ export function Blokken({
         uit.push(<Faq key={k} b={b} n={n} />);
         break;
       case "overgang":
-        uit.push(<Overgang key={k} b={b} />);
+        uit.push(<Overgang key={k} b={b} ctx={ctx} />);
         break;
       case "cta":
         uit.push(<Cta key={k} b={b} n={n} />);
