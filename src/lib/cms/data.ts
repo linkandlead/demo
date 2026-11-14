@@ -12,7 +12,7 @@ import {
   type Post,
   type Space,
 } from "@/content/nova";
-import { leesTabel, supabase } from "@/lib/supabase/server";
+import { leesTabel, supabase, supabaseConfig } from "@/lib/supabase/server";
 import { cmsMedia, cmsUrl, laadCms, type CmsStatus } from "./client";
 
 // Eén plek die bepaalt waar de content vandaan komt. Volgorde: het gekoppelde Link & Lead One-CMS,
@@ -223,7 +223,7 @@ export async function cmsInfo(): Promise<CmsInfo> {
       melding: null,
       beheerUrl: beheer ? `${beheer}/admin/paginas` : null,
     };
-  const sbUrl = process.env.SUPABASE_URL?.trim();
+  const sbUrl = supabaseConfig().url;
   if (supabase() && sbUrl) {
     const ref = new URL(sbUrl).hostname.split(".")[0];
     return {

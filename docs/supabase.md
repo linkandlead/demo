@@ -3,6 +3,11 @@
 NOVA gebruikt het Supabase-project **`demo`** (`knkgvtmewegeczfdgjuq`, eu-central-1) als eigen,
 geïsoleerde database. Het Link & Lead One-CMS en de andere sites worden niet aangeraakt.
 
+De projectgegevens staan als standaard in `src/lib/supabase/server.ts`. De publishable key is
+openbaar bedoeld; de rechten worden door RLS bepaald. Daardoor werkt Vercel zonder extra
+instellingen. `SUPABASE_URL` en `SUPABASE_PUBLISHABLE_KEY` overschrijven die standaard, en
+`SUPABASE_URL=""` schakelt Supabase uit.
+
 ## Volgorde van databronnen
 
 1. **Link & Lead One-CMS** (`CMS_URL` + `CMS_TOKEN`): cases, artikelen, teamleden en paginateksten

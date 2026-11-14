@@ -5,12 +5,24 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 // Alleen de publieke (publishable) sleutel; RLS bepaalt wat mag: gepubliceerde collecties lezen
 // en aanvragen invoegen. Schema: supabase/migrations/.
 
+// Standaard: het NOVA-project "demo". De publishable key is bedoeld om openbaar te zijn (net als
+// een anon key in de browser); RLS bepaalt de rechten. Overschrijf met env-variabelen, of zet
+// SUPABASE_URL="" om Supabase uit te schakelen (dan vaste demodata).
+const STANDAARD_URL = "https://knkgvtmewegeczfdgjuq.supabase.co";
+const STANDAARD_KEY = "sb_publishable_ZCyfFq_5EFMdjlO_JR4k4Q_7j-icx-l";
+
+export function supabaseConfig(): { url: string; key: string } {
+  return {
+    url: (process.env.SUPABASE_URL ?? STANDAARD_URL).trim(),
+    key: (process.env.SUPABASE_PUBLISHABLE_KEY ?? STANDAARD_KEY).trim(),
+  };
+}
+
 let client: SupabaseClient | null | undefined;
 
 export function supabase(): SupabaseClient | null {
   if (client !== undefined) return client;
-  const url = process.env.SUPABASE_URL?.trim();
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY?.trim();
+  const { url, key } = supabaseConfig();
   client =
     url && key
       ? createClient(url, key, {
