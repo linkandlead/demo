@@ -11,11 +11,11 @@ export async function Footer() {
       <section data-cms="Afsluitende oproep · gedeeld" className="footer-cta">
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            {t(c, "eyebrow", "WHAT'S NEXT?")}
+            {t(c, "eyebrow", "WAT IS DE VOLGENDE STAP?")}
           </span>
           <h2>
             <Lines
-              text={t(c, "titel", "Have something extraordinary in mind?")}
+              text={t(c, "titel", "Heb je iets bijzonders in gedachten?")}
             />
           </h2>
           <Btn to={t(c, "knop", "contact")}>
@@ -31,18 +31,18 @@ export async function Footer() {
             </Link>
             <div className="footer-links">
               <div>
-                <span className="eyebrow">Explore</span>
-                <Link href="/work">Work</Link>
-                <Link href="/journal">Journal</Link>
-                <Link href="/experiences">Experiences</Link>
-                <Link href="/spaces">Spaces</Link>
+                <span className="eyebrow">Ontdek</span>
+                <Link href="/work">Werk</Link>
+                <Link href="/journal">Verhalen</Link>
+                <Link href="/experiences">Belevingen</Link>
+                <Link href="/spaces">Ruimtes</Link>
               </div>
               <div>
-                <span className="eyebrow">Connect</span>
+                <span className="eyebrow">Contact</span>
                 <Link href="/community">Community</Link>
-                <Link href="/about">About</Link>
+                <Link href="/about">Over ons</Link>
                 <Link href="/contact">Contact</Link>
-                <Link href="/playground">Block Playground</Link>
+                <Link href="/playground">Blokkenbibliotheek</Link>
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@ export async function Footer() {
               © NOVA 2026 — Fictief merk voor de CMS-ontwerpdemonstratie.
             </span>
             <span>
-              Visual design concept by Link & Lead One · Geen live website
+              Visueel ontwerpconcept van Link & Lead One · Geen live website
             </span>
           </div>
         </div>

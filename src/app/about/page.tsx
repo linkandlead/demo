@@ -3,13 +3,13 @@ import { Page } from "@/components/nova/Page";
 import { PersonCard, Photo, SectionTitle } from "@/components/nova/ui";
 import { getPeople } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = { title: "Over ons" };
 
 const STAPPEN = [
-  ["01", "Discover", "Luisteren, observeren, doorvragen."],
-  ["02", "Imagine", "Nieuwe mogelijkheden durven zien."],
-  ["03", "Create", "Ideeën tastbaar maken."],
-  ["04", "Connect", "Mensen en plannen samenbrengen."],
+  ["01", "Ontdekken", "Luisteren, observeren, doorvragen."],
+  ["02", "Verbeelden", "Nieuwe mogelijkheden durven zien."],
+  ["03", "Creëren", "Ideeën tastbaar maken."],
+  ["04", "Verbinden", "Mensen en plannen samenbrengen."],
 ];
 
 export default async function About() {
@@ -18,14 +18,14 @@ export default async function About() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">ABOUT / OUR STORY</span>
+          <span className="eyebrow">OVER ONS / ONS VERHAAL</span>
           <h1>
-            Make room
+            Maak ruimte
             <br />
-            for what’s next.
+            voor wat komt.
           </h1>
           <div className="hero-description">
-            <span className="meta">DESIGNING NEW POSSIBILITIES</span>
+            <span className="meta">NIEUWE MOGELIJKHEDEN ONTWERPEN</span>
             <p>
               NOVA is een fictieve creatieve wereld, speciaal ontworpen om te
               laten zien wat Link & Lead One mogelijk maakt.
@@ -43,10 +43,10 @@ export default async function About() {
       <section data-cms="Statement" className="section section-dark statement">
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            OUR MISSION
+            ONZE MISSIE
           </span>
           <h2>
-            We believe <em>ideas grow</em> when worlds connect.
+            Wij geloven dat <em>ideeën groeien</em> als werelden elkaar raken.
           </h2>
         </div>
       </section>
@@ -54,8 +54,8 @@ export default async function About() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="OUR PROCESS"
-            title="From spark to impact."
+            eyebrow="ONZE WERKWIJZE"
+            title="Van vonk tot impact."
           />
           <div className="timeline">
             {STAPPEN.map(([n, titel, tekst]) => (
@@ -72,8 +72,8 @@ export default async function About() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="OUR PEOPLE"
-            title="Meet the makers."
+            eyebrow="ONZE MENSEN"
+            title="Ontmoet de makers."
           />
           <div className="people-grid">
             {people.map((p) => (

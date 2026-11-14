@@ -23,15 +23,17 @@ const ACHTERGRONDEN: Array<[string, string, string]> = [
 ];
 
 function previewHeadline(b: string) {
-  if (/Formulier|Enquête|NPS|Review/.test(b)) return "Let’s stay connected.";
+  if (/Formulier|Enquête|NPS|Review/.test(b))
+    return "Laten we in contact blijven.";
   if (/Artikel|Cases|Portfolio|Collectie/.test(b))
-    return "Stories worth sharing.";
+    return "Verhalen die het delen waard zijn.";
   if (/Team|Partner|Sprekers|Testimonial/.test(b))
-    return "Made possible by people.";
-  if (/Statist|Feiten|Bewijs/.test(b)) return "Ideas with an impact.";
-  if (/Tickets|Prijs|Configurat/.test(b)) return "Your experience, your way.";
-  if (/Agenda|Aftel|Wedstrijd/.test(b)) return "The moments that move us.";
-  return "Create what’s next.";
+    return "Mogelijk gemaakt door mensen.";
+  if (/Statist|Feiten|Bewijs/.test(b)) return "Ideeën met impact.";
+  if (/Tickets|Prijs|Configurat/.test(b))
+    return "Jouw beleving, op jouw manier.";
+  if (/Agenda|Aftel|Wedstrijd/.test(b)) return "De momenten die ons raken.";
+  return "Maak wat er komt.";
 }
 
 export function Playground() {
@@ -73,9 +75,9 @@ export function Playground() {
       <div className="playground-layout">
         <aside className="block-menu">
           <span className="eyebrow">
-            BLOCK LIBRARY · {blokken.length} BLOKKEN
+            BLOKKENBIBLIOTHEEK · {blokken.length} BLOKKEN
           </span>
-          <h3>Select a block.</h3>
+          <h3>Kies een blok.</h3>
           <div className="block-list" role="listbox" aria-label="CMS-blokken">
             {blokken.map((b) => (
               <button
@@ -97,7 +99,7 @@ export function Playground() {
         <div className="block-viewer">
           <div className="toolbar">
             <div>
-              <span className="eyebrow">LIVE DESIGN PREVIEW</span>
+              <span className="eyebrow">LIVE ONTWERPVOORBEELD</span>
               <h3 style={{ fontSize: 29, marginTop: 6 }}>{blok.naam}</h3>
             </div>
             <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
@@ -126,7 +128,7 @@ export function Playground() {
               className="eyebrow"
               style={{ position: "relative", zIndex: 1 }}
             >
-              {groep === ALLE ? "NOVA BLOCK SHOWCASE" : groep.toUpperCase()}
+              {groep === ALLE ? "NOVA-BLOKKENSHOWCASE" : groep.toUpperCase()}
             </span>
             <h3 style={{ position: "relative", zIndex: 1 }}>
               {previewHeadline(blok.naam)}
@@ -137,7 +139,7 @@ export function Playground() {
               weergaven.
             </p>
             <div style={{ position: "relative", zIndex: 1, marginTop: 25 }}>
-              <span className="btn btn-lime">Discover more ↗</span>
+              <span className="btn btn-lime">Ontdek meer ↗</span>
             </div>
             <div className="preview-art">
               {/* eslint-disable-next-line @next/next/no-img-element */}

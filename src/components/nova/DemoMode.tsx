@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from "react";
 
-// Design Demo Mode: blokinspectie, themawissel, responsieve weergave en de vijf-minutentour.
+// Ontwerpdemomodus: blokinspectie, themawissel, responsieve weergave en de vijf-minutentour.
 // Paneel-markup gelijk aan index.html van het prototype; nieuw zijn de databron-regel, de
 // (alleen bij koppeling getoonde) beheerlink, de mobiele weergave en de rondleiding.
 
@@ -166,13 +166,13 @@ export function DemoProvider({
         className="demo-fab"
         onClick={() => setPaneel((o) => !o)}
       >
-        ◈ <span>Bekijk CMS-design</span> <span>↗</span>
+        ◈ <span>Bekijk het CMS-ontwerp</span> <span>↗</span>
       </button>
       <div
         className={`demo-panel ${paneel ? "open" : ""}`}
         id="demoPanel"
         role="dialog"
-        aria-label="Design Demo Mode"
+        aria-label="Ontwerpdemomodus"
       >
         <div
           style={{
@@ -190,12 +190,12 @@ export function DemoProvider({
             ×
           </button>
         </div>
-        <h3>Design Demo Mode</h3>
+        <h3>Ontwerpdemomodus</h3>
         <p>
           {gekoppeld
             ? `Deze inhoud komt uit het Link & Lead One-CMS (site: ${info.site ?? "onbekend"}).`
             : viaSupabase
-              ? "Cases, artikelen, team, ruimtes en events komen uit de NOVA-demodatabase in Supabase. Paginateksten zijn nog ontwerpcopy; het echte CMS is nog niet gekoppeld."
+              ? "Cases, artikelen, team, ruimtes en evenementen komen uit de NOVA-demodatabase in Supabase. Paginateksten zijn nog ontwerpcopy; het echte CMS is nog niet gekoppeld."
               : "Dit is een klikbaar visueel prototype. Het is nog niet gekoppeld aan het echte CMS."}
         </p>
         <div className="demo-control" style={{ marginTop: 22 }}>
@@ -228,7 +228,7 @@ export function DemoProvider({
             href="/playground"
             onClick={() => setPaneel(false)}
           >
-            Open Playground ↗
+            Open blokkenbibliotheek ↗
           </Link>
         </div>
         <div className="demo-control">

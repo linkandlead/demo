@@ -50,62 +50,62 @@ export type Space = {
 export const slugify = (s: string) => s.toLowerCase().replaceAll(" ", "-");
 
 export const nav: Array<[string, string]> = [
-  ["Work", "work"],
-  ["Journal", "journal"],
-  ["Experiences", "experiences"],
-  ["Spaces", "spaces"],
+  ["Werk", "work"],
+  ["Verhalen", "journal"],
+  ["Belevingen", "experiences"],
+  ["Ruimtes", "spaces"],
   ["Community", "community"],
-  ["About", "about"],
+  ["Over ons", "about"],
   ["Het CMS", "one"],
 ];
 
 export const mobileExtra: Array<[string, string]> = [
   ["Contact", "contact"],
-  ["The Lab", "lab"],
-  ["Block Playground", "playground"],
-  ["Design Demo", "demo"],
+  ["Het Lab", "lab"],
+  ["Blokkenbibliotheek", "playground"],
+  ["Ontwerpdemo", "demo"],
   ["Het CMS", "one"],
 ];
 
 const rawCases = [
   {
     name: "Aurora Pavilion",
-    type: "EXPERIENCE",
+    type: "BELEVING",
     year: "2026",
     cover: "hero_arch",
     desc: "Een sculpturale ontmoetingsplek waar architectuur en licht samenkomen.",
   },
   {
     name: "Lumen Experience",
-    type: "CULTURE",
+    type: "CULTUUR",
     year: "2026",
     cover: "work_color",
     desc: "Een immersief universum van kleur, licht en beweging.",
   },
   {
     name: "Echo Spaces",
-    type: "DESIGN",
+    type: "ONTWERP",
     year: "2025",
     cover: "work_arch",
     desc: "Een nieuwe kijk op de ruimte tussen mens en omgeving.",
   },
   {
     name: "Pulse Festival",
-    type: "EVENT",
+    type: "EVENEMENT",
     year: "2026",
     cover: "event_lights",
     desc: "Drie dagen waarin cultuur en technologie samenkomen.",
   },
   {
     name: "Future Assembly",
-    type: "TECHNOLOGY",
+    type: "TECHNOLOGIE",
     year: "2026",
     cover: "journal_event",
     desc: "Een ideeënfestival voor een verbonden generatie.",
   },
   {
     name: "The Atrium",
-    type: "SPACE",
+    type: "RUIMTE",
     year: "2025",
     cover: "space_atrium",
     desc: "Een lichte, open ruimte waar alles mogelijk wordt.",
@@ -118,32 +118,34 @@ export const cases: Case[] = rawCases.map((c) => ({
 
 const rawPosts = [
   {
-    title: "De kracht van immersive experiences",
-    cat: "CULTURE",
+    title: "De kracht van meeslepende belevingen",
+    slug: "de-kracht-van-immersive-experiences",
+    cat: "CULTUUR",
     time: "8 min lezen",
     cover: "journal_face",
   },
   {
     title: "Ruimtes die creativiteit activeren",
-    cat: "DESIGN",
+    cat: "ONTWERP",
     time: "6 min lezen",
     cover: "journal_arch",
   },
   {
     title: "Achter de schermen bij Pulse Festival",
-    cat: "EXPERIENCES",
+    cat: "BELEVINGEN",
     time: "5 min lezen",
     cover: "journal_event",
   },
   {
     title: "Waarom de toekomst menselijk blijft",
-    cat: "FUTURE",
+    cat: "TOEKOMST",
     time: "9 min lezen",
     cover: "comm_face",
   },
   {
-    title: "Designing for tomorrow begins today",
-    cat: "INSIGHTS",
+    title: "Ontwerpen voor morgen begint vandaag",
+    slug: "designing-for-tomorrow-begins-today",
+    cat: "INZICHTEN",
     time: "11 min lezen",
     cover: "work_color",
   },
@@ -154,16 +156,17 @@ const rawPosts = [
     cover: "space_atrium",
   },
 ];
+// Vaste slug waar de titel vertaald is, zodat bestaande URL's (en Supabase-rijen) blijven werken.
 export const posts: Post[] = rawPosts.map((p) => ({
   ...p,
-  slug: slugify(p.title),
+  slug: "slug" in p && p.slug ? p.slug : slugify(p.title),
 }));
 
 export const people: Person[] = [
-  { name: "Maya Chen", role: "Creative director", cover: "comm_face" },
-  { name: "Noah Vermeer", role: "Head of experiences", cover: "comm_man" },
-  { name: "Amara Brooks", role: "Design strategist", cover: "journal_face" },
-  { name: "Luca Moreno", role: "Community curator", cover: "comm_person" },
+  { name: "Maya Chen", role: "Creatief directeur", cover: "comm_face" },
+  { name: "Noah Vermeer", role: "Hoofd belevingen", cover: "comm_man" },
+  { name: "Amara Brooks", role: "Ontwerpstrateeg", cover: "journal_face" },
+  { name: "Luca Moreno", role: "Communitycurator", cover: "comm_person" },
 ];
 
 export const spaces: Space[] = [

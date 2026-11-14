@@ -10,7 +10,7 @@ import {
 } from "@/components/nova/ui";
 import { getPosts } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Journal" };
+export const metadata: Metadata = { title: "Verhalen" };
 
 export default async function Journal() {
   const { items } = await getPosts();
@@ -19,14 +19,14 @@ export default async function Journal() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">THE JOURNAL / IDEAS & INSIGHTS</span>
+          <span className="eyebrow">VERHALEN / IDEEËN & INZICHTEN</span>
           <h1>
-            Stories, ideas
+            Verhalen, ideeën
             <br />
-            and insights.
+            en inzichten.
           </h1>
           <div className="hero-description">
-            <span className="meta">THINK / QUESTION / IMAGINE</span>
+            <span className="meta">DENKEN / BEVRAGEN / VERBEELDEN</span>
             <p>
               Verdiepende verhalen, interviews en nieuws over creativiteit,
               technologie en de toekomst.
@@ -46,7 +46,9 @@ export default async function Journal() {
                 <Photo src={featured.cover} alt={featured.title} />
               </div>
               <div className="copy">
-                <span className="eyebrow">FEATURED STORY / {featured.cat}</span>
+                <span className="eyebrow">
+                  UITGELICHT VERHAAL / {featured.cat}
+                </span>
                 <div>
                   <h2>{featured.title}.</h2>
                   <p style={{ marginTop: 20 }}>
@@ -67,8 +69,8 @@ export default async function Journal() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="MORE TO EXPLORE"
-            title="Ideas worth sharing."
+            eyebrow="MEER OM TE ONTDEKKEN"
+            title="Ideeën die het delen waard zijn."
           />
           <div
             className="chip-row"
@@ -76,10 +78,10 @@ export default async function Journal() {
             aria-label="Rubrieken (visueel voorbeeld)"
           >
             <span className="chip active">Alles</span>
-            <span className="chip">Design</span>
-            <span className="chip">Culture</span>
-            <span className="chip">Experiences</span>
-            <span className="chip">Future</span>
+            <span className="chip">Ontwerp</span>
+            <span className="chip">Cultuur</span>
+            <span className="chip">Belevingen</span>
+            <span className="chip">Toekomst</span>
           </div>
           {rest.length ? (
             <div className="article-grid">
@@ -111,7 +113,7 @@ export default async function Journal() {
           }}
         >
           <div>
-            <span className="eyebrow">NOVA NOTES</span>
+            <span className="eyebrow">NOVA-NOTITIES</span>
             <h2
               style={{
                 fontSize: "clamp(55px,7vw,108px)",
@@ -119,7 +121,7 @@ export default async function Journal() {
                 maxWidth: 720,
               }}
             >
-              A little more inspiration in your inbox.
+              Een beetje meer inspiratie in je inbox.
             </h2>
           </div>
           <DemoFormulier

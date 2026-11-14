@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import { Page } from "@/components/nova/Page";
 import { SectionTitle } from "@/components/nova/ui";
 
-export const metadata: Metadata = { title: "Sports" };
+export const metadata: Metadata = { title: "Sport" };
 
 export default function Sports() {
   return (
     <Page>
       <section className="inner-hero">
         <div className="container">
-          <span className="eyebrow">BLOCK PLAYGROUND / SPORTS</span>
+          <span className="eyebrow">BLOKKENBIBLIOTHEEK / SPORT</span>
           <h1>
-            Every team.
+            Elk team.
             <br />
-            Every moment.
+            Elk moment.
           </h1>
           <p>
             Een aparte visuele omgeving voor de bestaande blokken Wedstrijden en
@@ -28,7 +28,7 @@ export default function Sports() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="THE NEXT MATCH"
+            eyebrow="DE VOLGENDE WEDSTRIJD"
             title="NOVA United."
           />
           <div
@@ -40,7 +40,7 @@ export default function Sports() {
             }}
           >
             <div style={{ padding: 60 }}>
-              <span className="eyebrow">NEXT MATCH / HOME</span>
+              <span className="eyebrow">VOLGENDE WEDSTRIJD / THUIS</span>
               <h2 style={{ fontSize: 80, marginTop: 15 }}>NOVA / ATLAS</h2>
               <p style={{ fontSize: 15, color: "#1b2b3c", marginTop: 15 }}>
                 Fictieve wedstrijd · 24 april 2027 · 16:00

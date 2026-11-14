@@ -6,12 +6,12 @@ import { EmptyState, PicCard } from "./ui";
 
 const FILTERS = [
   "ALL",
-  "EXPERIENCE",
-  "DESIGN",
-  "CULTURE",
-  "EVENT",
-  "TECHNOLOGY",
-  "SPACE",
+  "BELEVING",
+  "ONTWERP",
+  "CULTUUR",
+  "EVENEMENT",
+  "TECHNOLOGIE",
+  "RUIMTE",
 ];
 
 // Cases-collectie met sectorfilter (CMS: Cases · filter op sector) — filterWork() uit het prototype.

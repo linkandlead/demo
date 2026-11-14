@@ -241,12 +241,6 @@ button.btn:disabled {
 @media (max-width: 380px) {
   /* Uitgelicht verhaal / volgende wedstrijd: koppen en vaste paddings uit inline stijlen van het
      prototype passen niet op 375px; alleen daar geschaald (390px blijft gelijk aan het ontwerp). */
-  .featured-story > * {
-    min-width: 0;
-  }
-  .featured-story h2 {
-    font-size: clamp(40px, 12.5vw, 54px) !important;
-  }
   .featured-story > div[style*="padding"] {
     padding: 28px !important;
   }
@@ -260,15 +254,31 @@ button.btn:disabled {
 .block-fields code {
   color: var(--night);
 }
-@media (max-width: 380px) {
-  /* Alleen de smalste telefoons: lange woorden ("Extraordinary", "experiences.") passen hier niet
-     op de minimale mobiele koptekstmaat. 390px blijft identiek aan het ontwerp. */
+@media (max-width: 760px) {
+  /* Nederlandse teksten: lange woorden ("Experimenteren.", "perspectieven.", "mogelijkheden.",
+     "meeslepende") passen op een telefoon niet op de vaste mobiele kopmaten uit nova.css. Op mobiel
+     schalen deze koppen daarom mee met de schermbreedte (zie docs/visuele-controle.md). */
   .inner-hero h1 {
-    font-size: clamp(50px, 15.2vw, 62px);
+    font-size: clamp(40px, 12.4vw, 62px);
+  }
+  .hero-copy h1 {
+    font-size: clamp(44px, 13.6vw, 97px);
+  }
+  .section-head h2 {
+    font-size: clamp(38px, 13.4vw, 58px);
   }
   .article-page h1 {
-    font-size: clamp(50px, 15.2vw, 65px);
+    font-size: clamp(40px, 13.8vw, 65px);
   }
+  .featured-story > * {
+    min-width: 0;
+  }
+  .featured-story h2 {
+    font-size: clamp(38px, 12.4vw, 54px) !important;
+  }
+}
+.ticket .btn {
+  white-space: normal;
 }
 
 /* Selected work (home): nova.css richt de 2-rijen-lay-out op `.portfolio-grid > div`, maar de

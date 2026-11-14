@@ -3,7 +3,7 @@ import Link from "next/link";
 import { TourStart } from "@/components/nova/DemoMode";
 import { Page } from "@/components/nova/Page";
 
-export const metadata: Metadata = { title: "Design Demo" };
+export const metadata: Metadata = { title: "Ontwerpdemo" };
 
 const STAPPEN: Array<[string, string]> = [
   ["Open de prachtige homepage", "/"],
@@ -20,15 +20,15 @@ export default function Demo() {
       <section className="inner-hero night">
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            LINK & LEAD ONE / THE SHOWCASE
+            LINK & LEAD ONE / DE SHOWCASE
           </span>
           <h1>
-            See the design.
+            Bekijk het ontwerp.
             <br />
-            Discover the CMS.
+            Ontdek het CMS.
           </h1>
           <div className="hero-description">
-            <span className="meta">GUIDED DESIGN EXPERIENCE</span>
+            <span className="meta">ONTWERP MET RONDLEIDING</span>
             <p>
               Een presentatieroute door de fictieve NOVA-website. De visuele
               fase gaat vooraf aan de werkende CMS-koppeling.
@@ -41,9 +41,9 @@ export default function Demo() {
           <div className="demo-launch">
             <div>
               <span className="eyebrow" style={{ color: "var(--lime)" }}>
-                THE FIVE-MINUTE TOUR
+                DE VIJF-MINUTENTOUR
               </span>
-              <h2>Show, don&apos;t tell.</h2>
+              <h2>Laten zien, niet vertellen.</h2>
               <p>
                 Zo demonstreer je straks de kracht van een prachtig ontworpen
                 website én de flexibiliteit van het CMS erachter.
@@ -62,19 +62,19 @@ export default function Demo() {
           </div>
           <div className="showcase-table" style={{ marginTop: 25 }}>
             <Link className="showcase-tile" href="/work">
-              <span className="eyebrow">EXPLORE</span>
+              <span className="eyebrow">ONTDEKKEN</span>
               <h3>Projecten en dynamische collecties</h3>
-              <span className="meta">OPEN WORK ↗</span>
+              <span className="meta">OPEN WERK ↗</span>
             </Link>
             <Link className="showcase-tile" href="/lab">
-              <span className="eyebrow">EXPERIMENT</span>
+              <span className="eyebrow">EXPERIMENTEREN</span>
               <h3>Formulieren en interactieve onderdelen</h3>
               <span className="meta">OPEN LAB ↗</span>
             </Link>
             <Link className="showcase-tile" href="/playground">
-              <span className="eyebrow">DISCOVER</span>
+              <span className="eyebrow">VERKENNEN</span>
               <h3>Alle 43 generieke CMS-blokken</h3>
-              <span className="meta">OPEN PLAYGROUND ↗</span>
+              <span className="meta">OPEN BLOKKENBIBLIOTHEEK ↗</span>
             </Link>
           </div>
         </div>

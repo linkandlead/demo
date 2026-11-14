@@ -27,14 +27,14 @@ export default async function Artikel({
   return (
     <Page>
       <article className="container article-page" data-cms="Header + Tekstblok">
-        <span className="eyebrow">{post.cat} / THE JOURNAL</span>
+        <span className="eyebrow">{post.cat} / VERHALEN</span>
         <h1>{post.title}.</h1>
         <p className="lead">
           {post.lead ||
             "Waarom nieuwe ideeën, mensen en plekken een steeds belangrijkere rol spelen in de manier waarop we samenkomen en creëren."}
         </p>
         <div className="meta" style={{ marginBottom: 30 }}>
-          NOVA EDITORIAL{post.time ? <> &nbsp; · &nbsp; {post.time}</> : null}
+          NOVA-REDACTIE{post.time ? <> &nbsp; · &nbsp; {post.time}</> : null}
           {bron !== "cms" && !post.body?.length ? (
             <> &nbsp; · &nbsp; VOORBEELDARTIKEL</>
           ) : null}
@@ -57,14 +57,14 @@ export default async function Artikel({
                 Niet met de nieuwste techniek of het grootste podium, maar met
                 de vraag wat we voor mensen mogelijk willen maken.
               </p>
-              <h2>Experience first.</h2>
+              <h2>Beleving eerst.</h2>
               <p>
                 Een sterke ervaring vertelt een verhaal zonder alles uit te
                 leggen. Ze maakt bezoekers niet alleen toeschouwer, maar
                 onderdeel van wat er gebeurt. Dat vraagt om ruimte, ritme en een
                 scherp gevoel voor detail.
               </p>
-              <blockquote>Great design makes people feel something.</blockquote>
+              <blockquote>Goed ontwerp laat mensen iets voelen.</blockquote>
               <p>
                 Van een intieme studio tot een grootschalig festival: de
                 uitgangspunten blijven hetzelfde. Zoek naar wat verbindt, laat
@@ -82,9 +82,9 @@ export default async function Artikel({
         <section className="section section-soft" data-cms="Artikelen">
           <div className="container">
             <SectionTitle
-              num="NEXT"
-              eyebrow="READ MORE"
-              title="Stories worth sharing."
+              num="VERDER"
+              eyebrow="LEES MEER"
+              title="Verhalen die het delen waard zijn."
             />
             <div className="article-grid">
               {meer.map((p) => (

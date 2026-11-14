@@ -72,7 +72,7 @@ export default function One() {
       <section className="section" data-cms="Tekst met beeld">
         <div className="container one-split">
           <div>
-            <SectionLabel num="01">LIVE DESIGN SHOWCASE</SectionLabel>
+            <SectionLabel num="01">LIVE ONTWERPSHOWCASE</SectionLabel>
             <h2
               style={{
                 fontSize: "clamp(50px,6.5vw,90px)",
@@ -141,7 +141,7 @@ export default function One() {
 
       <section className="section one-dark" data-cms="Statement">
         <div className="container">
-          <SectionLabel num="03">THE REAL POWER</SectionLabel>
+          <SectionLabel num="03">DE ECHTE KRACHT</SectionLabel>
           <h2
             style={{
               fontSize: "clamp(55px,8vw,126px)",
@@ -174,7 +174,7 @@ export default function One() {
               </span>
             ))}
           </div>
-          <Btn to="playground">Ontdek de Playground</Btn>
+          <Btn to="playground">Ontdek de blokkenbibliotheek</Btn>
         </div>
       </section>
 
@@ -254,8 +254,8 @@ export default function One() {
 
       <section className="one-end" data-cms="Afsluitende oproep / product">
         <div className="container">
-          <span className="eyebrow">THE WEBSITE IS THE PROOF</span>
-          <h2>Great websites deserve a better way to work.</h2>
+          <span className="eyebrow">DE WEBSITE IS HET BEWIJS</span>
+          <h2>Mooie websites verdienen een betere manier van werken.</h2>
           <div className="one-cta-row">
             <Link className="btn btn-dark" href="/demo">
               Ontdek Link & Lead One <span className="arrow">↗</span>

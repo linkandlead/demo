@@ -53,6 +53,8 @@ Toelichting op de grotere verschillen:
 | Afwijking                                                                              | Waarom                                                                                          |
 | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | "Selected work": 2-rijen-lay-out ook voor `<a>`-kaarten (`.portfolio-grid > a`)        | nova.css richtte zich op `div`-kinderen; de derde case viel onder de eerste, met een gat rechts |
+| **Alle zichtbare tekst in het Nederlands** (op verzoek van de opdrachtgever): koppen, knoppen, navigatie, labels, sectoren, rubrieken en paginatitels. Projectnamen blijven eigennamen; URL's (`/work`, …) ongewijzigd | Engels en Nederlands liepen door elkaar |
+| Mobiel (≤ 760px) schalen grote koppen mee met de schermbreedte | Lange Nederlandse woorden ("werkelijkheid.", "Experimenteren.") liepen buiten beeld |
 | Geneste links in ruimtekaarten → één kaartlink met knopvormige `span`                  | Ongeldige HTML brak de lay-out                                                                  |
 | Ruimtekaarten linken naar hun eigen detailpagina (`/spaces/the-atrium`, …)             | Prototype stuurde alle drie naar Studio One                                                     |
 | `.steps` buiten `.demo-launch` (op `/one`) gestileerd                                  | In `nova.css` ontbrak de stijl: de stappen waren losse tekst                                    |

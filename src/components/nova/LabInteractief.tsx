@@ -16,9 +16,9 @@ export function Configurator() {
           value={pakket}
           onChange={(e) => setPakket(Number(e.target.value))}
         >
-          <option value="150">Creative Session — € 150</option>
-          <option value="300">Immersive Event — € 300</option>
-          <option value="450">Full Experience — € 450</option>
+          <option value="150">Creatieve sessie — € 150</option>
+          <option value="300">Meeslepend evenement — € 300</option>
+          <option value="450">Volledige beleving — € 450</option>
         </select>
       </div>
       <div className="form-field">

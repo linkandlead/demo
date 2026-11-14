@@ -5,13 +5,17 @@ import { Page } from "@/components/nova/Page";
 import { Btn, PersonCard, Photo, SectionTitle } from "@/components/nova/ui";
 import { getPeople } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Experiences" };
+export const metadata: Metadata = { title: "Belevingen" };
 
 const TICKETS = [
-  ["Day Pass", "€ 49", "Toegang voor één inspirerende festivaldag."],
-  ["Full Experience", "€ 119", "Alle dagen, alle sessies en alle inspiratie."],
+  ["Dagkaart", "€ 49", "Toegang voor één inspirerende festivaldag."],
   [
-    "Community Pass",
+    "Volledige beleving",
+    "€ 119",
+    "Alle dagen, alle sessies en alle inspiratie.",
+  ],
+  [
+    "Communitykaart",
     "€ 179",
     "Met extra netwerkervaring en besloten programma.",
   ],
@@ -29,7 +33,7 @@ export default async function Experiences() {
         />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            UPCOMING EXPERIENCES
+            KOMENDE BELEVINGEN
           </span>
           <h1>
             Pulse
@@ -43,7 +47,7 @@ export default async function Experiences() {
           <div className="hero-actions">
             <Btn to="experiences/nova-sessions">Bekijk het programma</Btn>
             <Link className="btn btn-outline" href="/experiences/nova-sessions">
-              Ontdek het event ↗
+              Ontdek het evenement ↗
             </Link>
           </div>
         </div>
@@ -52,23 +56,23 @@ export default async function Experiences() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="WHAT TO EXPECT"
-            title="More than an event."
+            eyebrow="WAT JE KUNT VERWACHTEN"
+            title="Meer dan een evenement."
           />
           <div className="card-3">
             <div className="info-tile">
               <span className="eyebrow">01</span>
-              <strong>Inspiring speakers.</strong>
+              <strong>Inspirerende sprekers.</strong>
               <p>Nieuwe perspectieven van makers en denkers.</p>
             </div>
             <div className="info-tile">
               <span className="eyebrow">02</span>
-              <strong>Immersive art.</strong>
+              <strong>Meeslepende kunst.</strong>
               <p>Ervaar de toekomst met al je zintuigen.</p>
             </div>
             <div className="info-tile">
               <span className="eyebrow">03</span>
-              <strong>Real connections.</strong>
+              <strong>Echte verbindingen.</strong>
               <p>Ontmoet mensen die iets in beweging brengen.</p>
             </div>
           </div>
@@ -81,17 +85,17 @@ export default async function Experiences() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="THE PROGRAM"
-            title="An experience to remember."
+            eyebrow="HET PROGRAMMA"
+            title="Een beleving om te onthouden."
             desc="Drie inspirerende dagen. Hier tonen we de visuele uitwerking van een programma en tijdlijn."
           />
           <div className="schedule">
             <div>
               {[
                 ["10:00", "Opening Pulse Festival"],
-                ["11:15", "Designing tomorrow"],
-                ["13:30", "Experiences beyond screens"],
-                ["16:00", "Meet the makers"],
+                ["11:15", "Ontwerpen voor morgen"],
+                ["13:30", "Belevingen voorbij het scherm"],
+                ["16:00", "Ontmoet de makers"],
               ].map(([tijd, titel]) => (
                 <div className="schedule-row" key={tijd}>
                   <strong>{tijd}</strong>
@@ -113,12 +117,12 @@ export default async function Experiences() {
         <div className="container">
           <SectionTitle
             num="03"
-            eyebrow="ON STAGE"
-            title="Fresh voices. Big ideas."
+            eyebrow="OP HET PODIUM"
+            title="Nieuwe stemmen. Grote ideeën."
           />
           <div className="people-grid">
             {people.slice(0, 4).map((p) => (
-              <PersonCard key={p.name} p={p} prefix="Speaker · " />
+              <PersonCard key={p.name} p={p} prefix="Spreker · " />
             ))}
           </div>
         </div>
@@ -128,11 +132,7 @@ export default async function Experiences() {
         className="section section-dark"
       >
         <div className="container">
-          <SectionTitle
-            num="04"
-            eyebrow="JOIN THE EXPERIENCE"
-            title="Find your ticket."
-          />
+          <SectionTitle num="04" eyebrow="DOE MEE" title="Vind je ticket." />
           <div className="tickets">
             {TICKETS.map((tk, i) => (
               <div
@@ -141,7 +141,7 @@ export default async function Experiences() {
               >
                 <div>
                   <span className="eyebrow">
-                    {i === 1 ? "MOST POPULAR" : "ACCESS"}
+                    {i === 1 ? "MEEST GEKOZEN" : "TOEGANG"}
                   </span>
                   <h3 style={{ marginTop: 13 }}>{tk[0]}</h3>
                   <p style={{ marginTop: 12 }}>{tk[2]}</p>

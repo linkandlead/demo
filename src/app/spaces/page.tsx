@@ -4,7 +4,7 @@ import { Page } from "@/components/nova/Page";
 import { Photo, SectionTitle } from "@/components/nova/ui";
 import { getSpaces } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Spaces" };
+export const metadata: Metadata = { title: "Ruimtes" };
 
 export default async function Spaces() {
   const { items: spaces } = await getSpaces();
@@ -12,16 +12,16 @@ export default async function Spaces() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">OUR SPACES / MEET DIFFERENTLY</span>
+          <span className="eyebrow">ONZE RUIMTES / ANDERS ONTMOETEN</span>
           <h1>
-            Extraordinary
+            Bijzondere
             <br />
-            spaces for
+            ruimtes voor
             <br />
-            big ideas.
+            grote ideeën.
           </h1>
           <div className="hero-description">
-            <span className="meta">SPACES THAT INSPIRE</span>
+            <span className="meta">RUIMTES DIE INSPIREREN</span>
             <p>
               Flexibele, inspirerende locaties voor evenementen, producties,
               workshops en meetings.
@@ -45,7 +45,7 @@ export default async function Spaces() {
                 <Photo src={s.cover} alt={s.alt} />
               </div>
               <div className="copy">
-                <span className="eyebrow">0{i + 1} / OUR SPACES</span>
+                <span className="eyebrow">0{i + 1} / ONZE RUIMTES</span>
                 <h3>{s.name}.</h3>
                 <p>{s.desc}</p>
                 {/* In het prototype een geneste link; een <a> in een <a> is ongeldige HTML, dus hier
@@ -63,8 +63,8 @@ export default async function Spaces() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="SPACE FACTS"
-            title="Your next idea starts here."
+            eyebrow="FEITEN OVER DE RUIMTES"
+            title="Je volgende idee begint hier."
           />
           <div className="stats-grid">
             <div className="stat">

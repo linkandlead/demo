@@ -37,7 +37,7 @@ export default async function Home() {
         </div>
         <div className="container hero-copy">
           <div className="eyebrow" style={{ color: "var(--lime)" }}>
-            {t(hero, "eyebrow", "WELCOME TO CREATIVE FUTURES")}
+            {t(hero, "eyebrow", "WELKOM IN CREATIEVE TOEKOMSTEN")}
           </div>
           <h1>
             {typeof hero.heading === "string" && hero.heading ? (
@@ -52,11 +52,11 @@ export default async function Home() {
               )
             ) : (
               <>
-                Ideas deserve
+                Ideeën
                 <br />
-                to become
+                verdienen
                 <br />
-                reality<span style={{ color: "var(--lime)" }}>.</span>
+                werkelijkheid<span style={{ color: "var(--lime)" }}>.</span>
               </>
             )}
           </h1>
@@ -69,7 +69,7 @@ export default async function Home() {
           </p>
           <div className="hero-actions">
             <Btn to={t(hero, "cta_primair_link", "work")}>
-              {t(hero, "cta_primair_label", "Explore NOVA")}
+              {t(hero, "cta_primair_label", "Ontdek NOVA")}
             </Btn>
             <Link href="/one" className="btn btn-outline">
               ◉ &nbsp; Ontdek het CMS
@@ -92,7 +92,7 @@ export default async function Home() {
                 <small>Kleurenschema&apos;s</small>
               </div>
             </div>
-            <span className="scroll">SCROLL TO EXPLORE &nbsp; ↓</span>
+            <span className="scroll">SCROL OM TE ONTDEKKEN &nbsp; ↓</span>
           </div>
         </div>
       </section>
@@ -100,8 +100,8 @@ export default async function Home() {
       <div data-cms="Bewegende tekstband" className="marquee">
         <div className="container">
           <span>
-            CREATE &nbsp; / &nbsp; CONNECT &nbsp; / &nbsp; EXPLORE &nbsp; /
-            &nbsp; BUILD &nbsp; / &nbsp;
+            CREËREN &nbsp; / &nbsp; VERBINDEN &nbsp; / &nbsp; ONTDEKKEN &nbsp; /
+            &nbsp; BOUWEN &nbsp; / &nbsp;
           </span>
         </div>
       </div>
@@ -110,9 +110,9 @@ export default async function Home() {
         <div className="container intro-grid">
           <div>
             <SectionLabel num="01">
-              {t(intro, "eyebrow", "OUR WORLD")}
+              {t(intro, "eyebrow", "ONZE WERELD")}
             </SectionLabel>
-            <h2>{t(intro, "titel", "Where ideas find their people.")}</h2>
+            <h2>{t(intro, "titel", "Waar ideeën hun mensen vinden.")}</h2>
             <p>
               Wij geloven in de kracht van ontmoetingen. In ruimtes die
               uitdagen, verhalen die blijven hangen en ideeën die de wereld
@@ -124,7 +124,7 @@ export default async function Home() {
           </div>
           <div className="image-frame intro-image">
             <Photo src="work_color" alt="Kleurrijke lichtinstallatie" />
-            <span className="image-tag">CREATIVITY IN MOTION</span>
+            <span className="image-tag">CREATIVITEIT IN BEWEGING</span>
           </div>
         </div>
       </section>
@@ -133,8 +133,8 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="SELECTED WORK"
-            title="Made to move people."
+            eyebrow="GESELECTEERD WERK"
+            title="Gemaakt om mensen te raken."
             desc="Van architectuur en ervaringen tot digitale ideeën. Werk dat niet alleen mooi is, maar ook iets losmaakt."
           />
           {uitgelicht.length ? (
@@ -161,20 +161,19 @@ export default async function Home() {
         <div className="ring" />
         <div className="container">
           <SectionLabel num="03">
-            {t(statement, "eyebrow", "OUR BELIEF")}
+            {t(statement, "eyebrow", "WAAR WE IN GELOVEN")}
           </SectionLabel>
           <h2>
             {typeof statement.titel === "string" && statement.titel ? (
               statement.titel
             ) : (
               <>
-                Tomorrow is not something we wait for.{" "}
-                <em>It&apos;s something we make.</em>
+                Op morgen wachten we niet. <em>Morgen maken we zelf.</em>
               </>
             )}
           </h2>
           <Btn to={t(statement, "knop", "community")}>
-            {t(statement, "knoptekst", "Meet our community")}
+            {t(statement, "knoptekst", "Ontmoet onze community")}
           </Btn>
         </div>
       </section>
@@ -183,8 +182,8 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="04"
-            eyebrow="THE IDEA IN NUMBERS"
-            title="A world of possibilities."
+            eyebrow="HET IDEE IN CIJFERS"
+            title="Een wereld vol mogelijkheden."
             desc="Fictieve voorbeeldcijfers voor de demonstratie van het CMS-statistiekenblok."
           />
           <div className="stats-grid">
@@ -192,15 +191,15 @@ export default async function Home() {
               <strong>
                 120<span style={{ color: "#8fa616" }}>+</span>
               </strong>
-              <p>Ideas brought to life</p>
+              <p>Ideeën tot leven gebracht</p>
             </div>
             <div className="stat">
               <strong>38</strong>
-              <p>Creative collaborators</p>
+              <p>Creatieve samenwerkingspartners</p>
             </div>
             <div className="stat">
               <strong>12k</strong>
-              <p>Inspired minds</p>
+              <p>Geïnspireerde geesten</p>
             </div>
           </div>
         </div>
@@ -210,8 +209,8 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="05"
-            eyebrow="PEOPLE"
-            title="Meet the minds."
+            eyebrow="MENSEN"
+            title="Ontmoet de denkers."
             desc="Ideeën worden pas bijzonder door de mensen die ze vormgeven."
           />
           {people.length ? (
@@ -238,8 +237,8 @@ export default async function Home() {
         <div className="container">
           <SectionTitle
             num="06"
-            eyebrow="THE JOURNAL"
-            title="Fresh perspectives."
+            eyebrow="VERHALEN"
+            title="Frisse perspectieven."
             desc="Verhalen om bij stil te staan. En om daarna weer vooruit te kijken."
           />
           {posts.length ? (

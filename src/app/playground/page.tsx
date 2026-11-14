@@ -3,21 +3,21 @@ import Link from "next/link";
 import { Page } from "@/components/nova/Page";
 import { Playground } from "@/components/nova/Playground";
 
-export const metadata: Metadata = { title: "Block Playground" };
+export const metadata: Metadata = { title: "Blokkenbibliotheek" };
 
 export default function PlaygroundPage() {
   return (
     <Page>
       <section className="inner-hero" style={{ paddingBottom: 65 }}>
         <div className="container">
-          <span className="eyebrow">LINK & LEAD ONE / BLOCK EXPLORER</span>
+          <span className="eyebrow">LINK & LEAD ONE / BLOKKENVERKENNER</span>
           <h1>
-            One system.
+            Eén systeem.
             <br />
-            43 possibilities.
+            43 mogelijkheden.
           </h1>
           <div className="hero-description">
-            <span className="meta">43 GENERIC CONTENT BLOCKS</span>
+            <span className="meta">43 ALGEMENE CONTENTBLOKKEN</span>
             <p>
               De visuele bibliotheek van alle generieke CMS-blokken. Dit is een
               ontwerpvoorstel, nog geen live weergave van de echte componenten.

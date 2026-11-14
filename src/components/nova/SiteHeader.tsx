@@ -73,7 +73,7 @@ export function SiteHeader() {
           </nav>
           <div className="header-actions">
             <Link className="header-pill" href="/contact">
-              Let&apos;s talk ↗
+              Neem contact op ↗
             </Link>
             <button
               aria-label={open ? "Sluit het menu" : "Open het menu"}

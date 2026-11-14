@@ -8,7 +8,7 @@ const MOZAIEK: Array<[string, string, string, boolean]> = [
   ["comm_face", "Portret van een creatieve maker", "Makers", true],
   ["comm_man", "Creatieve partner", "Partners", false],
   ["comm_person", "Portret teamlid", "Team", false],
-  ["comm_event", "Community event", "Moments we share", false],
+  ["comm_event", "Community event", "Momenten die we delen", false],
 ];
 
 const STEMMEN: Array<[string, string]> = [
@@ -25,14 +25,14 @@ export default function Community() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">OUR COMMUNITY / MADE TOGETHER</span>
+          <span className="eyebrow">ONZE COMMUNITY / SAMEN GEMAAKT</span>
           <h1>
-            People make
+            Mensen maken
             <br />
-            the future.
+            de toekomst.
           </h1>
           <div className="hero-description">
-            <span className="meta">PEOPLE / CREATIVITY / CONNECTION</span>
+            <span className="meta">MENSEN / CREATIVITEIT / VERBINDING</span>
             <p>
               Een groeiende community van creatieven, innovators en organisaties
               die samen werken aan betekenisvolle projecten.
@@ -68,12 +68,12 @@ export default function Community() {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="BETTER TOGETHER"
-            title="Ideas are made to be shared."
+            eyebrow="SAMEN STERKER"
+            title="Ideeën zijn er om te delen."
           />
           <div className="detail-split">
             <p className="pullquote">
-              Great things happen when different worlds meet.
+              Mooie dingen ontstaan als werelden elkaar ontmoeten.
             </p>
             <div className="body-copy">
               <p>
@@ -92,13 +92,13 @@ export default function Community() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="WHAT PEOPLE SAY"
-            title="Real connection. Lasting impact."
+            eyebrow="WAT MENSEN ZEGGEN"
+            title="Echte verbinding. Blijvende impact."
           />
           <div className="card-3">
             {STEMMEN.map(([citaat, naam]) => (
               <div className="info-tile" key={naam}>
-                <span className="eyebrow">COMMUNITY VOICE</span>
+                <span className="eyebrow">STEM UIT DE COMMUNITY</span>
                 <strong style={{ fontSize: 23 }}>{citaat}</strong>
                 <p>— {naam} · fictieve testimonial</p>
               </div>

@@ -34,7 +34,7 @@ const blauwdruk = {
   paginas: [
     {
       slug: "/",
-      titel: "NOVA — Ideas deserve to become reality",
+      titel: "NOVA — Ideeën verdienen werkelijkheid",
       beschrijving:
         "Een plek voor nieuwe ideeën, inspirerende mensen en bijzondere ervaringen.",
       published: true,
@@ -45,11 +45,11 @@ const blauwdruk = {
           content: {
             layout: "split-rechts",
             hoogte: "fullscreen",
-            eyebrow: "WELCOME TO CREATIVE FUTURES",
-            heading: "Ideas deserve\nto become\nreality.",
+            eyebrow: "WELKOM IN CREATIEVE TOEKOMSTEN",
+            heading: "Ideeën\nverdienen\nwerkelijkheid.",
             subheading:
               "Een plek voor nieuwe ideeën, inspirerende mensen en bijzondere ervaringen.",
-            cta_primair_label: "Explore NOVA",
+            cta_primair_label: "Ontdek NOVA",
             cta_primair_link: "/work",
             cta_secundair_label: "Ontdek het CMS",
             cta_secundair_link: "/one",
@@ -69,17 +69,19 @@ const blauwdruk = {
           bg: null,
           content: {
             stijl: "limoen",
-            items: ["CREATE", "CONNECT", "EXPLORE", "BUILD"].map((tekst) => ({
-              tekst,
-            })),
+            items: ["CREËREN", "VERBINDEN", "ONTDEKKEN", "BOUWEN"].map(
+              (tekst) => ({
+                tekst,
+              }),
+            ),
           },
         },
         {
           type: "mediatekst",
           bg: "wit",
           content: {
-            eyebrow: "OUR WORLD",
-            titel: "Where ideas find their people.",
+            eyebrow: "ONZE WERELD",
+            titel: "Waar ideeën hun mensen vinden.",
             alineas: [
               {
                 tekst:
@@ -96,8 +98,8 @@ const blauwdruk = {
           type: "cases_grid",
           bg: "mist",
           content: {
-            eyebrow: "SELECTED WORK",
-            titel: "Made to move people.",
+            eyebrow: "GESELECTEERD WERK",
+            titel: "Gemaakt om mensen te raken.",
             maximaal: 3,
             link_naar_overzicht: "/work",
           },
@@ -106,28 +108,31 @@ const blauwdruk = {
           type: "statement",
           bg: "nacht",
           content: {
-            eyebrow: "OUR BELIEF",
-            titel:
-              "Tomorrow is not something we wait for. It's something we make.",
+            eyebrow: "WAAR WE IN GELOVEN",
+            titel: "Op morgen wachten we niet. Morgen maken we zelf.",
             knop: "/community",
-            knoptekst: "Meet our community",
+            knoptekst: "Ontmoet onze community",
           },
         },
         {
           type: "statistieken",
           bg: "mist",
           content: {
-            titel: "A world of possibilities.",
+            titel: "Een wereld vol mogelijkheden.",
             intro:
               "Fictieve voorbeeldcijfers voor de demonstratie van het CMS-statistiekenblok.",
             items: [
               {
                 waarde: "120",
                 achtervoegsel: "+",
-                label: "Ideas brought to life",
+                label: "Ideeën tot leven gebracht",
               },
-              { waarde: "38", label: "Creative collaborators" },
-              { waarde: "12", achtervoegsel: "k", label: "Inspired minds" },
+              { waarde: "38", label: "Creatieve samenwerkingspartners" },
+              {
+                waarde: "12",
+                achtervoegsel: "k",
+                label: "Geïnspireerde geesten",
+              },
             ],
           },
         },
@@ -135,7 +140,7 @@ const blauwdruk = {
           type: "mensen",
           bg: "wit",
           content: {
-            titel: "Meet the minds.",
+            titel: "Ontmoet de denkers.",
             intro:
               "Ideeën worden pas bijzonder door de mensen die ze vormgeven.",
             maximaal: 4,
@@ -145,8 +150,8 @@ const blauwdruk = {
           type: "artikelen_grid",
           bg: "mist",
           content: {
-            eyebrow: "THE JOURNAL",
-            titel: "Fresh perspectives.",
+            eyebrow: "VERHALEN",
+            titel: "Frisse perspectieven.",
             maximaal: 3,
           },
         },
@@ -154,8 +159,8 @@ const blauwdruk = {
           type: "cta",
           bg: "nacht",
           content: {
-            eyebrow: "WHAT'S NEXT?",
-            titel: "Have something extraordinary in mind?",
+            eyebrow: "WAT IS DE VOLGENDE STAP?",
+            titel: "Heb je iets bijzonders in gedachten?",
             knoptekst: "Start een gesprek",
             knop: "/contact",
           },
@@ -164,8 +169,8 @@ const blauwdruk = {
     },
     {
       slug: "/work",
-      titel: "Work",
-      beschrijving: "Projects that make an impact.",
+      titel: "Werk",
+      beschrijving: "Projecten die impact maken.",
       published: true,
       blokken: [
         {
@@ -174,10 +179,10 @@ const blauwdruk = {
           content: {
             layout: "compact",
             hoogte: "normaal",
-            eyebrow: "OUR WORK / CURATED PROJECTS",
-            heading: "Projects that\nmake an impact.",
+            eyebrow: "ONS WERK / GESELECTEERDE PROJECTEN",
+            heading: "Projecten die\nimpact maken.",
             subheading:
-              "Van immersieve experiences tot digitale platformen. Ontdek hoe ideeën veranderen in betekenisvolle projecten.",
+              "Van meeslepende belevingen tot digitale platformen. Ontdek hoe ideeën veranderen in betekenisvolle projecten.",
           },
         },
         { type: "cases_grid", bg: "wit", content: { maximaal: 24 } },
@@ -185,8 +190,8 @@ const blauwdruk = {
     },
     {
       slug: "/journal",
-      titel: "Journal",
-      beschrijving: "Stories, ideas and insights.",
+      titel: "Verhalen",
+      beschrijving: "Verhalen, ideeën en inzichten.",
       published: true,
       blokken: [
         {
@@ -195,16 +200,16 @@ const blauwdruk = {
           content: {
             layout: "compact",
             hoogte: "normaal",
-            eyebrow: "THE JOURNAL / IDEAS & INSIGHTS",
-            heading: "Stories, ideas\nand insights.",
+            eyebrow: "VERHALEN / IDEEËN & INZICHTEN",
+            heading: "Verhalen, ideeën\nen inzichten.",
           },
         },
         {
           type: "artikelen_grid",
           bg: "mist",
           content: {
-            eyebrow: "MORE TO EXPLORE",
-            titel: "Ideas worth sharing.",
+            eyebrow: "MEER OM TE ONTDEKKEN",
+            titel: "Ideeën die het delen waard zijn.",
             maximaal: 12,
           },
         },
@@ -213,8 +218,8 @@ const blauwdruk = {
           bg: "limoenlicht",
           content: {
             soort: "nieuwsbrief",
-            eyebrow: "NOVA NOTES",
-            titel: "A little more inspiration in your inbox.",
+            eyebrow: "NOVA-NOTITIES",
+            titel: "Een beetje meer inspiratie in je inbox.",
             knoptekst: "Aanmelden",
           },
         },
@@ -223,7 +228,7 @@ const blauwdruk = {
     {
       slug: "/contact",
       titel: "Contact",
-      beschrijving: "Let's make something happen.",
+      beschrijving: "Laten we iets laten gebeuren.",
       published: true,
       blokken: [
         {
@@ -232,8 +237,8 @@ const blauwdruk = {
           content: {
             layout: "compact",
             hoogte: "normaal",
-            eyebrow: "CONTACT / GET IN TOUCH",
-            heading: "Let's make\nsomething happen.",
+            eyebrow: "CONTACT / NEEM CONTACT OP",
+            heading: "Laten we\niets laten gebeuren.",
           },
         },
         {
@@ -241,8 +246,8 @@ const blauwdruk = {
           bg: "wit",
           content: {
             soort: "contact",
-            eyebrow: "TELL US ABOUT YOUR IDEA",
-            titel: "What's on your mind?",
+            eyebrow: "VERTEL ONS OVER JE IDEE",
+            titel: "Wat houdt je bezig?",
             knoptekst: "Verstuur je bericht",
           },
         },

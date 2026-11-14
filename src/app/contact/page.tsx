@@ -9,14 +9,14 @@ export default function Contact() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">CONTACT / GET IN TOUCH</span>
+          <span className="eyebrow">CONTACT / NEEM CONTACT OP</span>
           <h1>
-            Let&apos;s make
+            Laten we
             <br />
-            something happen.
+            iets laten gebeuren.
           </h1>
           <div className="hero-description">
-            <span className="meta">SAY HELLO</span>
+            <span className="meta">ZEG HALLO</span>
             <p>
               Een vraag, een idee of gewoon nieuwsgierig? Laat van je horen.
             </p>
@@ -30,16 +30,16 @@ export default function Contact() {
       >
         <div className="container contact-layout">
           <div>
-            <span className="eyebrow">TELL US ABOUT YOUR IDEA</span>
-            <h2>What&apos;s on your mind?</h2>
+            <span className="eyebrow">VERTEL ONS OVER JE IDEE</span>
+            <h2>Wat houdt je bezig?</h2>
             <p className="side-note">
               We zijn benieuwd naar je plannen. Dit formulier is een visueel
               ontwerp en verzendt nog geen berichten.
             </p>
             <div style={{ marginTop: 70 }}>
-              <span className="eyebrow">FICTIONAL HEADQUARTERS</span>
+              <span className="eyebrow">FICTIEF HOOFDKANTOOR</span>
               <p style={{ fontSize: 18, marginTop: 12 }}>
-                NOVA Creative Campus
+                NOVA Creatieve Campus
                 <br />
                 Demolocatie · geen bezoekadres
               </p>

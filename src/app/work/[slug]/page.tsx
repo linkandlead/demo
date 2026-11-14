@@ -29,7 +29,7 @@ export default async function WorkDetail({
         <Photo src={item.cover} alt={item.name} priority />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            SELECTED WORK / {item.type}
+            GESELECTEERD WERK / {item.type}
           </span>
           <h1>{item.name}.</h1>
           <p>{item.desc}</p>
@@ -42,22 +42,22 @@ export default async function WorkDetail({
         </div>
         {item.year ? (
           <div>
-            <span>YEAR</span>
+            <span>JAAR</span>
             <strong>{item.year}</strong>
           </div>
         ) : null}
         <div>
-          <span>CLIENT</span>
-          <strong>{bron === "cms" ? item.name : "NOVA Demo Project"}</strong>
+          <span>OPDRACHTGEVER</span>
+          <strong>{bron === "cms" ? item.name : "NOVA-demoproject"}</strong>
         </div>
         <div>
-          <span>SERVICES</span>
-          <strong>Concept / Design / Experience</strong>
+          <span>DIENSTEN</span>
+          <strong>Concept / Ontwerp / Beleving</strong>
         </div>
       </div>
       <section data-cms="Tekst met beeld" className="section">
         <div className="container detail-split">
-          <p className="pullquote">Designed to leave an impression.</p>
+          <p className="pullquote">Ontworpen om indruk te maken.</p>
           <div className="body-copy">
             <p>
               Dit project begon met een simpele vraag: hoe maak je van een plek

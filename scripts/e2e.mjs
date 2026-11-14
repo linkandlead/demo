@@ -60,7 +60,7 @@ for (const r of ROUTES) {
     ),
     fab: document
       .querySelector(".demo-fab")
-      ?.textContent.includes("Bekijk CMS-design"),
+      ?.textContent.includes("Bekijk het CMS-ontwerp"),
     links: [...document.querySelectorAll('a[href^="/"]')].map((a) =>
       a.getAttribute("href"),
     ),
@@ -159,9 +159,9 @@ check(
 
 console.log("Interactie");
 await page.goto(SITE + "/work", { waitUntil: "load" });
-await page.getByRole("button", { name: "design", exact: true }).click();
+await page.getByRole("button", { name: "ontwerp", exact: true }).click();
 check(
-  'werkfilter "design" toont 1 project',
+  'werkfilter "ontwerp" toont 1 project',
   (await page.locator("#projects > div").count()) === 1,
 );
 await page.goto(SITE + "/lab", { waitUntil: "load" });
@@ -173,7 +173,7 @@ check(
 await page.getByRole("button", { name: /Wissel tekstvariant/ }).click();
 check(
   "A/B-test wisselt tekst",
-  (await page.locator("#ab-text").textContent()) === "Make tomorrow happen.",
+  (await page.locator("#ab-text").textContent()) === "Laat morgen gebeuren.",
 );
 await page.goto(SITE + "/contact", { waitUntil: "load" });
 await page.getByRole("button", { name: /Verstuur je bericht/ }).click();

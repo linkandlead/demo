@@ -34,7 +34,7 @@ export default async function Ruimte({ params }: PageProps<"/spaces/[slug]">) {
         />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            NOVA SPACES
+            NOVA-RUIMTES
           </span>
           <h1>{ruimte.name}.</h1>
           <p>
@@ -62,8 +62,8 @@ export default async function Ruimte({ params }: PageProps<"/spaces/[slug]">) {
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="THE SPACE"
-            title="Everything you need to create."
+            eyebrow="DE RUIMTE"
+            title="Alles wat je nodig hebt om te creëren."
           />
           <div className="intro-grid">
             <div className="body-copy">
@@ -93,22 +93,22 @@ export default async function Ruimte({ params }: PageProps<"/spaces/[slug]">) {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="DESIGN YOUR VISIT"
-            title="Your event, your way."
+            eyebrow="STEL JE BEZOEK SAMEN"
+            title="Jouw evenement, op jouw manier."
           />
           <div className="card-3">
             <div className="info-tile">
-              <span className="eyebrow">STEP 01</span>
+              <span className="eyebrow">STAP 01</span>
               <strong>Kies je ervaring</strong>
               <p>Workshop, presentatie of evenement.</p>
             </div>
             <div className="info-tile">
-              <span className="eyebrow">STEP 02</span>
+              <span className="eyebrow">STAP 02</span>
               <strong>Bepaal je gezelschap</strong>
               <p>Flexibele opstellingen voor groepen.</p>
             </div>
             <div className="info-tile">
-              <span className="eyebrow">STEP 03</span>
+              <span className="eyebrow">STAP 03</span>
               <strong>Plan je bezoek</strong>
               <p>Vraag naar een geschikte datum.</p>
             </div>

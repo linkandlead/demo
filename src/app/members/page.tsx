@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DemoFormulier } from "@/components/nova/DemoFormulier";
 import { Page } from "@/components/nova/Page";
 
-export const metadata: Metadata = { title: "Members" };
+export const metadata: Metadata = { title: "Leden" };
 
 export default function Members() {
   return (
@@ -10,12 +10,12 @@ export default function Members() {
       <section data-cms="Header (hero)" className="inner-hero night">
         <div className="container">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            MEMBERS / YOUR SPACE
+            LEDEN / JOUW PLEK
           </span>
           <h1>
-            A place for
+            Een plek voor
             <br />
-            our people.
+            onze mensen.
           </h1>
           <p style={{ maxWidth: 490, color: "#c0c7d8" }}>
             Een besloten omgeving waar leden exclusieve ideeën, sessies en
@@ -25,8 +25,8 @@ export default function Members() {
       </section>
       <section data-cms="Ledentoegang" className="section">
         <div className="container" style={{ maxWidth: 640 }}>
-          <span className="eyebrow">MEMBER ACCESS</span>
-          <h2 style={{ fontSize: 68, margin: "18px 0" }}>Welcome back.</h2>
+          <span className="eyebrow">LEDENTOEGANG</span>
+          <h2 style={{ fontSize: 68, margin: "18px 0" }}>Welkom terug.</h2>
           <DemoFormulier
             className="form-grid"
             demoTekst="Dit is een voorbeeldscherm. Er is geen echte login en er wordt niets opgeslagen."

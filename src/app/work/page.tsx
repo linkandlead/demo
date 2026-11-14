@@ -4,7 +4,7 @@ import { WorkGrid } from "@/components/nova/WorkGrid";
 import { SectionTitle } from "@/components/nova/ui";
 import { getCases } from "@/lib/cms/data";
 
-export const metadata: Metadata = { title: "Work" };
+export const metadata: Metadata = { title: "Werk" };
 
 export default async function Work() {
   const { items } = await getCases();
@@ -12,16 +12,16 @@ export default async function Work() {
     <Page>
       <section data-cms="Header (hero)" className="inner-hero">
         <div className="container">
-          <span className="eyebrow">OUR WORK / CURATED PROJECTS</span>
+          <span className="eyebrow">ONS WERK / GESELECTEERDE PROJECTEN</span>
           <h1>
-            Projects that
+            Projecten die
             <br />
-            make an impact.
+            impact maken.
           </h1>
           <div className="hero-description">
-            <span className="meta">DESIGN / CULTURE / EXPERIENCE</span>
+            <span className="meta">ONTWERP / CULTUUR / BELEVING</span>
             <p>
-              Van immersieve experiences tot digitale platformen. Ontdek hoe
+              Van meeslepende belevingen tot digitale platformen. Ontdek hoe
               ideeën veranderen in betekenisvolle projecten.
             </p>
           </div>
@@ -40,23 +40,23 @@ export default async function Work() {
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="OUR APPROACH"
-            title="Every project starts with a question."
+            eyebrow="ONZE AANPAK"
+            title="Elk project begint met een vraag."
           />
           <div className="card-3">
             <div className="info-tile">
-              <span className="eyebrow">01 / Discover</span>
-              <strong>Listen first.</strong>
+              <span className="eyebrow">01 / Ontdekken</span>
+              <strong>Eerst luisteren.</strong>
               <p>Begrijp het probleem en de mensen erachter.</p>
             </div>
             <div className="info-tile">
-              <span className="eyebrow">02 / Create</span>
-              <strong>Think bigger.</strong>
+              <span className="eyebrow">02 / Creëren</span>
+              <strong>Groter denken.</strong>
               <p>Geef verbeelding en experiment de ruimte.</p>
             </div>
             <div className="info-tile">
               <span className="eyebrow">03 / Impact</span>
-              <strong>Make it matter.</strong>
+              <strong>Laat het ertoe doen.</strong>
               <p>Werk aan iets wat mensen raakt.</p>
             </div>
           </div>

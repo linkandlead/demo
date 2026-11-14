@@ -29,10 +29,10 @@ export default async function EventDetail({
   return (
     <Page>
       <section data-cms="Header · eventdetail" className="detail-hero">
-        <Photo src="event_lights" alt="Creative festival" priority />
+        <Photo src="event_lights" alt="Creatief festival" priority />
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
-            NOVA SESSIONS / EVENT EXPERIENCE
+            NOVA SESSIONS / EVENEMENT
           </span>
           <h1>{ev.name}.</h1>
           <p>
@@ -48,7 +48,7 @@ export default async function EventDetail({
         </div>
         <div>
           <span>LOCATIE</span>
-          <strong>NOVA Creative Campus (fictief)</strong>
+          <strong>NOVA Creatieve Campus (fictief)</strong>
         </div>
         <div>
           <span>DOELGROEP</span>
@@ -59,15 +59,15 @@ export default async function EventDetail({
         <div className="container">
           <SectionTitle
             num="01"
-            eyebrow="THE PROGRAM"
-            title="Three days. Infinite ideas."
+            eyebrow="HET PROGRAMMA"
+            title="Drie dagen. Eindeloos veel ideeën."
           />
           <div className="schedule">
             <div>
               {[
-                ["10:00", "Welcome & Creative Futures"],
-                ["11:30", "Beyond the expected"],
-                ["14:00", "Meet the makers"],
+                ["10:00", "Welkom & creatieve toekomsten"],
+                ["11:30", "Voorbij het verwachte"],
+                ["14:00", "Ontmoet de makers"],
               ].map(([tijd, titel]) => (
                 <div className="schedule-row" key={tijd}>
                   <strong>{tijd}</strong>
@@ -89,14 +89,14 @@ export default async function EventDetail({
         <div className="container">
           <SectionTitle
             num="02"
-            eyebrow="YOUR TICKET"
-            title="Choose your experience."
+            eyebrow="JOUW TICKET"
+            title="Kies je beleving."
           />
           <div className="tickets">
             {[
-              ["Day ticket.", "€ 49", ""],
-              ["Full pass.", "€ 119", "featured"],
-              ["Group pass.", "€ 399", ""],
+              ["Dagticket.", "€ 49", ""],
+              ["Volledige pas.", "€ 119", "featured"],
+              ["Groepspas.", "€ 399", ""],
             ].map(([naam, prijs, cl]) => (
               <div className={`ticket ${cl}`} key={naam}>
                 <h3>{naam}</h3>
