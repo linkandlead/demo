@@ -1,0 +1,86 @@
+{
+  "brand": "NOVA (fictief) / powered by Link & Lead One",
+  "source": "02_WEBSITE/styles/nova.css — exact CSS reference values for existing design",
+  "cssVariablesOriginal": {
+    "--night": "#0B1127",
+    "--deep": "#14204A",
+    "--cream": "#F8F7F3",
+    "--mist": "#E7EDF1",
+    "--lime": "#DBF866",
+    "--muted": "#5C6675",
+    "--line": "#d9dde1",
+    "--curve": "18px",
+    "--display": "Inter, Arial Black, ui-sans-serif, system-ui, sans-serif",
+    "--body": "Inter, ui-sans-serif, system-ui, sans-serif"
+  },
+  "cmsColorFields": {
+    "wit": "#F8F7F3",
+    "mist": "#E7EDF1",
+    "limoenlicht": "#EFF7C7",
+    "diep": "#14204A",
+    "nacht": "#0B1127",
+    "limoen": "#DBF866",
+    "limoendonker": "#596E00",
+    "tekst": "#3D4858",
+    "steen": "#5C6675",
+    "mistdof": "#C9D2E1",
+    "fout": "#D1492F",
+    "foutlicht": "#FCE8E1"
+  },
+  "cmsBackgrounds": {
+    "Licht": "wit",
+    "Zacht": "mist",
+    "Accent": "limoenlicht",
+    "Donker": "diep",
+    "Diepst": "nacht"
+  },
+  "type": {
+    "display": "Inter, Arial Black, system-ui",
+    "body": "Inter, system-ui",
+    "fontFilesIncluded": false,
+    "note": "Geen fontbestanden in het pakket. Gebruik alleen licentieconforme lokaal gehoste WOFF2 bestanden in de echte site. Prototype valt terug op systeemfonts."
+  },
+  "layout": {
+    "maxContainerPx": 1440,
+    "desktopOuterMarginPx": 52,
+    "navHeightPx": 75,
+    "sectionVerticalPaddingPx": 116,
+    "borderRadiusSmallPx": 12,
+    "borderRadiusMediumPx": 20,
+    "borderRadiusLargePx": 30,
+    "buttons": "pill (999px)",
+    "mobileBreakpoint": "see CSS media queries; target 375px"
+  },
+  "typography": {
+    "h1": "clamp + line-height in CSS per component",
+    "h2": "clamp(50px,7.3vw,112px); line-height .96",
+    "eyebrow": "11px uppercase letter spacing .13em",
+    "body": "15px source CSS; adjust body copy to 16px on mobile in production for accessibility"
+  },
+  "interfaceComponents": [
+    "SiteHeader",
+    "MobileNav",
+    "HeroHome",
+    "Eyebrow",
+    "SectionTitle",
+    "ButtonPill",
+    "ButtonOutline",
+    "ChipFilter",
+    "ProjectCard",
+    "ArticleCard",
+    "FeatureMedia",
+    "StatCard",
+    "TeamCard",
+    "Testimonial",
+    "ScheduleRow",
+    "FormFields",
+    "CTASection",
+    "Footer",
+    "DemoFab",
+    "DemoPanel",
+    "PlaygroundPreview",
+    "OnePromoHero",
+    "OneBenefitCard",
+    "OnePromoRibbon"
+  ]
+}

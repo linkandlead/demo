@@ -1,0 +1,211 @@
+[
+  {
+    "route": "/",
+    "name": "Homepage",
+    "visualObjective": "Hero, marquee, intro, cases, statement, stats, team, journal, CTA",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Bewegende tekstband",
+      "Tekst met beeld",
+      "Cases",
+      "Statement",
+      "Statistieken",
+      "Team",
+      "Artikelen",
+      "Afsluitende oproep (CTA)"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/work",
+    "name": "Projectoverzicht",
+    "visualObjective": "Case-grid met filters",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Cases",
+      "Portfolio",
+      "Afsluitende oproep (CTA)"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/work/:slug",
+    "name": "Projectdetail",
+    "visualObjective": "Grote hero, feiten, projecttekst en beeld",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Feiten",
+      "Tekst met beeld",
+      "Portfolio"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/journal",
+    "name": "Magazinestart",
+    "visualObjective": "Feature-artikel en kaarten",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Artikelen",
+      "Collectie (lijst)"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/journal/:slug",
+    "name": "Artikel",
+    "visualObjective": "Rijke redactionele detailpagina",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Tekstblok",
+      "Artikelen"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/experiences",
+    "name": "Events",
+    "visualObjective": "Hero, evenementen, programma",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Aftelklok",
+      "Sprekers",
+      "Reeks stappen",
+      "Prijskaarten / tickets"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/experiences/:slug",
+    "name": "Eventdetail",
+    "visualObjective": "Eventdetail / algemene detailtemplate",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Reeks stappen",
+      "Sprekers",
+      "Formulier"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/spaces",
+    "name": "Ruimtes",
+    "visualObjective": "Locaties, feiten, reservering",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Collectie (lijst)",
+      "Feiten",
+      "Configurator"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/spaces/:slug",
+    "name": "Ruimtedetail",
+    "visualObjective": "Ruimtedetail / algemene detailtemplate",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Tekst met beeld",
+      "Feiten",
+      "Configurator"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/community",
+    "name": "Community",
+    "visualObjective": "Mensen, partners, reviews",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Team",
+      "Partners/sponsoren",
+      "Reviews"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/about",
+    "name": "Over NOVA",
+    "visualObjective": "Storytelling + people",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Tekst met beeld",
+      "Team",
+      "Veelgestelde vragen"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/contact",
+    "name": "Contact",
+    "visualObjective": "Contactformulier met UI-staten",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Formulier",
+      "Kaart en locatie",
+      "Veelgestelde vragen"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/lab",
+    "name": "Lab",
+    "visualObjective": "Interactieve voorbeelden",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Rolvoorbeelden",
+      "Enquête / NPS",
+      "Formulierbouwer",
+      "A/B-test"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/members",
+    "name": "Ledenomgeving",
+    "visualObjective": "Illustratie ledenlogin",
+    "mappedBlocks": [
+      "Header (hero)",
+      "Ledentoegang"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/playground",
+    "name": "Alle 43 blokken",
+    "visualObjective": "Categorie, previews, achtergrond, variant",
+    "mappedBlocks": [
+      "Kernblokken",
+      " demonstratiecomponent"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/playground/sports",
+    "name": "Sportblokken",
+    "visualObjective": "Fictieve wedstrijden",
+    "mappedBlocks": [
+      "Wedstrijden",
+      "Volgende wedstrijd"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/demo",
+    "name": "Demonstratietour",
+    "visualObjective": "Presentatiescript",
+    "mappedBlocks": [
+      "Front-end demonstratiecomponent"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  },
+  {
+    "route": "/one",
+    "name": "Link & Lead One promotie",
+    "visualObjective": "Verkoopverhaal en transparant productoverzicht",
+    "mappedBlocks": [
+      "Promotiecomponent + kernblokillustraties"
+    ],
+    "status": "visual prototype; not connected to production CMS"
+  }
+]

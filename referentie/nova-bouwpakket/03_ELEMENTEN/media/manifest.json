@@ -1,0 +1,228 @@
+{
+  "comm_arch": {
+    "file": "comm_arch.webp",
+    "dimensionsPx": [
+      114,
+      77
+    ],
+    "suggestedUse": [
+      "Community grid"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: comm arch",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "comm_event": {
+    "file": "comm_event.webp",
+    "dimensionsPx": [
+      116,
+      77
+    ],
+    "suggestedUse": [
+      "Community grid"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: comm event",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "comm_face": {
+    "file": "comm_face.webp",
+    "dimensionsPx": [
+      154,
+      174
+    ],
+    "suggestedUse": [
+      "Community lead portrait"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: comm face",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "comm_man": {
+    "file": "comm_man.webp",
+    "dimensionsPx": [
+      113,
+      93
+    ],
+    "suggestedUse": [
+      "Community portrait"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: comm man",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "comm_person": {
+    "file": "comm_person.webp",
+    "dimensionsPx": [
+      115,
+      94
+    ],
+    "suggestedUse": [
+      "Community portrait"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: comm person",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "event_gradient": {
+    "file": "event_gradient.webp",
+    "dimensionsPx": [
+      220,
+      117
+    ],
+    "suggestedUse": [
+      "Event accent visual"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: event gradient",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "event_lights": {
+    "file": "event_lights.webp",
+    "dimensionsPx": [
+      292,
+      224
+    ],
+    "suggestedUse": [
+      "Event hero",
+      "Experiences listing"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: event lights",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "hero_arch": {
+    "file": "hero_arch.webp",
+    "dimensionsPx": [
+      251,
+      356
+    ],
+    "suggestedUse": [
+      "Homepage hero",
+      "Aurora Pavilion case",
+      "Magazine project"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: hero arch",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "journal_arch": {
+    "file": "journal_arch.webp",
+    "dimensionsPx": [
+      119,
+      68
+    ],
+    "suggestedUse": [
+      "Magazine thumbnail"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: journal arch",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "journal_event": {
+    "file": "journal_event.webp",
+    "dimensionsPx": [
+      117,
+      68
+    ],
+    "suggestedUse": [
+      "Experience article"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: journal event",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "journal_face": {
+    "file": "journal_face.webp",
+    "dimensionsPx": [
+      202,
+      167
+    ],
+    "suggestedUse": [
+      "Featured magazine article"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: journal face",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "journal_person": {
+    "file": "journal_person.webp",
+    "dimensionsPx": [
+      118,
+      68
+    ],
+    "suggestedUse": [
+      "Magazine thumbnail"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: journal person",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "space_atrium": {
+    "file": "space_atrium.webp",
+    "dimensionsPx": [
+      403,
+      179
+    ],
+    "suggestedUse": [
+      "Spaces hero",
+      "Venue card"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: space atrium",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "work_arch": {
+    "file": "work_arch.webp",
+    "dimensionsPx": [
+      155,
+      111
+    ],
+    "suggestedUse": [
+      "Projectcard"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: work arch",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "work_beige": {
+    "file": "work_beige.webp",
+    "dimensionsPx": [
+      229,
+      75
+    ],
+    "suggestedUse": [
+      "Projectcard"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: work beige",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "work_color": {
+    "file": "work_color.webp",
+    "dimensionsPx": [
+      210,
+      218
+    ],
+    "suggestedUse": [
+      "Homepage case",
+      "Lumen Experience"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: work color",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  },
+  "work_person": {
+    "file": "work_person.webp",
+    "dimensionsPx": [
+      155,
+      105
+    ],
+    "suggestedUse": [
+      "Projectcard"
+    ],
+    "altTextDutch": "Visueel conceptbeeld NOVA: work person",
+    "source": "AI-generated composite concept board, cropped from 01_REFERENTIE/ontwerpboard_original.png",
+    "quality": "low-resolution concept crop; not final production imagery"
+  }
+}

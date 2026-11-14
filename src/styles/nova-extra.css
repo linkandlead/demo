@@ -1,0 +1,272 @@
+/* Aanvullingen op nova.css. nova.css zelf blijft een ongewijzigde kopie van het prototype.
+   Alleen nieuwe onderdelen (rondleiding, mobiele weergave, formulierstaten, veldenlijst in de
+   Playground) staan hier, opgebouwd uit dezelfde tokens en vormtaal. */
+
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/inter-latin-wght-normal.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/inter-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 200;
+  background: var(--lime);
+  color: var(--night);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+/* Databron in het demopaneel */
+.demo-bron {
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #ebf0d2;
+  color: #28320e;
+}
+.demo-bron.live {
+  background: var(--night);
+  color: var(--lime);
+}
+
+/* Rondleiding */
+.tour-bar {
+  position: fixed;
+  z-index: 135;
+  left: 22px;
+  bottom: 23px;
+  width: min(560px, calc(100% - 110px));
+  background: white;
+  color: var(--night);
+  border: 1px solid #e4e6ea;
+  border-radius: 16px;
+  box-shadow: 0 22px 80px #0003;
+  padding: 18px 20px;
+  display: grid;
+  gap: 12px;
+}
+.tour-bar strong {
+  display: block;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  margin-top: 6px;
+}
+.tour-bar p {
+  font-size: 12px;
+  color: #5c6575;
+  margin-top: 4px;
+}
+.tour-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tour-actions .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  transform: none;
+}
+
+/* Mobiele weergave */
+.mobile-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(8, 13, 29, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px;
+  gap: 14px;
+}
+.mobile-preview-bar {
+  width: min(390px, 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.mobile-preview-frame {
+  width: min(390px, 100%);
+  height: min(844px, calc(100svh - 90px));
+  border: 8px solid #101323;
+  border-radius: 30px;
+  background: var(--cream);
+}
+
+/* Formulierstaten (fout / bezig / bevestiging / demo) */
+.form-status {
+  font-size: 12px;
+  margin-top: 9px;
+  line-height: 1.5;
+}
+.form-status.fout {
+  background: #fce8e1;
+  color: #7c2412;
+  border-left: 3px solid #d1492f;
+  padding: 10px 14px;
+}
+.form-status.ok {
+  background: #ebf0d2;
+  color: #28320e;
+  border-left: 3px solid #a6ba23;
+  padding: 10px 14px;
+}
+.form-field input[aria-invalid="true"],
+.form-field textarea[aria-invalid="true"] {
+  border-color: #d1492f;
+}
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+button.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Playground: wat de redacteur invult */
+.block-fields {
+  padding: 20px;
+  background: white;
+  margin-top: 15px;
+}
+.block-fields ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.block-fields li {
+  font-size: 12px;
+  border: 1px solid #cfd3d7;
+  border-radius: 999px;
+  padding: 6px 11px;
+}
+.block-fields strong {
+  font-size: 13px;
+}
+.block-fields code {
+  font-size: 11px;
+  background: var(--mist);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Aanvraagsectie op /one */
+.one-aanvraag .contact-layout h2 {
+  font-size: clamp(50px, 6vw, 76px);
+}
+
+@media (max-width: 760px) {
+  .tour-bar {
+    left: 12px;
+    bottom: 76px;
+    width: calc(100% - 24px);
+  }
+  .mobile-preview-frame {
+    border-width: 4px;
+    border-radius: 18px;
+  }
+}
+
+/* Stappen buiten .demo-launch (op /one). In nova.css bestaat alleen .demo-launch .step; zonder
+   deze regel renderde het prototype hier ongestileerde tekst. Lichte variant van dezelfde vorm. */
+.section > .container > .steps {
+  display: grid;
+  gap: 9px;
+}
+.section > .container > .steps .step {
+  padding: 17px;
+  border: 1px solid #cfd3d7;
+  border-radius: 3px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+}
+.section > .container > .steps .step span {
+  color: #596e00;
+  font-weight: 800;
+  min-width: 28px;
+}
+.section > .container > .steps .step b {
+  margin-left: auto;
+}
+
+/* Overflow-correcties (het prototype had dezelfde horizontale scroll; zie docs/visuele-controle.md).
+   - "extraordinary" in de gedeelde oproep is bij 65px breder dan een 375/390px-scherm.
+   - Gridkolommen met formulieren mogen krimpen (anders duwen inputs de kolom breder dan 768px).
+   Bewust GEEN overflow-wrap op koppen: dat brak "Extraordinar/y" midden in het woord. */
+.contact-layout > *,
+.form-grid > * {
+  min-width: 0;
+}
+@media (max-width: 420px) {
+  .footer-cta h2 {
+    font-size: clamp(40px, 14.6vw, 65px);
+  }
+}
+@media (max-width: 380px) {
+  /* Uitgelicht verhaal / volgende wedstrijd: koppen en vaste paddings uit inline stijlen van het
+     prototype passen niet op 375px; alleen daar geschaald (390px blijft gelijk aan het ontwerp). */
+  .featured-story > * {
+    min-width: 0;
+  }
+  .featured-story h2 {
+    font-size: clamp(40px, 12.5vw, 54px) !important;
+  }
+  .featured-story > div[style*="padding"] {
+    padding: 28px !important;
+  }
+}
+
+/* WCAG AA-contrast (zie docs/visuele-controle.md): #647185 op limoen haalde 4,15:1.
+   Nu het CMS-kleurveld "tekst" (#3D4858). */
+.one-honest {
+  color: #3d4858;
+}
+.block-fields code {
+  color: var(--night);
+}
+@media (max-width: 380px) {
+  /* Alleen de smalste telefoons: lange woorden ("Extraordinary", "experiences.") passen hier niet
+     op de minimale mobiele koptekstmaat. 390px blijft identiek aan het ontwerp. */
+  .inner-hero h1 {
+    font-size: clamp(50px, 15.2vw, 62px);
+  }
+  .article-page h1 {
+    font-size: clamp(50px, 15.2vw, 65px);
+  }
+}

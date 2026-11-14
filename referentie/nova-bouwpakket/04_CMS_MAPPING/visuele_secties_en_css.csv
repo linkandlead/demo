@@ -1,0 +1,72 @@
+route,sectievolgorde,CMS-label exact in voorbeeld,css-klassen,los_html_fragment
+home,1,Header (hero) · Diepst,hero-home,06_SECTIES/home/01_header-hero-diepst.html
+home,2,Bewegende tekstband,marquee,06_SECTIES/home/02_bewegende-tekstband.html
+home,3,Tekst met beeld · Licht,section,06_SECTIES/home/03_tekst-met-beeld-licht.html
+home,4,Cases · collectie,section section-soft,06_SECTIES/home/04_cases-collectie.html
+home,5,Statement · Donker,section section-dark statement,06_SECTIES/home/05_statement-donker.html
+home,6,Statistieken · Zacht,section section-soft,06_SECTIES/home/06_statistieken-zacht.html
+home,7,Team · collectie,section,06_SECTIES/home/07_team-collectie.html
+home,8,Artikelen · collectie,section section-soft,06_SECTIES/home/08_artikelen-collectie.html
+home,9,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/home/09_afsluitende-oproep-gedeeld.html
+work,1,Header (hero),inner-hero,06_SECTIES/work/01_header-hero.html
+work,2,Cases · collectie en filters,section,06_SECTIES/work/02_cases-collectie-en-filters.html
+work,3,Bewijsstrook,section section-soft,06_SECTIES/work/03_bewijsstrook.html
+work,4,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/work/04_afsluitende-oproep-gedeeld.html
+journal,1,Header (hero),inner-hero,06_SECTIES/journal/01_header-hero.html
+journal,2,Artikelen · uitgelicht,section,06_SECTIES/journal/02_artikelen-uitgelicht.html
+journal,3,Artikelen · collectie,section section-soft,06_SECTIES/journal/03_artikelen-collectie.html
+journal,4,Formulier · nieuwsbrief,section section-lime,06_SECTIES/journal/04_formulier-nieuwsbrief.html
+journal,5,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/journal/05_afsluitende-oproep-gedeeld.html
+experiences,1,Header (hero) · Diepst,feature-media,06_SECTIES/experiences/01_header-hero-diepst.html
+experiences,2,Kaartenrij,section,06_SECTIES/experiences/02_kaartenrij.html
+experiences,3,Reeks stappen · programma,section section-soft,06_SECTIES/experiences/03_reeks-stappen-programma.html
+experiences,4,Sprekers · collectie,section,06_SECTIES/experiences/04_sprekers-collectie.html
+experiences,5,Prijskaarten / tickets,section section-dark,06_SECTIES/experiences/05_prijskaarten-tickets.html
+experiences,6,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/experiences/06_afsluitende-oproep-gedeeld.html
+spaces,1,Header (hero),inner-hero,06_SECTIES/spaces/01_header-hero.html
+spaces,2,Collectie (lijst) · ruimtes,section,06_SECTIES/spaces/02_collectie-lijst-ruimtes.html
+spaces,3,Feiten,section section-soft,06_SECTIES/spaces/03_feiten.html
+spaces,4,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/spaces/04_afsluitende-oproep-gedeeld.html
+community,1,Header (hero),inner-hero,06_SECTIES/community/01_header-hero.html
+community,2,Team en Partners/sponsoren,section,06_SECTIES/community/02_team-en-partners-sponsoren.html
+community,3,Partner uitgelicht,section section-soft,06_SECTIES/community/03_partner-uitgelicht.html
+community,4,Reviews / Citaten-carrousel,section,06_SECTIES/community/04_reviews-citaten-carrousel.html
+community,5,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/community/05_afsluitende-oproep-gedeeld.html
+about,1,Header (hero),inner-hero,06_SECTIES/about/01_header-hero.html
+about,2,Statement,section section-dark statement,06_SECTIES/about/02_statement.html
+about,3,Reeks stappen · tijdlijn,section,06_SECTIES/about/03_reeks-stappen-tijdlijn.html
+about,4,Team,section section-soft,06_SECTIES/about/04_team.html
+about,5,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/about/05_afsluitende-oproep-gedeeld.html
+contact,1,Header (hero),inner-hero,06_SECTIES/contact/01_header-hero.html
+contact,2,Formulier / Kaart en locatie,section,06_SECTIES/contact/02_formulier-kaart-en-locatie.html
+contact,3,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/contact/03_afsluitende-oproep-gedeeld.html
+lab,1,Header (hero),inner-hero night,06_SECTIES/lab/01_header-hero.html
+lab,2,Configurator,section,06_SECTIES/lab/02_configurator.html
+lab,3,Enquête / NPS · A/B-test · Personalisatie,section section-soft,06_SECTIES/lab/03_enqu-te-nps-a-b-test-personalisatie.html
+lab,4,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/lab/04_afsluitende-oproep-gedeeld.html
+members,1,Header (hero),inner-hero night,06_SECTIES/members/01_header-hero.html
+members,2,Ledentoegang,section,06_SECTIES/members/02_ledentoegang.html
+members,3,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/members/03_afsluitende-oproep-gedeeld.html
+playground,1,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/playground/01_afsluitende-oproep-gedeeld.html
+sports,1,Wedstrijden en Volgende wedstrijd,section section-dark,06_SECTIES/sports/01_wedstrijden-en-volgende-wedstrijd.html
+sports,2,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/sports/02_afsluitende-oproep-gedeeld.html
+demo,1,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/demo/01_afsluitende-oproep-gedeeld.html
+one,1,Productpromotie / eigen frontendmodule (geen CMS-kernblok),one-hero,06_SECTIES/one/01_productpromotie-eigen-frontendmodule-geen-cms-kernblok.html
+one,2,Tekst met beeld,section,06_SECTIES/one/02_tekst-met-beeld.html
+one,3,Kaartenrij,section section-soft,06_SECTIES/one/03_kaartenrij.html
+one,4,Statement,section one-dark,06_SECTIES/one/04_statement.html
+one,5,Reeks stappen,section,06_SECTIES/one/05_reeks-stappen.html
+one,6,Flexibel blok,section section-soft,06_SECTIES/one/06_flexibel-blok.html
+one,7,Afsluitende oproep / product,one-end,06_SECTIES/one/07_afsluitende-oproep-product.html
+one,8,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/one/08_afsluitende-oproep-gedeeld.html
+work_detail,1,Header · projectdetail,detail-hero,06_SECTIES/work_detail/01_header-projectdetail.html
+work_detail,2,Tekst met beeld,section,06_SECTIES/work_detail/02_tekst-met-beeld.html
+work_detail,3,Portfolio / extra beelden,section section-soft,06_SECTIES/work_detail/03_portfolio-extra-beelden.html
+work_detail,4,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/work_detail/04_afsluitende-oproep-gedeeld.html
+journal_detail,1,Header + Tekstblok,container article-page,06_SECTIES/journal_detail/01_header-tekstblok.html
+journal_detail,2,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/journal_detail/02_afsluitende-oproep-gedeeld.html
+events_detail,1,Header · eventdetail,detail-hero,06_SECTIES/events_detail/01_header-eventdetail.html
+events_detail,2,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/events_detail/02_afsluitende-oproep-gedeeld.html
+spaces_detail,1,Header · ruimtedetail,detail-hero,06_SECTIES/spaces_detail/01_header-ruimtedetail.html
+spaces_detail,2,Configurator / Agenda-inplanner,section section-soft,06_SECTIES/spaces_detail/02_configurator-agenda-inplanner.html
+spaces_detail,3,Afsluitende oproep · gedeeld,footer-cta,06_SECTIES/spaces_detail/03_afsluitende-oproep-gedeeld.html

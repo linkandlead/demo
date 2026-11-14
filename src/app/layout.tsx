@@ -1,29 +1,40 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata, Viewport } from "next";
+import { DemoProvider } from "@/components/nova/DemoMode";
+import { SiteHeader } from "@/components/nova/SiteHeader";
+import { cmsInfo } from "@/lib/cms/data";
+import "@/styles/nova.css";
+import "@/styles/nova-extra.css";
 
 export const metadata: Metadata = {
-  title: "Nieuwe website",
-  description: "Nieuwe website",
+  title: {
+    default: "NOVA — Visueel ontwerp voor Link & Lead One",
+    template: "%s · NOVA",
+  },
+  description:
+    "NOVA is een fictieve creatieve website die laat zien wat je met een eigen frontend op het Link & Lead One-CMS kunt bouwen.",
+  robots: { index: false, follow: false },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+// Content uit het CMS ververst elke 60 s (gelijk aan de cache van de CMS-lees-API).
+export const revalidate = 60;
+
+export const viewport: Viewport = { themeColor: "#0B1127" };
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const info = await cmsInfo();
   return (
-    <html
-      lang="nl"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col">{children}</body>
+    <html lang="nl">
+      <body>
+        <a className="skip-link" href="#app">
+          Naar de inhoud
+        </a>
+        <DemoProvider info={info}>
+          <SiteHeader />
+          <main id="app" tabIndex={-1}>
+            {children}
+          </main>
+        </DemoProvider>
+      </body>
     </html>
   );
 }

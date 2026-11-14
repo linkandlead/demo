@@ -1,27 +1,47 @@
-# Nieuwe website
+# NOVA × Link & Lead One
 
-Next.js (App Router) · TypeScript · Tailwind CSS v4 · Supabase · Vercel
+NOVA is een fictieve creatieve website: het visuele bewijs van wat je met een **eigen frontend (model A)**
+op het **Link & Lead One-CMS** kunt bouwen. De route **`/one`** is de productpromotie van het CMS.
 
-## Aan de slag
+Next.js (App Router) · TypeScript · originele NOVA-CSS · lokaal gehoste Inter · CMS-lees-API
+
+## Starten
 
 ```bash
 npm install
-cp .env.example .env.local   # vul Supabase URL + publishable key in
+```
+
+```bash
 npm run dev
 ```
 
-Open http://localhost:3000.
+Zonder `.env.local` draait de site op demodata en verstuurt hij niets. Koppelen aan het CMS: zie
+[`docs/cms-koppeling.md`](docs/cms-koppeling.md).
+
+## Routes
+
+`/` · `/work` · `/work/:slug` · `/journal` · `/journal/:slug` · `/experiences` · `/experiences/:slug` ·
+`/spaces` · `/spaces/:slug` · `/community` · `/about` · `/contact` · `/lab` · `/members` · `/playground` ·
+`/playground/sports` · `/demo` · `/one` (+ `POST /api/aanvraag`)
+
+Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 stappen) → blokken
+(`/playground`) → aanvraag (`/one#aanvraag`).
 
 ## Scripts
 
-| Script              | Doel                                       |
-| ------------------- | ------------------------------------------ |
-| `npm run dev`       | Dev-server                                 |
-| `npm run build`     | Productiebuild                             |
-| `npm run lint`      | ESLint                                     |
-| `npm run typecheck` | TypeScript-controle                        |
-| `npm run format`    | Prettier (incl. Tailwind-klassensortering) |
+| Script                                            | Doel                                                                   |
+| ------------------------------------------------- | ---------------------------------------------------------------------- |
+| `npm run build` / `npm start`                     | Productiebuild / starten                                               |
+| `npm run lint` · `npm run typecheck` · `npm test` | Kwaliteitscontroles (unit-tests met `node --test`)                     |
+| `npm run e2e`                                     | End-to-end + axe-core op een draaiende site (`SITE=…`)                 |
+| `npm run visueel`                                 | Screenshotvergelijking met het prototype (prototype serveren op :8080) |
+| `npm run mock-cms`                                | Nep-CMS met het echte API-contract, om de koppeling lokaal te testen   |
 
-## Deploy
+## Documentatie
 
-Koppel de repo aan een Vercel-project en zet `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` als environment variables.
+- [`docs/fase-a-audit.md`](docs/fase-a-audit.md): verificatietabel CMS (bevestigd / ontbreekt / simulatie)
+- [`docs/visuele-controle.md`](docs/visuele-controle.md): visuele vergelijking, afwijkingen, toegankelijkheid, performance
+- [`docs/cms-koppeling.md`](docs/cms-koppeling.md): koppelen aan een geïsoleerde NOVA-demosite
+- [`docs/vervolgstappen.md`](docs/vervolgstappen.md): wat er nog moet gebeuren
+- `referentie/nova-bouwpakket/`: het aangeleverde overdrachtspakket (ontwerpbron, ongewijzigd)
+- `cms/nova-blauwdruk.mjs`: blauwdruk voor `scripts/cms-push.mjs` in de CMS-repo

@@ -1,24 +1,33 @@
 @AGENTS.md
 
-# Projectnotities
+# NOVA × Link & Lead One — projectregels
 
-Nieuwe website, gebouwd met Next.js (App Router) + TypeScript + Tailwind CSS v4, gehost op Vercel, met Supabase als backend.
+Eigen frontend (model A) voor het Link & Lead One-CMS (`linkandlead/linkandlead-cms`). Content komt
+uit `GET {CMS_URL}/api/cms/content` (token per site); zonder koppeling uit `src/content/nova.ts`.
+
+## Visueel contract
+
+- `src/styles/nova.css` is een **ongewijzigde** kopie van het prototype. Niet bewerken; aanvullingen
+  en correcties horen in `src/styles/nova-extra.css`, met een korte reden erbij.
+- Markup volgt `referentie/nova-bouwpakket/02_WEBSITE/scripts/nova-app.js` (zelfde klassen en volgorde).
+  Een visuele afwijking komt eerst in `docs/visuele-controle.md` (verschilrapport).
+- Geen Tailwind of componentbibliotheek. Gebruik de bestaande klassen.
 
 ## Structuur
 
-- `src/app/` — routes, layouts en pagina's (App Router)
-- `src/lib/supabase/client.ts` — Supabase-client voor Client Components
-- `src/lib/supabase/server.ts` — Supabase-client voor Server Components / Server Actions
-- `public/` — statische bestanden
+- `src/app/` routes · `src/components/nova/` NOVA-componenten · `src/content/` demodata + 43 kernblokken
+- `src/lib/cms/` CMS-koppeling (server-only, runtime-validatie) · `src/lib/lead/` aanvraagvalidatie
+- `cms/nova-blauwdruk.mjs` blauwdruk voor de CMS-sync · `scripts/` e2e, visuele vergelijking, nep-CMS
 
-## Commando's
+## Eerlijkheid en veiligheid
 
-- `npm run dev` — dev-server op http://localhost:3000
-- `npm run lint` / `npm run typecheck` / `npm run format`
-- `npm run build` — productiebuild (moet slagen voor een PR)
+- Claim geen CMS-functies die niet in de CMS-repo bevestigd zijn (zie `docs/fase-a-audit.md`).
+- NOVA-formulieren versturen niets en tonen een demostatus. Alleen `/api/aanvraag` stuurt echt door,
+  en alleen met `CMS_LEAD_SITE_ID`.
+- Nooit schrijven naar productie-CMS-data of naar andere sites ("Nova Studio" en "Stadstheater Nova"
+  zijn andere sites). Secrets nooit committen.
 
-## Afspraken
+## Controles voor een PR
 
-- Teksten op de site zijn in het Nederlands; `<html lang="nl">`.
-- Server Components standaard; `"use client"` alleen waar nodig.
-- Secrets nooit committen; alleen `.env.example` staat in git.
+`npm run lint && npm run typecheck && npm test && npm run build`. Bij visuele wijzigingen ook
+`npm run visueel` en `npm run e2e` (zie README).

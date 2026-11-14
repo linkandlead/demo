@@ -1,0 +1,683 @@
+{
+  "total": 43,
+  "groups": {
+    "Structuur en tekst": [
+      "Header (hero)",
+      "Tekstblok",
+      "Tekst met beeld",
+      "Kaartenrij",
+      "Flexibel blok",
+      "Conclusieregel",
+      "Statement",
+      "Veelgestelde vragen",
+      "Reeks stappen",
+      "Intake-stappen",
+      "Feiten",
+      "Tabel",
+      "Bewegende tekstband"
+    ],
+    "Bewijs en mensen": [
+      "Bewijsstrook",
+      "Testimonial",
+      "Citaten-carrousel",
+      "Logostrook",
+      "Team",
+      "Sprekers",
+      "Statistieken",
+      "Portfolio",
+      "Rolvoorbeelden"
+    ],
+    "Live data uit collecties": [
+      "Cases",
+      "Artikelen",
+      "Collectie (lijst)",
+      "Partners/sponsoren",
+      "Partner uitgelicht",
+      "Reviews",
+      "Wedstrijden",
+      "Volgende wedstrijd",
+      "Agenda-inplanner"
+    ],
+    "Conversie en formulieren": [
+      "Afsluitende oproep (CTA)",
+      "Formulier",
+      "Formulierbouwer",
+      "Review verzamelen",
+      "Ledentoegang",
+      "Enquête / NPS",
+      "A/B-test",
+      "Personalisatie",
+      "Configurator",
+      "Prijskaarten / tickets"
+    ],
+    "Overig": [
+      "Kaart en locatie",
+      "Aftelklok"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Header (hero)",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "kop",
+        "subkop",
+        "knop 1",
+        "knop 2",
+        "afbeelding of video",
+        "overlay"
+      ],
+      "cmsVariantsFromPdf": "lay-out: gecentreerd / beeld links / beeld rechts / achtergrondbeeld / compact; hoogte: compact / normaal / schermvullend; onder kop: niets / logostrook / cijfers / formulier"
+    },
+    {
+      "name": "Tekstblok",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "tekst met kopjes en lijsten",
+        "datum bijgewerkt"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Tekst met beeld",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "alinea’s",
+        "opsommingspunten",
+        "beeld met alt-tekst",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "beeld links / beeld rechts"
+    },
+    {
+      "name": "Kaartenrij",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "kaarten (titel en tekst)"
+      ],
+      "cmsVariantsFromPdf": "3 of 4 kolommen"
+    },
+    {
+      "name": "Flexibel blok",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "items"
+      ],
+      "cmsVariantsFromPdf": "1 / 2 / 3 kolommen"
+    },
+    {
+      "name": "Conclusieregel",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "tekst"
+      ],
+      "cmsVariantsFromPdf": "donker / accent"
+    },
+    {
+      "name": "Statement",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "groot cijfer en bijschrift",
+        "claim",
+        "tekst",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "standaard gedeeld"
+    },
+    {
+      "name": "Veelgestelde vragen",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "vragen en antwoorden"
+      ],
+      "cmsVariantsFromPdf": "uitklapbaar; zonder JavaScript leesbaar"
+    },
+    {
+      "name": "Reeks stappen",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "stappen",
+        "uitkomsten",
+        "slotregel",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "genummerde keten / pijplijn / stappen of weken / systeem / AI-kringloop / groeiloop (cirkel) / fasenstrip / tijdlijn"
+    },
+    {
+      "name": "Intake-stappen",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "tekst",
+        "subtekst",
+        "stappen"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Feiten",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "feiten",
+        "afbeelding"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Tabel",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "maximaal 6 kolomkoppen",
+        "rijen",
+        "gemarkeerde rij",
+        "voettekst"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Bewegende tekstband",
+      "category": "Structuur en tekst",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "woorden"
+      ],
+      "cmsVariantsFromPdf": "limoen / diep / nacht / accent"
+    },
+    {
+      "name": "Bewijsstrook",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "cijfers (waarde en label)",
+        "logo’s uit Klanten-collectie",
+        "maximum"
+      ],
+      "cmsVariantsFromPdf": "logo’s aan / uit; standaard gedeeld"
+    },
+    {
+      "name": "Testimonial",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "gekozen testimonial uit collectie: citaat",
+        "naam",
+        "functie",
+        "organisatie",
+        "foto"
+      ],
+      "cmsVariantsFromPdf": "foto aan / uit; standaard gedeeld"
+    },
+    {
+      "name": "Citaten-carrousel",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "citaten"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Logostrook",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "logo’s"
+      ],
+      "cmsVariantsFromPdf": "grijs naar kleur op hover"
+    },
+    {
+      "name": "Team",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "maximum",
+        "aangesloten Team-collectie"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Sprekers",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "subtitel",
+        "sprekers",
+        "slotregel"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Statistieken",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "cijfers"
+      ],
+      "cmsVariantsFromPdf": "optellende getallen"
+    },
+    {
+      "name": "Portfolio",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "projecten"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Rolvoorbeelden",
+      "category": "Bewijs en mensen",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "rolvoorbeelden (nu vs. met AI)"
+      ],
+      "cmsVariantsFromPdf": "tabs"
+    },
+    {
+      "name": "Cases",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "maximum",
+        "filter op sector",
+        "link overzicht",
+        "Cases-collectie"
+      ],
+      "cmsVariantsFromPdf": "filter op sector"
+    },
+    {
+      "name": "Artikelen",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "maximum",
+        "filter op rubriek",
+        "Artikelen-collectie"
+      ],
+      "cmsVariantsFromPdf": "filter op rubriek"
+    },
+    {
+      "name": "Collectie (lijst)",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "gekozen collectie",
+        "tagfilter",
+        "maximum"
+      ],
+      "cmsVariantsFromPdf": "lijst / raster / uitgelicht"
+    },
+    {
+      "name": "Partners/sponsoren",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "partners",
+        "filters"
+      ],
+      "cmsVariantsFromPdf": "filters aan / uit"
+    },
+    {
+      "name": "Partner uitgelicht",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "één partner"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Reviews",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "maximum"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Wedstrijden",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "komende wedstrijden en uitslagen"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Volgende wedstrijd",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "kop",
+        "eerstvolgende wedstrijd",
+        "indicator"
+      ],
+      "cmsVariantsFromPdf": "alleen thuiswedstrijden"
+    },
+    {
+      "name": "Agenda-inplanner",
+      "category": "Live data uit collecties",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "persoon",
+        "maximum",
+        "vrije tijdsloten"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Afsluitende oproep (CTA)",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "tekst",
+        "knop",
+        "afbeelding",
+        "meta-regels"
+      ],
+      "cmsVariantsFromPdf": "standaard gedeeld"
+    },
+    {
+      "name": "Formulier",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "knoptekst",
+        "voetnoot",
+        "bevestiging"
+      ],
+      "cmsVariantsFromPdf": "contact / nieuwsbrief / URL-scan"
+    },
+    {
+      "name": "Formulierbouwer",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "velden naast e-mail",
+        "knoptekst",
+        "bevestiging",
+        "voetnoot"
+      ],
+      "cmsVariantsFromPdf": "eigen velden"
+    },
+    {
+      "name": "Review verzamelen",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "knoptekst",
+        "bevestiging"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Ledentoegang",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Enquête / NPS",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "scorevraag",
+        "toelichting",
+        "knop",
+        "bevestiging"
+      ],
+      "cmsVariantsFromPdf": "NPS 0–10 / sterren"
+    },
+    {
+      "name": "A/B-test",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel per variant",
+        "tekst per variant",
+        "knop per variant"
+      ],
+      "cmsVariantsFromPdf": "2 varianten"
+    },
+    {
+      "name": "Personalisatie",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "standaard en bekend-versie van eyebrow",
+        "titel",
+        "tekst",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "drempel voor bekend"
+    },
+    {
+      "name": "Configurator",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "opties",
+        "aantal personen",
+        "knop",
+        "bevestiging"
+      ],
+      "cmsVariantsFromPdf": "aantal personen aan / uit"
+    },
+    {
+      "name": "Prijskaarten / tickets",
+      "category": "Conversie en formulieren",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "titel",
+        "intro",
+        "kaarten"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Kaart en locatie",
+      "category": "Overig",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "adres",
+        "telefoon",
+        "e-mail",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    },
+    {
+      "name": "Aftelklok",
+      "category": "Overig",
+      "cmsType": "kernblok",
+      "sourcePdf": "CMS_blokken_en_ontwerpregels.pdf",
+      "notes": "Controleer velden en varianten tegen de daadwerkelijke CMS-repo. Een visuele preview is niet het bewijs dat de API gekoppeld is.",
+      "cmsFieldsFromPdf": [
+        "eyebrow",
+        "titel",
+        "intro",
+        "datum en tijd",
+        "tekst na afloop",
+        "knop"
+      ],
+      "cmsVariantsFromPdf": "geen"
+    }
+  ],
+  "sourceNote": "Veldnamen en varianten overgenomen uit het aangeleverde document, pagina 3–7. Repo kan afwijkende technische namen hebben."
+}

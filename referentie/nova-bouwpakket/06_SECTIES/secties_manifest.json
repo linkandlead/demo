@@ -1,0 +1,536 @@
+[
+  {
+    "route": "home",
+    "h1": "Ideas deserve to become reality .",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero) · Diepst",
+        "file": "06_SECTIES/home/01_header-hero-diepst.html",
+        "cssClasses": "hero-home"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Bewegende tekstband",
+        "file": "06_SECTIES/home/02_bewegende-tekstband.html",
+        "cssClasses": "marquee"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Tekst met beeld · Licht",
+        "file": "06_SECTIES/home/03_tekst-met-beeld-licht.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Cases · collectie",
+        "file": "06_SECTIES/home/04_cases-collectie.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Statement · Donker",
+        "file": "06_SECTIES/home/05_statement-donker.html",
+        "cssClasses": "section section-dark statement"
+      },
+      {
+        "order": 6,
+        "cmsLabel": "Statistieken · Zacht",
+        "file": "06_SECTIES/home/06_statistieken-zacht.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 7,
+        "cmsLabel": "Team · collectie",
+        "file": "06_SECTIES/home/07_team-collectie.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 8,
+        "cmsLabel": "Artikelen · collectie",
+        "file": "06_SECTIES/home/08_artikelen-collectie.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 9,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/home/09_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "work",
+    "h1": "Projects that make an impact.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/work/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Cases · collectie en filters",
+        "file": "06_SECTIES/work/02_cases-collectie-en-filters.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Bewijsstrook",
+        "file": "06_SECTIES/work/03_bewijsstrook.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/work/04_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "journal",
+    "h1": "Stories, ideas and insights.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/journal/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Artikelen · uitgelicht",
+        "file": "06_SECTIES/journal/02_artikelen-uitgelicht.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Artikelen · collectie",
+        "file": "06_SECTIES/journal/03_artikelen-collectie.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Formulier · nieuwsbrief",
+        "file": "06_SECTIES/journal/04_formulier-nieuwsbrief.html",
+        "cssClasses": "section section-lime"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/journal/05_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "experiences",
+    "h1": "Pulse Festival.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero) · Diepst",
+        "file": "06_SECTIES/experiences/01_header-hero-diepst.html",
+        "cssClasses": "feature-media"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Kaartenrij",
+        "file": "06_SECTIES/experiences/02_kaartenrij.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Reeks stappen · programma",
+        "file": "06_SECTIES/experiences/03_reeks-stappen-programma.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Sprekers · collectie",
+        "file": "06_SECTIES/experiences/04_sprekers-collectie.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Prijskaarten / tickets",
+        "file": "06_SECTIES/experiences/05_prijskaarten-tickets.html",
+        "cssClasses": "section section-dark"
+      },
+      {
+        "order": 6,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/experiences/06_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "spaces",
+    "h1": "Extraordinary spaces for big ideas.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/spaces/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Collectie (lijst) · ruimtes",
+        "file": "06_SECTIES/spaces/02_collectie-lijst-ruimtes.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Feiten",
+        "file": "06_SECTIES/spaces/03_feiten.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/spaces/04_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "community",
+    "h1": "People make the future.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/community/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Team en Partners/sponsoren",
+        "file": "06_SECTIES/community/02_team-en-partners-sponsoren.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Partner uitgelicht",
+        "file": "06_SECTIES/community/03_partner-uitgelicht.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Reviews / Citaten-carrousel",
+        "file": "06_SECTIES/community/04_reviews-citaten-carrousel.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/community/05_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "about",
+    "h1": "Make room for what’s next.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/about/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Statement",
+        "file": "06_SECTIES/about/02_statement.html",
+        "cssClasses": "section section-dark statement"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Reeks stappen · tijdlijn",
+        "file": "06_SECTIES/about/03_reeks-stappen-tijdlijn.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Team",
+        "file": "06_SECTIES/about/04_team.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/about/05_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "contact",
+    "h1": "Let's make something happen.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/contact/01_header-hero.html",
+        "cssClasses": "inner-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Formulier / Kaart en locatie",
+        "file": "06_SECTIES/contact/02_formulier-kaart-en-locatie.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/contact/03_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "lab",
+    "h1": "Explore. Experiment. Experience.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/lab/01_header-hero.html",
+        "cssClasses": "inner-hero night"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Configurator",
+        "file": "06_SECTIES/lab/02_configurator.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Enquête / NPS · A/B-test · Personalisatie",
+        "file": "06_SECTIES/lab/03_enqu-te-nps-a-b-test-personalisatie.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/lab/04_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "members",
+    "h1": "A place for our people.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header (hero)",
+        "file": "06_SECTIES/members/01_header-hero.html",
+        "cssClasses": "inner-hero night"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Ledentoegang",
+        "file": "06_SECTIES/members/02_ledentoegang.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/members/03_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "playground",
+    "h1": "One system. 43 possibilities.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/playground/01_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "sports",
+    "h1": "Every team. Every moment.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Wedstrijden en Volgende wedstrijd",
+        "file": "06_SECTIES/sports/01_wedstrijden-en-volgende-wedstrijd.html",
+        "cssClasses": "section section-dark"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/sports/02_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "demo",
+    "h1": "See the design. Discover the CMS.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/demo/01_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "one",
+    "h1": "Je zag de website. Ontdek wat erachter zit.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Productpromotie / eigen frontendmodule (geen CMS-kernblok)",
+        "file": "06_SECTIES/one/01_productpromotie-eigen-frontendmodule-geen-cms-kernblok.html",
+        "cssClasses": "one-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Tekst met beeld",
+        "file": "06_SECTIES/one/02_tekst-met-beeld.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Kaartenrij",
+        "file": "06_SECTIES/one/03_kaartenrij.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Statement",
+        "file": "06_SECTIES/one/04_statement.html",
+        "cssClasses": "section one-dark"
+      },
+      {
+        "order": 5,
+        "cmsLabel": "Reeks stappen",
+        "file": "06_SECTIES/one/05_reeks-stappen.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 6,
+        "cmsLabel": "Flexibel blok",
+        "file": "06_SECTIES/one/06_flexibel-blok.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 7,
+        "cmsLabel": "Afsluitende oproep / product",
+        "file": "06_SECTIES/one/07_afsluitende-oproep-product.html",
+        "cssClasses": "one-end"
+      },
+      {
+        "order": 8,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/one/08_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "work_detail",
+    "h1": "Aurora Pavilion.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header · projectdetail",
+        "file": "06_SECTIES/work_detail/01_header-projectdetail.html",
+        "cssClasses": "detail-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Tekst met beeld",
+        "file": "06_SECTIES/work_detail/02_tekst-met-beeld.html",
+        "cssClasses": "section"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Portfolio / extra beelden",
+        "file": "06_SECTIES/work_detail/03_portfolio-extra-beelden.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 4,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/work_detail/04_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "journal_detail",
+    "h1": "De kracht van immersive experiences.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header + Tekstblok",
+        "file": "06_SECTIES/journal_detail/01_header-tekstblok.html",
+        "cssClasses": "container article-page"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/journal_detail/02_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "events_detail",
+    "h1": "NOVA Sessions.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header · eventdetail",
+        "file": "06_SECTIES/events_detail/01_header-eventdetail.html",
+        "cssClasses": "detail-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/events_detail/02_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  },
+  {
+    "route": "spaces_detail",
+    "h1": "Studio One.",
+    "sections": [
+      {
+        "order": 1,
+        "cmsLabel": "Header · ruimtedetail",
+        "file": "06_SECTIES/spaces_detail/01_header-ruimtedetail.html",
+        "cssClasses": "detail-hero"
+      },
+      {
+        "order": 2,
+        "cmsLabel": "Configurator / Agenda-inplanner",
+        "file": "06_SECTIES/spaces_detail/02_configurator-agenda-inplanner.html",
+        "cssClasses": "section section-soft"
+      },
+      {
+        "order": 3,
+        "cmsLabel": "Afsluitende oproep · gedeeld",
+        "file": "06_SECTIES/spaces_detail/03_afsluitende-oproep-gedeeld.html",
+        "cssClasses": "footer-cta"
+      }
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+referentie
+.next
+node_modules
+public
+package-lock.json
+src/styles/nova.css
+.next-cms

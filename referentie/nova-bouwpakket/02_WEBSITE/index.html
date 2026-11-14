@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#0B1127" name="theme-color"/>
+<title>NOVA — Visueel ontwerp voor Link &amp; Lead One</title>
+
+<link href="styles/nova.css" rel="stylesheet"/></head>
+<body>
+<header class="site-header dark" id="header"><div class="header-inner"><a aria-label="NOVA home" class="brand" href="#/">NOVA<span>.</span></a><nav class="primary-nav" id="primary"></nav><div class="header-actions"><a class="header-pill" href="#/contact">Let's talk ↗</a><button aria-label="Open het menu" class="menu-toggle" id="menu-button" onclick="toggleMenu()">☰</button></div></div></header>
+<nav class="mobile-nav" id="mobile"></nav><main id="app"></main>
+<button aria-label="Open demonstratiemodus" class="demo-fab" onclick="toggleDemo()">◈ <span>Bekijk CMS-design</span> <span>↗</span></button>
+<div class="demo-panel" id="demoPanel"><div style="display:flex;justify-content:space-between;align-items:center"><span class="eyebrow">LINK &amp; LEAD ONE</span><button aria-label="Sluiten" onclick="toggleDemo()" style="background:none;border:0;font-size:22px">×</button></div><h3>Design Demo Mode</h3><p>Dit is een klikbaar visueel prototype. Het is nog niet gekoppeld aan het echte CMS.</p><div class="demo-control" style="margin-top:22px">Toon CMS-bloklabels <button aria-label="CMS-blokken markeren" class="switch" id="cmsSwitch" onclick="toggleOutlines()"></button></div><div class="demo-control">Ontwerpstijlen <span>Accentkleur</span></div><div class="color-dots"><button aria-label="Limoen" onclick="setAccent('#DBF866')" style="background:#DBF866"></button><button aria-label="Roze" onclick="setAccent('#F4A5C7')" style="background:#F4A5C7"></button><button aria-label="Blauw" onclick="setAccent('#93C8FF')" style="background:#93C8FF"></button><button aria-label="Oranje" onclick="setAccent('#FFB473')" style="background:#FFB473"></button></div><div class="demo-control">Bekijk alle 43 blokken <a class="btn btn-mini btn-dark" href="#/playground" onclick="toggleDemo()">Open Playground ↗</a></div><div class="demo-control">Presentatieoverzicht <a class="btn btn-mini btn-dark" href="#/demo" onclick="toggleDemo()">Bekijk demo ↗</a></div><p style="margin-top:10px">Live content wijzigen kan in de volgende fase, na koppeling met One Studio.</p></div>
+
+
+<script defer="" src="scripts/assets.js"></script><script defer="" src="scripts/nova-app.js"></script></body>
+</html>
