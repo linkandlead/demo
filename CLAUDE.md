@@ -33,3 +33,12 @@ uit `GET {CMS_URL}/api/cms/content` (token per site); zonder koppeling uit `src/
 
 `npm run lint && npm run typecheck && npm test && npm run build`. Bij visuele wijzigingen ook
 `npm run visueel` en `npm run e2e` (zie README).
+
+## Live zetten (main)
+
+Er werken meerdere sessies aan deze site. **Voeg vóór elke push naar `main` eerst `origin/main`
+samen** en controleer opnieuw; overschrijf nooit andermans werk (geen force-push). `npm run naar-main`
+doet dat in één stap: fetch + merge van `origin/main`, lint, typecheck, tests, build, push van de
+branch en van `main`. Bij een conflict: oplossen (beide wijzigingen behouden), committen, opnieuw
+draaien. Raakt de wijziging CMS-inhoud, push dan alleen de betreffende pagina's
+(`CMS_PAGINAS=… node scripts/cms-push.mjs`) en controleer eerst of ze in het CMS niet zijn aangepast.
