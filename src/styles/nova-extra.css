@@ -815,3 +815,71 @@ body:has(.bewerk-balk) .voorbeeld-balk {
 .inner-hero h1.hero-kop { margin: 16px 0 26px; }
 @media (max-width: 760px) { .profiel { grid-template-columns: 1fr; gap: 28px; } .profiel-foto { height: 380px; } }
 .partner-tegel:hover { outline: 2px solid var(--night); outline-offset: -2px; }
+
+/* Automatische rondleiding (/rondleiding). Nieuw scherm, niet in het prototype: een speler met de echte
+   pagina's in een venster, uitleg ernaast en een tijdlijn eronder. In het venster geen demoknoppen. */
+.in-rondleiding .demo-fab, .in-rondleiding .demo-panel, .in-rondleiding .skip-link, .in-rondleiding .tour-bar { display: none !important; }
+body:has(.rl-start, .rl-speler) .demo-fab, body:has(.rl-start, .rl-speler) .demo-panel { display: none; }
+.rl-start { background: var(--night); color: white; min-height: 100svh; padding: 150px 0 90px; }
+.rl-start h1 { font-size: clamp(56px, 8vw, 128px); line-height: .94; margin: 22px 0 26px; }
+.rl-start p { max-width: 560px; color: #c0c7d8; font-size: 16px; }
+.rl-play { margin-top: 34px; display: inline-flex; align-items: center; gap: 16px; border: 0; border-radius: 999px; background: var(--lime); color: var(--night); font-size: 22px; font-weight: 800; padding: 20px 34px 20px 24px; box-shadow: 0 0 0 0 rgba(219, 248, 102, .5); animation: rl-puls 2.2s infinite; }
+.rl-play span { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--night); color: var(--lime); font-size: 18px; }
+@keyframes rl-puls { 0% { box-shadow: 0 0 0 0 rgba(219, 248, 102, .45); } 70% { box-shadow: 0 0 0 22px rgba(219, 248, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(219, 248, 102, 0); } }
+@media (prefers-reduced-motion: reduce) { .rl-play { animation: none; } }
+.rl-hoofdstukken { list-style: none; padding: 0; margin: 60px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 6px 24px; }
+.rl-hoofdstukken button { width: 100%; text-align: left; background: transparent; border: 0; border-top: 1px solid #333d59; color: #d5dbea; padding: 12px 0; font-size: 13px; }
+.rl-hoofdstukken button:hover { color: var(--lime); }
+.rl-hoofdstukken span { color: var(--lime); font-weight: 800; margin-right: 8px; }
+
+.rl-speler { background: var(--night); color: white; height: 100svh; padding: 92px 24px 18px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr) auto; gap: 18px 24px; }
+.rl-speler:fullscreen { padding-top: 24px; }
+.rl-podium { position: relative; display: grid; place-items: center; min-height: 0; min-width: 0; }
+.rl-venster { background: #1b2546; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 90px #0008; }
+.rl-venster.verborgen { position: absolute; visibility: hidden; }
+.rl-balk { height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #1b2546; }
+.rl-balk i { width: 10px; height: 10px; border-radius: 50%; background: #3a4670; }
+.rl-balk span { margin-left: 10px; flex: 1; max-width: 420px; background: #0f1733; color: #aeb8d3; font-size: 11px; border-radius: 6px; padding: 5px 10px; }
+.rl-schaal { position: relative; overflow: hidden; background: var(--cream); }
+.rl-schaal iframe { border: 0; transform-origin: 0 0; display: block; background: var(--cream); }
+.rl-laden { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(11, 17, 39, .55); color: white; font-size: 13px; font-weight: 750; }
+.rl-uitleg { align-self: center; }
+.rl-uitleg h2 { font-size: clamp(30px, 2.6vw, 44px); line-height: 1; margin: 14px 0 14px; }
+.rl-uitleg p { color: #c0c7d8; font-size: 15px; }
+.rl-punten { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 8px; }
+.rl-punten li { border: 1px solid #333d59; border-radius: 10px; padding: 11px 14px; font-size: 13px; color: #9ba6c1; transition: background .3s, color .3s, border-color .3s; }
+.rl-punten li.gedaan { color: #d5dbea; }
+.rl-punten li.actief { background: var(--lime); color: var(--night); border-color: var(--lime); font-weight: 750; }
+.rl-bediening { grid-column: 1 / -1; display: grid; gap: 12px; }
+.rl-tijdlijn { display: flex; gap: 4px; }
+.rl-tijdlijn button { flex-basis: 0; height: 8px; border: 0; padding: 0; border-radius: 4px; background: #2b3557; overflow: hidden; }
+.rl-tijdlijn button[aria-current] { outline: 1px solid var(--lime); outline-offset: 2px; }
+.rl-tijdlijn button span { display: block; height: 100%; background: var(--lime); }
+.rl-knoppen { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.rl-knoppen .chip { color: white; border-color: #4a5577; }
+.rl-knoppen .chip.active, .rl-knoppen .chip:hover { background: white; color: var(--night); border-color: white; }
+.rl-knoppen .chip:disabled { opacity: .4; cursor: default; }
+.rl-knoppen .btn { min-width: 130px; }
+.rl-dia { width: min(900px, 100%); }
+.rl-dia h2 { font-size: clamp(48px, 6vw, 96px); line-height: .95; margin: 16px 0 30px; }
+.rl-dia-intro { text-align: center; }
+.rl-dia-intro .brand { font-size: clamp(70px, 10vw, 150px); margin-bottom: 20px; }
+.rl-stroom { list-style: none; padding: 0; margin: 26px 0 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; counter-reset: stap; }
+.rl-stroom li { position: relative; background: #17214a; border: 1px solid #333d59; border-radius: 12px; padding: 18px 14px; animation: rl-in .5s both; }
+.rl-stroom li:nth-child(2) { animation-delay: .6s; } .rl-stroom li:nth-child(3) { animation-delay: 1.2s; } .rl-stroom li:nth-child(4) { animation-delay: 1.8s; } .rl-stroom li:nth-child(5) { animation-delay: 2.4s; }
+.rl-stroom li:not(:last-child)::after { content: "→"; position: absolute; right: -11px; top: 50%; transform: translateY(-50%); color: var(--lime); font-weight: 800; z-index: 1; }
+.rl-stroom b, .rl-tegels b { display: block; font-size: 16px; letter-spacing: -.03em; color: var(--lime); }
+.rl-stroom small, .rl-tegels small { display: block; margin-top: 6px; font-size: 12px; color: #c0c7d8; line-height: 1.4; }
+.rl-zijtak { margin-top: 18px; padding: 16px 18px; border: 1px dashed #4a5577; border-radius: 12px; font-size: 13px; color: #c0c7d8; animation: rl-in .5s 3s both; }
+.rl-zijtak b { color: var(--lime); }
+.rl-tegels { margin-top: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.rl-tegels div { background: #17214a; border: 1px solid #333d59; border-radius: 12px; padding: 20px 18px; animation: rl-in .5s both; }
+.rl-tegels div:nth-child(2) { animation-delay: .4s; } .rl-tegels div:nth-child(3) { animation-delay: .8s; } .rl-tegels div:nth-child(4) { animation-delay: 1.2s; } .rl-tegels div:nth-child(5) { animation-delay: 1.6s; } .rl-tegels div:nth-child(6) { animation-delay: 2s; }
+@keyframes rl-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .rl-stroom li, .rl-zijtak, .rl-tegels div { animation: none; } }
+@media (max-width: 1000px) {
+  .rl-speler { height: auto; min-height: 100svh; grid-template-columns: 1fr; grid-template-rows: 56vh auto auto; padding: 86px 16px 18px; }
+  .rl-stroom { grid-template-columns: 1fr; }
+  .rl-stroom li:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -15px; transform: none; }
+  .rl-tegels { grid-template-columns: 1fr 1fr; }
+}

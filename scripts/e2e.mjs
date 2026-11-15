@@ -282,6 +282,22 @@ const npsOk = await page
   .then(() => true, () => false);
 check("NPS: score en toelichting worden opgeslagen", npsOk);
 
+// Automatische rondleiding: afspelen start de speler; na de intro laadt de homepage in het venster.
+await page.goto(SITE + "/rondleiding", { waitUntil: "load" });
+await page.getByRole("button", { name: "Rondleiding afspelen" }).click();
+await page.locator(".rl-uitleg h2", { hasText: "De homepage" }).waitFor({ timeout: 20000 }).catch(() => {});
+const rlFrame = page.frameLocator(".rl-venster iframe");
+await rlFrame.locator(".hero-home").waitFor({ timeout: 15000 }).catch(() => {});
+check("rondleiding: speelt vanzelf door naar de homepage in het venster", (await rlFrame.locator(".hero-home").count()) === 1);
+check("rondleiding: in het venster geen demoknop", !(await rlFrame.locator(".demo-fab").isVisible().catch(() => false)));
+await page.getByRole("button", { name: /Pauze/ }).click();
+const rlBalk = page.locator('.rl-tijdlijn [aria-current] span');
+const rlStand = await rlBalk.getAttribute("style");
+await page.waitForTimeout(1500);
+check("rondleiding: pauze houdt de rondleiding vast", (await rlBalk.getAttribute("style")) === rlStand);
+await page.getByRole("button", { name: "Ga naar 16: Zelf zien wat Link & Lead One kan?" }).click();
+check("rondleiding: hoofdstuk kiezen via de tijdlijn", (await page.locator(".rl-dia", { hasText: "Zelf zien wat het kan?" }).count()) === 1);
+
 // Blokkenverkenner: het voorbeeld is het echte blok in een iframe (/blokvoorbeeld/…), per variant
 await page.goto(SITE + "/playground", { waitUntil: "load" });
 const voorbeeld = () => page.frameLocator(".pv-venster iframe");

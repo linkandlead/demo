@@ -232,6 +232,16 @@ export function DemoProvider({
           </Link>
         </div>
         <div className="demo-control">
+          Automatische rondleiding
+          <Link
+            className="btn btn-mini btn-lime"
+            href="/rondleiding"
+            onClick={() => setPaneel(false)}
+          >
+            ▶ Afspelen
+          </Link>
+        </div>
+        <div className="demo-control">
           Vijf-minutentour
           <button
             className="btn btn-mini btn-dark"

@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
   const paden = [
     ...paginas,
+    "/rondleiding",
     ...cases.map((c) => `/work/${c.slug}`),
     ...posts.map((p) => `/journal/${p.slug}`),
     ...mensen.map((m) => `/mensen/${persoonSlug(m.name)}`),
