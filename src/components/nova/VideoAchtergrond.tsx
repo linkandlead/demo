@@ -12,12 +12,18 @@ export function VideoAchtergrond({
   poster,
   mobielPoster,
   label,
+  positie,
+  overlay,
 }: {
   src: string;
   mobielSrc?: string;
   poster?: string;
   mobielPoster?: string;
   label: string;
+  /** Focuspunt (CMS: focal_x/focal_y) als object-position, bv. "50% 40%". */
+  positie?: string;
+  /** CMS-veld overlay: "licht" of "sterk" legt een extra laag over het ontwerpverloop. */
+  overlay?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [speelt, setSpeelt] = useState(false);
@@ -61,8 +67,7 @@ export function VideoAchtergrond({
       {poster ? (
         <picture>
           {mobielPoster ? <source media="(max-width: 760px)" srcSet={mobielPoster} /> : null}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={poster} alt="" loading="lazy" decoding="async" />
+          <img src={poster} alt="" loading="lazy" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
         </picture>
       ) : null}
       <video
@@ -73,11 +78,15 @@ export function VideoAchtergrond({
         preload="metadata"
         aria-label={label}
         className={speelt ? "speelt" : ""}
+        style={positie ? { objectPosition: positie } : undefined}
         onPlaying={() => setSpeelt(true)}
       >
         {mobielSrc ? <source media="(max-width: 760px)" src={mobielSrc} type="video/mp4" /> : null}
         <source src={src} type={src.endsWith(".webm") ? "video/webm" : "video/mp4"} />
       </video>
+      {overlay === "licht" || overlay === "sterk" ? (
+        <span className={`hero-overlay hero-overlay-${overlay}`} aria-hidden="true" />
+      ) : null}
       <button type="button" className="video-knop" onClick={wissel} aria-pressed={gepauzeerd}>
         {gepauzeerd ? "▶ Speel video af" : "❚❚ Pauzeer video"}
       </button>

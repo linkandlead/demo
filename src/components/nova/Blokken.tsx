@@ -136,6 +136,15 @@ function KopMetPunt({ tekst }: { tekst: string }) {
 }
 
 // ---------- Header ----------
+/** Focuspunt (CMS: focal_x/focal_y, 0–100, standaard 50) als object-position. */
+function focuspunt(c: Inhoud): string {
+  const pct = (k: string) => {
+    const n = Number(tx(c, k));
+    return tx(c, k) && Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 50;
+  };
+  return `${pct("focal_x")}% ${pct("focal_y")}%`;
+}
+
 function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean }) {
   const c = b.content;
   // Alleen de eerste header van een pagina is de paginakop (h1); een volgende header is een sectie.
@@ -151,6 +160,8 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
       poster={media(c, "media_afbeelding") || extra.poster}
       mobielPoster={extra.mobielPoster}
       label={tx(c, "media_alt") || tx(c, "heading").replace(/\n/g, " ")}
+      positie={focuspunt(c)}
+      overlay={tx(c, "overlay")}
     />
   ) : null;
   const beeld = media(c, "media_afbeelding");

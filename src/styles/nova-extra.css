@@ -645,3 +645,7 @@ button.btn:disabled {
   .video-knop { top: 84px; }
 }
 @media (prefers-reduced-motion: reduce) { .video-achtergrond video { transition: none; } }
+/* Overlay-standen "licht" en "sterk" (CMS-veld overlay) bovenop het donkere ontwerpverloop ("donker"). */
+.hero-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.hero-overlay-licht { background: rgba(9, 15, 36, .18); }
+.hero-overlay-sterk { background: rgba(9, 15, 36, .55); }

@@ -183,8 +183,9 @@ function variantPatch(type: string, variant: string, c: Inhoud): Inhoud {
       return {
         gecentreerd: { layout: "gecentreerd", hoogte: "normaal" },
         "beeld links": { layout: "split-links", hoogte: "normaal" },
-        "beeld rechts": { layout: "split-rechts", hoogte: "fullscreen" },
-        achtergrondbeeld: { layout: "achtergrond", hoogte: "normaal", media_afbeelding: m("event_lights") },
+        // Met een achtergrondvideo (CMS: media_type = video), gemaakt uit eigen NOVA-beelden.
+        "beeld rechts": { layout: "split-rechts", hoogte: "fullscreen", media_type: "video", media_video: "/media/nova-header.mp4" },
+        achtergrondbeeld: { layout: "achtergrond", hoogte: "normaal", media_afbeelding: m("nova-film-poster"), media_type: "video", media_video: "/media/nova-film.mp4" },
         compact: { layout: "compact", hoogte: "normaal", media_afbeelding: "", usps: [{ tekst: "HET INTERACTIEVE LAB" }] },
       }[v] ?? {};
     case "mediatekst":
