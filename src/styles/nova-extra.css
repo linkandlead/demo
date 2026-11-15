@@ -628,11 +628,9 @@ button.btn:disabled {
 .pv-venster:has(.ware-grootte) { height: 640px; }
 @media (max-width: 760px) { .pv-frame.ware-grootte { zoom: 1; } .pv-venster:has(.ware-grootte) { height: auto; max-height: 560px; } }
 
-/* Video in het Header-blok (media_type "video"). Poster eronder, video vervaagt erin zodra hij speelt. */
+/* Video in het Header-blok (media_type "video"). De video is altijd zichtbaar; zijn poster is hetzelfde beeld. */
 .video-achtergrond { position: absolute; inset: 0; overflow: hidden; background: var(--night); }
 .video-achtergrond img, .video-achtergrond video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.video-achtergrond video { opacity: 0; transition: opacity .6s ease; }
-.video-achtergrond video.speelt { opacity: 1; }
 .video-knop { position: absolute; z-index: 3; right: max(20px, env(safe-area-inset-right, 0px)); top: 96px; border: 1px solid rgba(255,255,255,.45); background: rgba(9,15,36,.55); color: white; border-radius: 999px; padding: 9px 15px; font-size: 12px; font-weight: 750; backdrop-filter: blur(8px); }
 .video-knop:hover { background: rgba(9,15,36,.8); }
 .feature-media.met-video { min-height: min(860px, 92svh); }
@@ -644,7 +642,6 @@ button.btn:disabled {
   .feature-media h2.hero-kop { font-size: clamp(52px, 14vw, 72px); }
   .video-knop { top: 84px; }
 }
-@media (prefers-reduced-motion: reduce) { .video-achtergrond video { transition: none; } }
 /* Overlay-standen "licht" en "sterk" (CMS-veld overlay) bovenop het donkere ontwerpverloop ("donker"). */
 .hero-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .hero-overlay-licht { background: rgba(9, 15, 36, .18); }
