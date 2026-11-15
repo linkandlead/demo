@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { doelInTijdzone } from "@/lib/tijd";
 
 // Aftelklok (CMS-blok aftelklok): telt af naar `doeldatum`; daarna de verlopen-tekst.
-export function Aftelklok({ doel, verlopen }: { doel: string; verlopen: string }) {
-  const doelMs = Date.parse(doel);
+export function Aftelklok({ doel, verlopen, tijdzone = "Europe/Amsterdam" }: { doel: string; verlopen: string; tijdzone?: string }) {
+  const doelMs = doelInTijdzone(doel, tijdzone);
   const [nu, setNu] = useState<number | null>(null);
   useEffect(() => {
     // Pas na het laden de klok starten (server en browser renderen eerst hetzelfde).

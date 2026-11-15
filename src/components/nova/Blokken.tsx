@@ -11,9 +11,11 @@ import {
   voorbeeldWedstrijden,
 } from "@/content/voorbeelddata";
 import { Aftelklok } from "./Aftelklok";
+import { BlokGrens } from "./BlokGrens";
 import { VideoAchtergrond } from "./VideoAchtergrond";
 import { VIDEO } from "@/content/media";
 import { CMS_MEDIA } from "@/content/cms-media";
+import { merk } from "@/content/blauwdruk";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 import { DemoFormulier } from "./DemoFormulier";
@@ -81,6 +83,26 @@ function kop(c: Inhoud, introVeld?: string): { eyebrow: string; title: string; d
   };
 }
 
+/** Pictogrammen uit het CMS-veld "icoon" (kaarten, reeks), als typografische tekens in de NOVA-stijl. */
+const ICOON: Record<string, string> = {
+  doel: "◎",
+  gesprek: "❝",
+  groei: "↗",
+  schakel: "⧉",
+  klok: "◷",
+  schild: "⛉",
+  kompas: "✣",
+  vonk: "✦",
+  post: "✉",
+  lijst: "☰",
+};
+const Icoon = ({ naam }: { naam: string }) =>
+  ICOON[naam] ? (
+    <span className="blok-icoon" aria-hidden="true">
+      {ICOON[naam]}
+    </span>
+  ) : null;
+
 const BG: Record<string, string> = {
   wit: "Licht",
   mist: "Zacht",
@@ -137,6 +159,71 @@ function KopMetPunt({ tekst }: { tekst: string }) {
 }
 
 // ---------- Header ----------
+/** Knop uit de CMS-velden knop/knoptekst; anders de vaste NOVA-knop (alleen waar het ontwerp er een had). */
+function BlokKnop({ c, vast, marge = 32 }: { c: Inhoud; vast?: { tekst: string; naar: string } | null; marge?: number }) {
+  const naar = link(c, "knop") || vast?.naar;
+  const tekst = tx(c, "knoptekst") || vast?.tekst;
+  if (!naar || !tekst) return null;
+  return (
+    <div style={{ marginTop: marge }}>
+      <Btn to={naar} cl="btn-dark">
+        {tekst}
+      </Btn>
+    </div>
+  );
+}
+
+/** Kruimelpad (CMS: kruimelpad, of auto_kruimelpad "aan" voor een pad uit het adres). */
+function Kruimelpad({ c, ctx, donker }: { c: Inhoud; ctx: Ctx; donker: boolean }) {
+  let delen = lijst(c, "kruimelpad")
+    .map((k) => ({ titel: tx(k, "titel"), href: link(k, "href") }))
+    .filter((k) => k.titel);
+  if (!delen.length && tx(c, "auto_kruimelpad") === "aan" && ctx.slug !== "/") {
+    const segmenten = ctx.slug.split("/").filter(Boolean);
+    delen = [
+      { titel: "Home", href: "/" },
+      ...segmenten.slice(0, -1).map((seg, i) => {
+        const href = "/" + segmenten.slice(0, i + 1).join("/");
+        return { titel: merk.hoofd_nav.find((l) => l.href === href)?.titel ?? seg, href };
+      }),
+      { titel: tx(c, "heading").split("\n")[0].replace(/[.*]/g, "").trim(), href: "" },
+    ];
+  }
+  if (!delen.length) return null;
+  return (
+    <nav aria-label="Kruimelpad" className={`kruimelpad${donker ? " donker" : ""}`}>
+      <ol>
+        {delen.map((d, i) => (
+          <li key={d.titel + i}>
+            {d.href && i < delen.length - 1 ? <Link href={d.href}>{d.titel}</Link> : <span aria-current="page">{d.titel}</span>}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+/** Nieuwsbriefformulier in de header (CMS: extras "formulier", formulier_soort "nieuwsbrief"). */
+function HeaderFormulier() {
+  return (
+    <DemoFormulier
+      className="header-formulier"
+      opslaan="nieuwsbrief"
+      demoTekst="Dit is een voorbeeld van de aanmeldbevestiging. Er is geen inschrijving opgeslagen."
+    >
+      <label className="sr-only" htmlFor="header-nieuwsbrief">
+        E-mailadres
+      </label>
+      <input id="header-nieuwsbrief" name="email" type="email" required placeholder="jij@voorbeeld.nl" autoComplete="email" />
+      <label className="form-check" htmlFor="header-nieuwsbrief-akkoord">
+        <input id="header-nieuwsbrief-akkoord" name="akkoord" type="checkbox" required />
+        Ik wil de nieuwsbrief ontvangen en kan me later afmelden.
+      </label>
+      <button className="btn btn-lime">Aanmelden ↗</button>
+    </DemoFormulier>
+  );
+}
+
 /** Focuspunt (CMS: focal_x/focal_y, 0–100, standaard 50) als object-position. */
 function focuspunt(c: Inhoud): string {
   const pct = (k: string) => {
@@ -162,6 +249,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
     <VideoAchtergrond
       src={extra.versie ? `${videoSrc}?v=${extra.versie}` : videoSrc}
       mobielSrc={extra.mobiel && extra.versie ? `${extra.mobiel}?v=${extra.versie}` : extra.mobiel}
+      middelSrc={extra.middel}
       poster={media(c, "media_afbeelding") || extra.poster}
       mobielPoster={extra.mobielPoster}
       label={tx(c, "media_alt") || tx(c, "heading").replace(/\n/g, " ")}
@@ -192,6 +280,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
       </div>
     ) : null;
   const stats = tx(c, "extras") === "stats" ? lijst(c, "stats") : [];
+  const formulier = tx(c, "extras") === "formulier" ? <HeaderFormulier /> : null;
   const meta = tx(lijst(c, "usps")[0] ?? {}, "tekst");
 
   if (tx(c, "hoogte") === "fullscreen")
@@ -213,6 +302,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
           </Kop>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
           {knoppen}
+          {formulier}
         </div>
         <div className="hero-bottom">
           <div className="container">
@@ -242,6 +332,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
           </Kop>
           {tx(c, "subheading") ? <p className="one-intro">{tx(c, "subheading")}</p> : null}
           {knoppen}
+          {formulier}
           {stats.length ? (
             <div className="one-proof">
               {stats.map((s) => (
@@ -268,6 +359,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
           </Kop>
           {tx(c, "subheading") ? <p className="hero-midden-tekst">{tx(c, "subheading")}</p> : null}
           {knoppen}
+          {formulier}
         </div>
       </section>
     );
@@ -292,6 +384,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
             </Kop>
             {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
             {knoppen}
+          {formulier}
           </div>
           {links ? null : foto}
         </div>
@@ -305,6 +398,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
       <section data-cms={label(b)} className={video ? `${cls} met-video` : cls}>
         {video ?? (beeld ? <Photo src={beeld} alt={alt} priority={eerste} /> : null)}
         <div className="container copy">
+          <Kruimelpad c={c} ctx={ctx} donker />
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </span>
@@ -313,6 +407,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
           </Kop>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
           {knoppen}
+          {formulier}
         </div>
       </section>
     );
@@ -322,6 +417,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
   return (
     <section data-cms={label(b)} className={`inner-hero${donker ? " night" : ""}`}>
       <div className="container">
+        <Kruimelpad c={c} ctx={ctx} donker={donker} />
         <span className="eyebrow" style={donker ? { color: "var(--lime)" } : undefined}>
           {tx(c, "eyebrow")}
         </span>
@@ -337,6 +433,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
           <p style={{ maxWidth: 490, color: donker ? "#c0c7d8" : "#58626c" }}>{tx(c, "subheading")}</p>
         ) : null}
         {knoppen}
+        {formulier}
         {beeld ? (
           <div className="lead-image image-frame">
             <Photo src={beeld} alt={alt} priority />
@@ -532,11 +629,9 @@ function Flexibel({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
   const c = b.content;
   const items = lijst(c, "items");
   // Op een projectpagina leidt de tekst terug naar het overzicht (het blok heeft geen knopveld).
-  const terug = ctx.slug.startsWith("/work/") ? (
-    <Btn to="/work" cl="btn-dark">
-      Bekijk meer projecten
-    </Btn>
-  ) : null;
+  const terug = (
+    <BlokKnop c={c} marge={0} vast={ctx.slug.startsWith("/work/") ? { tekst: "Bekijk meer projecten", naar: "/work" } : null} />
+  );
   if (tx(c, "kolommen") === "1")
     return (
       <section data-cms={label(b)} className={sectie(b.bg)}>
@@ -579,6 +674,7 @@ function Flexibel({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
         {kaarten}
+        <BlokKnop c={c} />
       </div>
     </section>
   );
@@ -693,22 +789,44 @@ function Kaarten({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
           <div className={tx(c, "kolommen") === "4" ? "card-3 card-4" : "card-3"}>
             {items.map((i) => (
               <div className="info-tile" key={tx(i, "titel")}>
-                {tx(i, "knoptekst") ? <span className="eyebrow">{tx(i, "knoptekst")}</span> : null}
+                {tx(i, "knoptekst") || tx(i, "icoon") ? (
+                  <span className="eyebrow">
+                    <Icoon naam={tx(i, "icoon")} />
+                    {tx(i, "knoptekst")}
+                  </span>
+                ) : null}
                 <strong>{tx(i, "titel")}</strong>
                 <p>{tx(i, "tekst")}</p>
               </div>
             ))}
           </div>
         )}
-        {ctx.detail && ctx.slug.startsWith("/spaces/") ? (
-          <div style={{ marginTop: 30 }}>
-            <Btn to="/lab" cl="btn-dark">
-              Probeer de configurator
-            </Btn>
-          </div>
-        ) : null}
+        <BlokKnop
+          c={c}
+          marge={30}
+          vast={ctx.detail && ctx.slug.startsWith("/spaces/") ? { tekst: "Probeer de configurator", naar: "/lab" } : null}
+        />
       </div>
     </section>
+  );
+}
+
+/** Bijschrift bij een portfoliobeeld: alleen als het CMS-item sector, jaar, resultaat of omschrijving heeft. */
+function Bijschrift({ i }: { i: Inhoud }) {
+  const meta = [tx(i, "sector"), tx(i, "jaar")].filter(Boolean).join(" · ");
+  const tekst = tx(i, "resultaat") || tx(i, "omschrijving");
+  if (!meta && !tekst) return null;
+  const inhoud = (
+    <>
+      {meta ? <span className="meta">{meta}</span> : null}
+      <strong>{tx(i, "titel")}</strong>
+      {tekst ? <span>{tekst}</span> : null}
+    </>
+  );
+  return (
+    <figcaption className="portfolio-bijschrift">
+      {link(i, "link") ? <Link href={link(i, "link")}>{inhoud}</Link> : inhoud}
+    </figcaption>
   );
 }
 
@@ -719,15 +837,21 @@ function Portfolio({ b }: { b: Blok }) {
   return (
     <section data-cms={label(b)} className={sectie(b.bg)} style={{ paddingTop: 0 }}>
       <div className="container">
-        <div className="wide-photo">
-          <Photo src={media(eerste, "beeld")} alt={tx(eerste, "alt")} />
-        </div>
+        <figure style={{ margin: 0 }}>
+          <div className="wide-photo">
+            <Photo src={media(eerste, "beeld")} alt={tx(eerste, "alt")} />
+          </div>
+          <Bijschrift i={eerste} />
+        </figure>
         {rest.length ? (
           <div className="card-3" style={{ marginTop: 14 }}>
             {rest.map((i) => (
-              <div className="image-frame" style={{ height: 300 }} key={media(i, "beeld")}>
-                <Photo src={media(i, "beeld")} alt={tx(i, "alt")} />
-              </div>
+              <figure style={{ margin: 0 }} key={media(i, "beeld")}>
+                <div className="image-frame" style={{ height: 300 }}>
+                  <Photo src={media(i, "beeld")} alt={tx(i, "alt")} />
+                </div>
+                <Bijschrift i={i} />
+              </figure>
             ))}
           </div>
         ) : null}
@@ -736,8 +860,9 @@ function Portfolio({ b }: { b: Blok }) {
   );
 }
 
-function Reeks({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
-  const c = b.content;
+function Reeks({ b, n }: { b: Blok; n: number }) {
+  // "Label rechts" geldt als toelichting als er geen intro is.
+  const c: Inhoud = { ...b.content, intro: tx(b.content, "intro") || tx(b.content, "label_rechts") };
   const stappen = lijst(c, "stappen");
 
   // Rondleiding: stappen die naar een pagina leiden, zonder tekst.
@@ -814,13 +939,26 @@ function Reeks({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
         <div className={`timeline${tx(c, "_vorm") ? ` reeks-${tx(c, "_vorm")}` : ""}`}>
           {stappen.map((s, i) => (
             <div className="timeline-item" key={tx(s, "titel") + i}>
-              <strong>{tx(s, "nummer") || nr(i + 1)}</strong>
-              <h3>{tx(s, "titel")}</h3>
+              <strong>
+                <Icoon naam={tx(s, "icoon")} />
+                {tx(s, "sleutel") || tx(s, "nummer") || nr(i + 1)}
+              </strong>
+              <h3>{tx(s, "titel") || tx(s, "naam")}</h3>
               <p>{tx(s, "tekst")}</p>
+              {tx(s, "belofte") ? <p className="reeks-belofte">{tx(s, "belofte")}</p> : null}
             </div>
           ))}
         </div>
-        {ctx.one ? null : null}
+        {lijst(c, "uitkomsten").length ? (
+          <div className="chip-row" style={{ marginTop: 24 }}>
+            {lijst(c, "uitkomsten").map((u) => (
+              <span className="chip" key={tx(u, "label")}>
+                {tx(u, "label")}
+              </span>
+            ))}
+          </div>
+        ) : null}
+        {tx(c, "slotregel") ? <p className="reeks-slot">{tx(c, "slotregel")}</p> : null}
       </div>
     </section>
   );
@@ -1021,13 +1159,7 @@ async function ArtikelenGrid({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
         ) : (
           <EmptyState>Er zijn nog geen artikelen gepubliceerd.</EmptyState>
         )}
-        {ctx.slug === "/" ? (
-          <div style={{ marginTop: 34 }}>
-            <Btn to="/journal" cl="btn-dark">
-              Lees de verhalen
-            </Btn>
-          </div>
-        ) : null}
+        <BlokKnop c={c} marge={34} vast={ctx.slug === "/" ? { tekst: "Lees de verhalen", naar: "/journal" } : null} />
       </div>
     </section>
   );
@@ -1053,13 +1185,7 @@ async function Mensen({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
         ) : (
           <EmptyState>Er zijn nog geen teamleden beschikbaar.</EmptyState>
         )}
-        {ctx.slug === "/" ? (
-          <div style={{ marginTop: 32 }}>
-            <Btn to="/community" cl="btn-dark">
-              Ontmoet de makers
-            </Btn>
-          </div>
-        ) : null}
+        <BlokKnop c={c} vast={ctx.slug === "/" ? { tekst: "Ontmoet de makers", naar: "/community" } : null} />
       </div>
     </section>
   );
@@ -1075,7 +1201,7 @@ function Sprekers({ b, n }: { b: Blok; n: number }) {
           {lijst(c, "items").map((s) => (
             <PersonCard
               key={tx(s, "naam")}
-              p={{ name: tx(s, "naam"), role: tx(s, "tekst"), cover: media(s, "foto") }}
+              p={{ name: tx(s, "naam"), role: tx(s, "tekst"), cover: media(s, "foto"), alt: tx(s, "foto_alt") || undefined }}
               prefix="Spreker · "
             />
           ))}
@@ -1135,11 +1261,7 @@ async function PartnerUitgelicht({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }
               <p key={a}>{a}</p>
             ))}
             {p?.quote && p.tekst ? <p>{p.tekst}</p> : null}
-            {ctx.slug === "/community" ? (
-              <Btn to="/about" cl="btn-dark">
-                Lees over onze aanpak
-              </Btn>
-            ) : null}
+            <BlokKnop c={c} marge={0} vast={ctx.slug === "/community" ? { tekst: "Lees over onze aanpak", naar: "/about" } : null} />
           </div>
         </div>
       </div>
@@ -1186,6 +1308,17 @@ function Prijskaarten({ b, n }: { b: Blok; n: number }) {
                   {tx(t, "badge") ? <span className="eyebrow">{tx(t, "badge")}</span> : null}
                   <h3 style={{ marginTop: 13 }}>{tx(t, "naam")}</h3>
                   <p style={{ marginTop: 12 }}>{tx(t, "voordeel")}</p>
+                  {tx(t, "incl") ? (
+                    <ul className="ticket-incl">
+                      {tx(t, "incl")
+                        .split("\n")
+                        .map((r) => r.replace(/^[-•]\s*/, "").trim())
+                        .filter(Boolean)
+                        .map((r) => (
+                          <li key={r}>{r}</li>
+                        ))}
+                    </ul>
+                  ) : null}
                 </div>
                 <div>
                   <strong>
@@ -1205,6 +1338,11 @@ function Prijskaarten({ b, n }: { b: Blok; n: number }) {
                     >
                       {tx(t, "knoptekst")} ↗
                     </DemoKnop>
+                  ) : null}
+                  {link(t, "knop2") && tx(t, "knoptekst2") ? (
+                    <Link className="meta ticket-knop2" href={link(t, "knop2")}>
+                      {tx(t, "knoptekst2")} ↗
+                    </Link>
                   ) : null}
                 </div>
               </div>
@@ -1290,6 +1428,7 @@ function Contactformulier({ c }: { c: Inhoud }) {
       className="form-grid"
       opslaan="contact"
       bevestiging={tx(c, "bevestigingstekst")}
+      naVerzenden={link(c, "na_verzenden") || undefined}
       demoTekst="Dit is de bevestigingsweergave. Je bericht is niet verzonden omdat er geen database is ingesteld."
     >
       <div className="form-field">
@@ -1355,6 +1494,7 @@ function Formulier({ b, ctx, n, kaart }: { b: Blok; ctx: Ctx; n: number; kaart?:
           <DemoFormulier
             opslaan="nieuwsbrief"
             bevestiging={tx(c, "bevestigingstekst")}
+            naVerzenden={link(c, "na_verzenden") || undefined}
             demoTekst="Dit is een voorbeeld van de aanmeldbevestiging. Er is geen inschrijving opgeslagen."
           >
             <div className="form-field">
@@ -1514,7 +1654,12 @@ function Kaart({ b, n }: { b: Blok; n: number }) {
 function ConfiguratorBlok({ b, n }: { b: Blok; n: number }) {
   const c = b.content;
   const opties = lijst(c, "opties")
-    .map((o) => ({ label: tx(o, "label"), prijs: Number(tx(o, "prijs").replace(",", ".")) || 0 }))
+    .map((o) => ({
+      label: tx(o, "label"),
+      prijs: Number(tx(o, "prijs").replace(",", ".")) || 0,
+      toelichting: tx(o, "toelichting") || undefined,
+      standaard: tx(o, "standaard_aan") === "ja",
+    }))
     .filter((o) => o.label);
   const groep = tx(lijst(c, "opties")[0] ?? {}, "groep") || "Keuze";
   return (
@@ -1590,9 +1735,14 @@ function Interacties({ blokken, n }: { blokken: Blok[]; n: number }) {
                   <Wissel
                     id="ab-text"
                     eyebrow={tx(c, "eyebrow")}
-                    a={tx(c, "titel_a")}
-                    b={tx(c, "titel_b") || tx(c, "titel_a")}
-                    knop={`${tx(c, "knoptekst_a") || "Wissel variant"} ↗`}
+                    a={{ titel: tx(c, "titel_a"), tekst: tx(c, "tekst_a"), knoptekst: tx(c, "knoptekst_a"), knop: link(c, "knop_a") }}
+                    b={{
+                      titel: tx(c, "titel_b") || tx(c, "titel_a"),
+                      tekst: tx(c, "tekst_b"),
+                      knoptekst: tx(c, "knoptekst_b"),
+                      knop: link(c, "knop_b"),
+                    }}
+                    knop="Wissel tekstvariant ↗"
                     startMetB={tx(c, "_start") === "b"}
                   />
                 </div>
@@ -1602,9 +1752,15 @@ function Interacties({ blokken, n }: { blokken: Blok[]; n: number }) {
                 <Wissel
                   id="person-text"
                   eyebrow={tx(c, "eyebrow")}
-                  a={tx(c, "titel")}
-                  b={tx(c, "warm_titel") || tx(c, "titel")}
-                  knop={`${tx(c, "knoptekst") || "Wissel"} ↗`}
+                  a={{ titel: tx(c, "titel"), tekst: tx(c, "tekst"), knoptekst: tx(c, "knoptekst"), knop: link(c, "knop") }}
+                  b={{
+                    eyebrow: tx(c, "warm_eyebrow"),
+                    titel: tx(c, "warm_titel") || tx(c, "titel"),
+                    tekst: tx(c, "warm_tekst"),
+                    knoptekst: tx(c, "warm_knoptekst"),
+                    knop: link(c, "warm_knop"),
+                  }}
+                  knop="Simuleer terugkerende bezoeker ↗"
                   startMetB={tx(c, "_start") === "b"}
                 />
               </div>
@@ -1627,6 +1783,7 @@ function FormulierBouwerBlok({ b, n }: { b: Blok; n: number }) {
         .map((o) => o.trim())
         .filter(Boolean),
       verplicht: tx(v, "verplicht") === "ja",
+      toonAls: tx(v, "toon_als"),
     }))
     .filter((v) => v.label);
   return (
@@ -1642,6 +1799,7 @@ function FormulierBouwerBlok({ b, n }: { b: Blok; n: number }) {
           knoptekst={tx(c, "knoptekst") || "Verstuur"}
           voetnoot={tx(c, "voetnoot")}
           bevestiging={tx(c, "bevestigingstekst")}
+          naVerzenden={link(c, "na_verzenden") || undefined}
         />
       </div>
     </section>
@@ -1774,6 +1932,11 @@ async function Bewijsstrook({ b }: { b: Blok }) {
             </div>
           ))}
         </div>
+        {tx(c, "toon_logos") !== "nee" && tx(c, "logos_titel") ? (
+          <span className="eyebrow" style={{ display: "block", marginTop: 34 }}>
+            {tx(c, "logos_titel")}
+          </span>
+        ) : null}
         {tx(c, "toon_logos") !== "nee" ? (
           <div className="logo-rij" aria-label="Klanten">
             {klanten.slice(0, Number(c.maximaal_logos) || 6).map((k) => (
@@ -1980,6 +2143,11 @@ async function Agenda({ b, n }: { b: Blok; n: number }) {
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        {[tx(c, "afspraak_naam"), tx(c, "duur"), tx(c, "kanaal")].some(Boolean) ? (
+          <p className="meta" style={{ marginBottom: 16 }}>
+            {[tx(c, "afspraak_naam"), tx(c, "duur"), tx(c, "kanaal")].filter(Boolean).join(" · ")}
+          </p>
+        ) : null}
         <div className="slots">
           {slots.map((sl) => (
             <DemoKnop
@@ -1987,7 +2155,8 @@ async function Agenda({ b, n }: { b: Blok; n: number }) {
               melding="Dit is een voorbeeld: er wordt geen afspraak ingepland."
               stijl="slot"
             >
-              <strong>{datumNl(sl.datum)}</strong> {sl.tijd} uur · {sl.persoon}
+              <strong>{datumNl(sl.datum)}</strong> {sl.tijd} uur
+              {tx(c, "tijdzone") && tx(c, "tijdzone") !== "Europe/Amsterdam" ? ` (${tx(c, "tijdzone")})` : ""} · {sl.persoon}
             </DemoKnop>
           ))}
         </div>
@@ -2004,7 +2173,11 @@ function AftelklokBlok({ b, n }: { b: Blok; n: number }) {
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
-        <Aftelklok doel={tx(c, "doeldatum")} verlopen={tx(c, "verlopen_tekst") || "Het is zover."} />
+        <Aftelklok
+          doel={tx(c, "doeldatum")}
+          tijdzone={tx(c, "tijdzone") || "Europe/Amsterdam"}
+          verlopen={tx(c, "verlopen_tekst") || "Het is zover."}
+        />
         {knop ? (
           <div style={{ marginTop: 30 }}>
             <Btn to={knop}>{tx(c, "knoptekst")}</Btn>
@@ -2058,6 +2231,20 @@ async function CollectieLijst({ b, n }: { b: Blok; n: number }) {
 }
 
 // ---------- Paginaopbouw ----------
+
+/** Rendert één blok. Een fout (bv. een onverwacht veld of een mislukte collectie) wordt gelogd en het
+ *  blok overgeslagen, in plaats van dat de hele pagina faalt. */
+async function VeiligBlok({ naam, maak }: { naam: string; maak: () => ReactNode | Promise<ReactNode> }) {
+  // maak() roept de blokfunctie direct aan, dus fouten in dat blok zelf vallen in deze try.
+  let inhoud: ReactNode;
+  try {
+    inhoud = await maak();
+  } catch (fout) {
+    console.error(`Blok "${naam}" kon niet worden getoond`, fout);
+    return null;
+  }
+  return <BlokGrens naam={naam}>{inhoud}</BlokGrens>;
+}
 const ZONDER_NUMMER = new Set([
   "header",
   "marquee",
@@ -2099,138 +2286,139 @@ export function Blokken({
   for (let i = 0; i < blokken.length; i++) {
     const b = blokken[i];
     if (!ZONDER_NUMMER.has(b.type)) n++;
+    const nHier = n; // vastzetten: de blokken renderen pas na deze lus
     const k = `${b.type}-${i}`;
     switch (b.type) {
       case "header":
-        uit.push(<Header key={k} b={b} ctx={ctx} eerste={!blokken.slice(0, i).some((x) => x.type === "header")} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Header({ b, ctx, eerste: !blokken.slice(0, i).some((x) => x.type === "header") })} />);
         break;
       case "marquee":
-        uit.push(<Marquee key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Marquee({ b })} />);
         break;
       case "mediatekst":
-        uit.push(<MediaTekst key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => MediaTekst({ b, ctx, n: nHier })} />);
         break;
       case "statement":
-        uit.push(<Statement key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Statement({ b, ctx, n: nHier })} />);
         break;
       case "statistieken":
-        uit.push(<Statistieken key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Statistieken({ b, n: nHier })} />);
         break;
       case "feiten":
-        uit.push(<Feiten key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Feiten({ b })} />);
         break;
       case "flexibel":
-        uit.push(<Flexibel key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Flexibel({ b, ctx, n: nHier })} />);
         break;
       case "kaarten":
-        uit.push(<Kaarten key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Kaarten({ b, ctx, n: nHier })} />);
         break;
       case "portfolio":
-        uit.push(<Portfolio key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Portfolio({ b })} />);
         break;
       case "reeks":
-        uit.push(<Reeks key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Reeks({ b, n: nHier })} />);
         break;
       case "faq":
-        uit.push(<Faq key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Faq({ b, n: nHier })} />);
         break;
       case "overgang":
-        uit.push(<Overgang key={k} b={b} ctx={ctx} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Overgang({ b, ctx })} />);
         break;
       case "cta":
-        uit.push(<Cta key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Cta({ b, n: nHier })} />);
         break;
       case "cases_grid":
-        uit.push(<CasesGrid key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => CasesGrid({ b, ctx, n: nHier })} />);
         break;
       case "artikelen_grid":
-        uit.push(<ArtikelenGrid key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => ArtikelenGrid({ b, ctx, n: nHier })} />);
         break;
       case "mensen":
-        uit.push(<Mensen key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Mensen({ b, ctx, n: nHier })} />);
         break;
       case "sprekers":
-        uit.push(<Sprekers key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Sprekers({ b, n: nHier })} />);
         break;
       case "partners_grid":
-        uit.push(<PartnersGrid key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => PartnersGrid({ b, n: nHier })} />);
         break;
       case "partner_uitgelicht":
-        uit.push(<PartnerUitgelicht key={k} b={b} ctx={ctx} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => PartnerUitgelicht({ b, ctx, n: nHier })} />);
         break;
       case "citaten_carrousel":
-        uit.push(<Citaten key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Citaten({ b, n: nHier })} />);
         break;
       case "prijskaarten":
-        uit.push(<Prijskaarten key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Prijskaarten({ b, n: nHier })} />);
         break;
       case "tabel":
-        uit.push(<Tabel key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Tabel({ b, n: nHier })} />);
         break;
       case "formulier": {
         // Contactformulier + kaart/locatie vormen samen één contactsectie.
         const volgende = blokken[i + 1];
         const kaart = volgende?.type === "kaart" ? volgende : undefined;
         if (kaart) i++;
-        uit.push(<Formulier key={k} b={b} ctx={ctx} n={n} kaart={kaart} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Formulier({ b, ctx, n: nHier, kaart })} />);
         break;
       }
       case "kaart":
-        uit.push(<Kaart key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Kaart({ b, n: nHier })} />);
         break;
       case "configurator":
-        uit.push(<ConfiguratorBlok key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => ConfiguratorBlok({ b, n: nHier })} />);
         break;
       case "formulier_bouwer":
-        uit.push(<FormulierBouwerBlok key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => FormulierBouwerBlok({ b, n: nHier })} />);
         break;
       case "review_verzamelen":
-        uit.push(<ReviewBlok key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => ReviewBlok({ b, n: nHier })} />);
         break;
       case "leden_toegang":
-        uit.push(<LedenToegang key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => LedenToegang({ b })} />);
         break;
       case "tekst":
-        uit.push(<TekstBlok key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => TekstBlok({ b, n: nHier })} />);
         break;
       case "intake":
-        uit.push(<Intake key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Intake({ b, n: nHier })} />);
         break;
       case "bewijsstrook":
-        uit.push(<Bewijsstrook key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Bewijsstrook({ b })} />);
         break;
       case "quote":
-        uit.push(<Quote key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Quote({ b })} />);
         break;
       case "logostrook":
-        uit.push(<Logostrook key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Logostrook({ b })} />);
         break;
       case "rolvoorbeelden":
-        uit.push(<Rolvoorbeelden key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Rolvoorbeelden({ b, n: nHier })} />);
         break;
       case "reviews":
-        uit.push(<Reviews key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Reviews({ b, n: nHier })} />);
         break;
       case "wedstrijden":
-        uit.push(<Wedstrijden key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Wedstrijden({ b, n: nHier })} />);
         break;
       case "volgende_wedstrijd":
-        uit.push(<VolgendeWedstrijd key={k} b={b} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => VolgendeWedstrijd({ b })} />);
         break;
       case "agenda":
-        uit.push(<Agenda key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Agenda({ b, n: nHier })} />);
         break;
       case "aftelklok":
-        uit.push(<AftelklokBlok key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => AftelklokBlok({ b, n: nHier })} />);
         break;
       case "collectie_lijst":
-        uit.push(<CollectieLijst key={k} b={b} n={n} />);
+        uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => CollectieLijst({ b, n: nHier })} />);
         break;
       default:
         if (INTERACTIE.has(b.type)) {
           const groep = [b];
           while (blokken[i + 1] && INTERACTIE.has(blokken[i + 1].type)) groep.push(blokken[++i]);
-          uit.push(<Interacties key={k} blokken={groep} n={n} />);
+          uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Interacties({ blokken: groep, n: nHier })} />);
         }
       // Onbekend bloktype: overslaan (veilige terugval).
     }

@@ -781,13 +781,11 @@ const lab: BlauwdrukPagina = {
       eyebrow: "A/B-TEST",
       titel_a: "Maak ruimte voor nieuwe ideeën.",
       titel_b: "Geef jouw volgende idee een vliegende start.",
-      knoptekst_a: "Wissel tekstvariant",
     }),
     blok("personalisatie", "mist", {
       eyebrow: "PERSONALISATIE",
       titel: "Welkom bij NOVA.",
       warm_titel: "Fijn dat je er weer bent. Ontdek wat er nieuw is.",
-      knoptekst: "Simuleer terugkerende bezoeker",
     }),
     cta(
       "06 / ACHTER DE SCHERMEN",

@@ -187,7 +187,7 @@ export function PicCard({
   return (
     <Link href={`/work/${item.slug}`} className="tagged-card">
       <div className={`image-frame ${large ? "tall" : ""}`}>
-        <Photo src={item.cover} alt={item.name} />
+        <Photo src={item.cover} alt={item.alt || item.name} />
         <div className="image-overlay" />
         <div className="image-caption">
           <div>
@@ -209,7 +209,7 @@ export function StoryCard({ post }: { post: Post & { lead?: string } }) {
   return (
     <Link href={`/journal/${post.slug}`} className="article-card">
       <div className="image-frame">
-        <Photo src={post.cover} alt={post.title} />
+        <Photo src={post.cover} alt={post.alt || post.title} />
       </div>
       <div className="meta">
         {post.cat}
@@ -228,7 +228,7 @@ export function PersonCard({ p, prefix = "" }: { p: Person; prefix?: string }) {
   return (
     <div className="person-card">
       <div className="image-frame">
-        <Photo src={p.cover} alt={p.name} />
+        <Photo src={p.cover} alt={p.alt || p.name} />
       </div>
       <h3>{p.name}</h3>
       <p>

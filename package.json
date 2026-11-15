@@ -14,7 +14,8 @@
     "e2e": "node scripts/e2e.mjs",
     "visueel": "node scripts/visueel-vergelijk.mjs",
     "mock-cms": "node scripts/mock-cms.mjs",
-    "naar-main": "bash scripts/naar-main.sh"
+    "naar-main": "bash scripts/naar-main.sh",
+    "lighthouse": "node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -31,6 +32,7 @@
     "axe-core": "^4.14.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "lighthouse": "^12.8.2",
     "prettier": "^3.10.1",
     "typescript": "^5"
   }

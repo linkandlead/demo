@@ -1,9 +1,85 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
-import type { BlokVoorbeeld } from "./BlokVoorbeelden";
+
+type Overzicht = Record<string, { slug: string; bg: string; varianten: string[] }>;
+const BREEDTE = { desktop: 1440, mobiel: 390 } as const;
+
+/** Het echte blok in een iframe (eigen pagina /blokvoorbeeld/…), verkleind tot de breedte van het
+ *  venster. Een iframe rekent met een echt schermformaat, dus "Mobiel" toont de telefoonopmaak.
+ *  Pas bij het kiezen wordt het voorbeeld geladen. */
+function VoorbeeldVenster({
+  src,
+  weergave,
+  wareGrootte,
+  titel,
+  variant,
+}: {
+  src: string;
+  weergave: keyof typeof BREEDTE;
+  wareGrootte: boolean;
+  titel: string;
+  variant: string;
+}) {
+  const venster = useRef<HTMLDivElement>(null);
+  const frame = useRef<HTMLIFrameElement>(null);
+  const [vensterBreedte, setVensterBreedte] = useState(900);
+  const [hoogte, setHoogte] = useState(600);
+  const [geladen, setGeladen] = useState(false);
+  const breedte = BREEDTE[weergave];
+  const schaal = wareGrootte ? 1 : Math.min(1, vensterBreedte / breedte);
+
+  useEffect(() => {
+    const el = venster.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setVensterBreedte(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Het iframe kan al geladen zijn voordat React de onLoad-handler koppelde (eerste weergave).
+  useEffect(() => {
+    if (frame.current?.contentDocument?.readyState === "complete") opLaden();
+  }, [src]);
+
+  function opLaden() {
+    setGeladen(true);
+    const doc = frame.current?.contentDocument;
+    const win = frame.current?.contentWindow as (Window & typeof globalThis) | null;
+    if (!doc || !win) return;
+    // Links in het voorbeeld openen niets; formulieren en knoppen werken wel.
+    doc.addEventListener("click", (e) => {
+      if ((e.target as Element | null)?.closest?.("a")) e.preventDefault();
+    }, true);
+    if (doc.body.dataset.gekoppeld) return;
+    doc.body.dataset.gekoppeld = "1";
+    // Hoogte van het blok zelf (niet van het venster eromheen).
+    const meet = () => setHoogte(Math.max(320, Math.ceil(doc.querySelector(".pv-pagina")?.getBoundingClientRect().height ?? doc.documentElement.scrollHeight)));
+    meet();
+    new win.ResizeObserver(meet).observe(doc.body);
+  }
+
+  return (
+    <div className="pv-venster" ref={venster} aria-label={`Voorbeeld van het blok ${titel}`} data-variant={variant}>
+      <div
+        className={`pv-schaal${weergave === "mobiel" ? " pv-mobiel" : ""}`}
+        style={{ width: breedte * schaal, height: hoogte * schaal }}
+      >
+        <iframe
+          key={src}
+          ref={frame}
+          src={src}
+          title={`Voorbeeld: ${titel} (${variant})`}
+          onLoad={opLaden}
+          className={geladen ? "geladen" : ""}
+          style={{ width: breedte, height: hoogte, transform: `scale(${schaal})` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 // Block Playground — playground() uit het prototype, nu met de echte veldnamen, de officiële
 // varianten uit de PDF en het bijbehorende CMS-bloktype per blok. De preview zelf blijft een
@@ -22,8 +98,7 @@ const ACHTERGRONDEN: Array<[string, string, string]> = [
   ["Diepst", "deepest", "nacht"],
 ];
 
-// De preview is het echte NOVA-blok (zelfde renderer als de site), verkleind weergegeven.
-export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVoorbeeld> }) {
+export function Playground({ voorbeelden }: { voorbeelden: Overzicht }) {
   const [groep, setGroep] = useState(ALLE);
   const [blokNaam, setBlokNaam] = useState("Header (hero)");
   const natuurlijk = (naam: string) =>
@@ -32,6 +107,7 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
   // Formulieren en interactie bekijk je op ware grootte (in de verkleinde weergave zijn velden te klein).
   const interactief = (naam: string) => KERNBLOKKEN.find((b) => b.naam === naam)?.categorie === "Conversie en formulieren";
   const [wareGrootte, setWareGrootte] = useState(false);
+  const [weergave, setWeergave] = useState<keyof typeof BREEDTE>("desktop");
   const [variant, setVariant] = useState<string | null>(null);
 
   const blokken =
@@ -42,7 +118,7 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
   const voorbeeld = voorbeelden[blok.naam];
   // Voorbeeldopstellingen (bv. bij de formulierbouwer) gaan voor de varianten uit de specificatie.
   const opties = voorbeelden[blok.naam]
-    ? Object.keys(voorbeelden[blok.naam].varianten)
+    ? voorbeelden[blok.naam].varianten
     : variantOpties(blok.varianten, blok.naam);
   const huidigeVariant =
     variant && opties.includes(variant) ? variant : opties[0];
@@ -119,31 +195,40 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
                   <option key={o}>{o}</option>
                 ))}
               </select>
-              <button
-                type="button"
-                className={`chip ${wareGrootte ? "active" : ""}`}
-                aria-pressed={wareGrootte}
-                onClick={() => setWareGrootte((w) => !w)}
-              >
-                Ware grootte
-              </button>
+              <div className="chip-row" role="group" aria-label="Schermformaat">
+                {(["desktop", "mobiel"] as const).map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    className={`chip ${weergave === w ? "active" : ""}`}
+                    aria-pressed={weergave === w}
+                    onClick={() => setWeergave(w)}
+                  >
+                    {w === "desktop" ? "Desktop" : "Mobiel"}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className={`chip ${wareGrootte ? "active" : ""}`}
+                  aria-pressed={wareGrootte}
+                  onClick={() => setWareGrootte((w) => !w)}
+                >
+                  Ware grootte
+                </button>
+              </div>
             </div>
           </div>
-          <div className="pv-venster" aria-label={`Voorbeeld van het blok ${blok.naam}`}>
-            <div
-              className={`pv-frame${wareGrootte ? " ware-grootte" : ""}`}
-              data-bg={bgToken}
-              data-variant={huidigeVariant}
-              // Interactie in de preview is echt (formulieren, configurator), maar links openen niets.
-              onClickCapture={(e) => {
-                if ((e.target as HTMLElement).closest("a")) e.preventDefault();
-              }}
-            >
-              {voorbeeld?.varianten[huidigeVariant] ?? (
-                <div className="demo-note">Voor dit blok is nog geen voorbeeld beschikbaar.</div>
-              )}
-            </div>
-          </div>
+          {voorbeeld ? (
+            <VoorbeeldVenster
+              src={`/blokvoorbeeld/${voorbeeld.slug}?variant=${encodeURIComponent(huidigeVariant)}&bg=${bgToken}`}
+              weergave={weergave}
+              wareGrootte={wareGrootte}
+              titel={blok.naam}
+              variant={huidigeVariant}
+            />
+          ) : (
+            <div className="demo-note">Voor dit blok is nog geen voorbeeld beschikbaar.</div>
+          )}
           <div className="block-details">
             <div>
               <strong>CMS-blok</strong>

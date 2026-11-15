@@ -12,7 +12,6 @@ import { OproepSectie } from "./Footer";
 // kolommen, soort); velden met "_" bestaan niet in het CMS en sturen alleen de vormgeving van de preview.
 
 type Inhoud = Record<string, unknown>;
-export type BlokVoorbeeld = { bg: string; varianten: Record<string, ReactNode> };
 
 const m = (naam: string) => `/media/${naam}.webp`;
 const uitBlauwdruk = (type: string, slug?: string): Blok | undefined =>
@@ -253,25 +252,49 @@ function variantPatch(type: string, variant: string, c: Inhoud): Inhoud {
 
 const VOORBEELDPAGINA: PaginaInhoud = { slug: "/blokvoorbeeld", titel: "", beschrijving: "", blokken: [], bron: "blauwdruk" };
 
-export function blokVoorbeelden(): Record<string, BlokVoorbeeld> {
-  const uit: Record<string, BlokVoorbeeld> = {};
+/** Slug van een bloknaam in de URL van de voorbeeldpagina, bv. "Header (hero)" → "header-hero". */
+export const blokSlug = (naam: string) =>
+  naam
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const typeVan = (naam: string, cmsType: string | null) => cmsType ?? (naam === "Collectie (lijst)" ? "collectie_lijst" : "");
+
+/** Per blok: de natuurlijke achtergrond en de varianten (of voorbeeldopstellingen) die er zijn. */
+export function voorbeeldOverzicht(): Record<string, { slug: string; bg: string; varianten: string[] }> {
+  const uit: Record<string, { slug: string; bg: string; varianten: string[] }> = {};
   for (const k of KERNBLOKKEN) {
-    const type = k.cmsType ?? (k.naam === "Collectie (lijst)" ? "collectie_lijst" : "");
+    const type = typeVan(k.naam, k.cmsType);
     const b = basis(type);
     if (!b) continue;
-    const varianten: Record<string, ReactNode> = {};
     const opstellingen = VOORBEELDOPSTELLINGEN[type];
-    for (const variant of opstellingen ? Object.keys(opstellingen) : variantOpties(k.varianten, k.naam)) {
-      const patch = opstellingen ? opstellingen[variant] : variantPatch(type, variant, b.content);
-      const blok: Blok = { ...b, content: { ...b.content, ...patch } };
-      varianten[variant] =
-        type === "cta" ? (
-          <OproepSectie oproep={blok} />
-        ) : (
-          <Blokken pagina={{ ...VOORBEELDPAGINA, blokken: [blok] }} blokken={[blok]} />
-        );
-    }
-    uit[k.naam] = { bg: b.bg ?? "wit", varianten };
+    uit[k.naam] = {
+      slug: blokSlug(k.naam),
+      bg: b.bg ?? "wit",
+      varianten: opstellingen ? Object.keys(opstellingen) : variantOpties(k.varianten, k.naam),
+    };
   }
   return uit;
+}
+
+/** Het voorbeeldblok voor een blok-slug en variant, gerenderd met de echte NOVA-renderer. */
+export function BlokVoorbeeld({ slug, variant }: { slug: string; variant: string }): ReactNode {
+  const k = KERNBLOKKEN.find((x) => blokSlug(x.naam) === slug);
+  if (!k) return null;
+  const type = typeVan(k.naam, k.cmsType);
+  const b = basis(type);
+  if (!b) return null;
+  const opstellingen = VOORBEELDOPSTELLINGEN[type];
+  const varianten = opstellingen ? Object.keys(opstellingen) : variantOpties(k.varianten, k.naam);
+  const gekozen = varianten.includes(variant) ? variant : varianten[0];
+  const patch = opstellingen ? opstellingen[gekozen] : variantPatch(type, gekozen, b.content);
+  const blok: Blok = { ...b, content: { ...b.content, ...patch } };
+  return type === "cta" ? (
+    <OproepSectie oproep={blok} />
+  ) : (
+    <Blokken pagina={{ ...VOORBEELDPAGINA, blokken: [blok] }} blokken={[blok]} />
+  );
 }

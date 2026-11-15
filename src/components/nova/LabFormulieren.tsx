@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { zichtbaar, type Veld } from "@/lib/lead/veldvoorwaarde";
 
 // Formulierbouwer, review- en NPS-formulier (CMS-blokken formulier_bouwer, review_verzamelen en
 // enquete). Inzendingen gaan naar /api/inzending en worden opgeslagen in de NOVA-demodatabase;
@@ -44,7 +45,8 @@ function Fout({ id, tekst }: { id: string; tekst?: string }) {
   ) : null;
 }
 
-export type Veld = { label: string; type: string; opties: string[]; verplicht: boolean };
+export type { Veld } from "@/lib/lead/veldvoorwaarde";
+
 
 const sleutel = (label: string, i: number) => `veld-${i}-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
@@ -53,13 +55,17 @@ export function FormulierBouwer({
   knoptekst,
   voetnoot,
   bevestiging,
+  naVerzenden,
 }: {
   velden: Veld[];
   knoptekst: string;
   voetnoot: string;
   bevestiging: string;
+  naVerzenden?: string;
 }) {
   const [status, setStatus] = useState<Status>(null);
+  // Huidige antwoorden per label, voor velden met "toon_als".
+  const [antwoorden, setAntwoorden] = useState<Record<string, string>>({});
   const [fouten, setFouten] = useState<Record<string, string>>({});
   const [bezig, setBezig] = useState(false);
 
@@ -70,6 +76,7 @@ export function FormulierBouwer({
     const nieuw: Record<string, string> = {};
     const gegevens: Record<string, string> = {};
     velden.forEach((v, i) => {
+      if (!zichtbaar(v, antwoorden)) return;
       const id = sleutel(v.label, i);
       const waarde = String(fd.get(id) ?? "").trim();
       if (v.verplicht && !waarde) nieuw[id] = `Vul “${v.label}” in.`;
@@ -87,16 +94,30 @@ export function FormulierBouwer({
     const r = await verstuurInzending({ soort: "formulier", gegevens, _website: fd.get("_website") }, bevestiging);
     setBezig(false);
     setStatus(r.status);
-    if (r.status.soort === "ok") form.reset();
+    if (r.status.soort === "ok") {
+      form.reset();
+      setAntwoorden({});
+      if (naVerzenden && /^\/(?!\/)/.test(naVerzenden)) window.location.assign(naVerzenden);
+    }
   }
 
   return (
-    <form className="form-grid" onSubmit={verstuur} noValidate>
+    <form
+      className="form-grid"
+      onSubmit={verstuur}
+      noValidate
+      onChange={(e) => {
+        const el = e.target as unknown as HTMLInputElement;
+        const i = velden.findIndex((v, k) => sleutel(v.label, k) === el.name);
+        if (i >= 0) setAntwoorden((a) => ({ ...a, [velden[i].label]: el.value }));
+      }}
+    >
       <div className="honeypot" aria-hidden="true">
         <label htmlFor="fb-website">Laat dit veld leeg</label>
         <input id="fb-website" name="_website" tabIndex={-1} autoComplete="off" />
       </div>
       {velden.map((v, i) => {
+        if (!zichtbaar(v, antwoorden)) return null;
         const id = sleutel(v.label, i);
         const aria = {
           "aria-invalid": fouten[id] ? true : undefined,

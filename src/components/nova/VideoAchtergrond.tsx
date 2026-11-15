@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 export function VideoAchtergrond({
   src,
   mobielSrc,
+  middelSrc,
   poster,
   mobielPoster,
   label,
@@ -22,6 +23,8 @@ export function VideoAchtergrond({
 }: {
   src: string;
   mobielSrc?: string;
+  /** Kleinere liggende versie voor schermen tot 1366 px breed. */
+  middelSrc?: string;
   poster?: string;
   mobielPoster?: string;
   label: string;
@@ -56,7 +59,8 @@ export function VideoAchtergrond({
         if (e.isIntersecting && !v.dataset.handmatig && !rustig) speel();
         else if (!e.isIntersecting && !v.paused) v.pause();
       },
-      { threshold: 0.2 },
+      // Begint iets vóór het blok in beeld komt, zodat het eerste beeld er al is.
+      { threshold: 0, rootMargin: "200px 0px" },
     );
     io.observe(v);
     return () => {
@@ -101,12 +105,14 @@ export function VideoAchtergrond({
         muted
         loop
         playsInline
-        preload="metadata"
+        // Bovenaan de pagina alvast de metadata; lager op de pagina pas laden als hij bijna in beeld is.
+        preload={direct ? "metadata" : "none"}
         poster={poster}
         aria-label={label}
         style={stijl}
       >
         {mobielSrc ? <source media="(max-width: 760px)" src={mobielSrc} type="video/mp4" /> : null}
+        {middelSrc ? <source media="(max-width: 1366px)" src={middelSrc} type="video/mp4" /> : null}
         <source src={src} type={/\.webm(\?|$)/i.test(src) ? "video/webm" : "video/mp4"} />
       </video>
       {overlay === "licht" || overlay === "sterk" ? (

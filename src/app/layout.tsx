@@ -28,9 +28,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     .map(([k, v]) => `${k}:${v}`)
     .join(";")}}`;
   return (
-    <html lang="nl">
+    <html lang="nl" suppressHydrationWarning>
       <head>
         <style id="huisstijl-cms">{huisstijl}</style>
+        {/* In een iframe (blokvoorbeeld in de blokkenbibliotheek) alleen het blok tonen, vóór de eerste weergave. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "if(window.self!==window.top)document.documentElement.classList.add('in-frame')",
+          }}
+        />
       </head>
       <body>
         <a className="skip-link" href="#app">

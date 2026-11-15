@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { verstuurInzending } from "./LabFormulieren";
 
 // Configurator (calcPrice) en de drie "smart interactions" uit lab() van het prototype.
-export type ConfigOptie = { label: string; prijs: number };
+export type ConfigOptie = { label: string; prijs: number; toelichting?: string; standaard?: boolean };
 
 export function Configurator({
   opties,
@@ -19,7 +19,7 @@ export function Configurator({
   vraagAantal: boolean;
   bevestiging: string;
 }) {
-  const [keuze, setKeuze] = useState(0);
+  const [keuze, setKeuze] = useState(() => Math.max(0, opties.findIndex((o) => o.standaard)));
   const [mensen, setMensen] = useState(25);
   const pakket = opties[keuze]?.prijs ?? 0;
   const prijs = pakket + (vraagAantal ? mensen * 20 : 0);
@@ -38,6 +38,9 @@ export function Configurator({
             </option>
           ))}
         </select>
+        {opties[keuze]?.toelichting ? (
+          <span style={{ fontSize: 12, color: "#596476" }}>{opties[keuze].toelichting}</span>
+        ) : null}
       </div>
       {vraagAantal ? (
       <div className="form-field">
@@ -155,6 +158,9 @@ export function Nps({
   );
 }
 
+export type WisselVariant = { eyebrow?: string; titel: string; tekst?: string; knoptekst?: string; knop?: string };
+
+/** A/B-test of personalisatie: twee varianten van dezelfde tegel (CMS-velden _a/_b of warm_*). */
 export function Wissel({
   id,
   eyebrow,
@@ -165,21 +171,28 @@ export function Wissel({
 }: {
   id: string;
   eyebrow: string;
-  a: string;
-  b: string;
+  a: WisselVariant;
+  b: WisselVariant;
   knop: string;
   startMetB?: boolean;
 }) {
   const [eerste, setEerste] = useState(!startMetB);
+  const v = eerste ? a : b;
   return (
     <>
-      <div>
-        <span className="eyebrow">{eyebrow}</span>
-        <h3 style={{ marginTop: 12 }} id={id} aria-live="polite">
-          {eerste ? a : b}
+      <div aria-live="polite">
+        <span className="eyebrow">{v.eyebrow || eyebrow}</span>
+        <h3 style={{ marginTop: 12 }} id={id}>
+          {v.titel}
         </h3>
+        {v.tekst ? <p style={{ marginTop: 10 }}>{v.tekst}</p> : null}
+        {v.knop && v.knoptekst && /^(\/|#|https:\/\/)/.test(v.knop) ? (
+          <a className="meta" href={v.knop} style={{ display: "inline-block", marginTop: 10, textDecoration: "underline" }}>
+            {v.knoptekst} ↗
+          </a>
+        ) : null}
       </div>
-      <button className="btn btn-dark" onClick={() => setEerste((v) => !v)}>
+      <button className="btn btn-dark" onClick={() => setEerste((x) => !x)}>
         {knop}
       </button>
     </>

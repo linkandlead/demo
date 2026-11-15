@@ -269,35 +269,47 @@ const npsOk = await page
   .then(() => true, () => false);
 check("NPS: score en toelichting worden opgeslagen", npsOk);
 
-// Blokkenverkenner: de preview is het echte NOVA-blok en volgt de gekozen variant
+// Blokkenverkenner: het voorbeeld is het echte blok in een iframe (/blokvoorbeeld/…), per variant
 await page.goto(SITE + "/playground", { waitUntil: "load" });
+const voorbeeld = () => page.frameLocator(".pv-venster iframe");
 await page.getByLabel("Kies variant").selectOption("achtergrondbeeld");
+await voorbeeld().locator(".feature-media").waitFor({ timeout: 10000 }).catch(() => {});
 check(
   "blokkenverkenner: header 'achtergrondbeeld' toont de echte achtergrondhero",
-  (await page.locator(".pv-frame .feature-media").count()) === 1,
+  (await voorbeeld().locator(".feature-media").count()) === 1,
+);
+check(
+  "blokkenverkenner: in het voorbeeld geen siteheader",
+  !(await voorbeeld().locator(".site-header").isVisible().catch(() => false)),
 );
 await page.getByLabel("Kies variant").selectOption("beeld links");
-check("blokkenverkenner: header 'beeld links' toont beeld links", (await page.locator(".pv-frame .hero-split").count()) === 1);
+await voorbeeld().locator(".hero-split").waitFor({ timeout: 10000 }).catch(() => {});
+check("blokkenverkenner: header 'beeld links' toont beeld links", (await voorbeeld().locator(".hero-split").count()) === 1);
+await page.getByRole("button", { name: "Mobiel", exact: true }).click();
+check("blokkenverkenner: mobiele weergave is 390 px breed", (await page.locator(".pv-venster iframe").getAttribute("style"))?.includes("width: 390px"));
+await page.getByRole("button", { name: "Desktop", exact: true }).click();
 await page.locator(".block-list button", { hasText: "Artikelen" }).first().click();
-check("blokkenverkenner: Artikelen toont echte artikelkaarten", (await page.locator(".pv-frame .article-card").count()) >= 3);
+await voorbeeld().locator(".article-card").first().waitFor({ timeout: 10000 }).catch(() => {});
+check("blokkenverkenner: Artikelen toont echte artikelkaarten", (await voorbeeld().locator(".article-card").count()) >= 3);
 await page.locator(".block-list button", { hasText: "Kaartenrij" }).first().click();
 await page.getByLabel("Kies variant").selectOption("4 kolommen");
-check("blokkenverkenner: Kaartenrij '4 kolommen' toont vier kaarten", (await page.locator(".pv-frame .info-tile").count()) === 4);
-
+await voorbeeld().locator(".info-tile").nth(3).waitFor({ timeout: 10000 }).catch(() => {});
+check("blokkenverkenner: Kaartenrij '4 kolommen' toont vier kaarten", (await voorbeeld().locator(".info-tile").count()) === 4);
 await page.locator(".block-list button", { hasText: "Formulierbouwer" }).first().click();
 check(
   "blokkenverkenner: formulierbouwer opent op ware grootte met voorbeeldopstellingen",
-  (await page.locator(".pv-frame.ware-grootte").count()) === 1 &&
+  (await page.getByRole("button", { name: "Ware grootte" }).getAttribute("aria-pressed")) === "true" &&
     (await page.getByLabel("Kies variant").locator("option", { hasText: "Offerteaanvraag" }).count()) === 1,
 );
 await page.getByLabel("Kies variant").selectOption("Offerteaanvraag");
-await page.locator(".pv-frame").getByRole("button", { name: /Vraag een offerte aan/ }).click();
+await voorbeeld().getByRole("button", { name: /Vraag een offerte aan/ }).click();
 check(
-  "blokkenverkenner: leeg versturen toont foutmeldingen in de preview",
-  (await page.locator('.pv-frame [aria-invalid="true"]').count()) >= 4,
+  "blokkenverkenner: leeg versturen toont foutmeldingen in het voorbeeld",
+  (await voorbeeld().locator('[aria-invalid="true"]').count()) >= 4,
 );
 await page.locator(".block-list button", { hasText: "Review verzamelen" }).first().click();
-check("blokkenverkenner: reviewformulier met sterren", (await page.locator(".pv-frame .sterren-rij button").count()) === 5);
+await voorbeeld().locator(".sterren-rij button").first().waitFor({ timeout: 10000 }).catch(() => {});
+check("blokkenverkenner: reviewformulier met sterren", (await voorbeeld().locator(".sterren-rij button").count()) === 5);
 
 // Homepage: videoblok uit het CMS (Header met media_type video)
 await page.goto(SITE + "/", { waitUntil: "load" });

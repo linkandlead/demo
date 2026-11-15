@@ -31,7 +31,8 @@ export async function laadCms(): Promise<CmsStatus> {
     const res = await fetch(`${url}/api/cms/content`, {
       headers: { authorization: `Bearer ${token}` },
       // De CMS-API cachet zelf 60s; we sluiten daarop aan.
-      next: { revalidate: 60 },
+      // Tag "cms": de webhook /api/cms-webhook ververst direct na publiceren in het CMS.
+      next: { revalidate: 60, tags: ["cms"] },
     });
     if (!res.ok)
       return {

@@ -31,6 +31,7 @@ export type Case = {
   /** Uit het CMS (citaat / schakels); leeg in de demodata. */
   statement?: string;
   diensten?: string[];
+  alt?: string;
 };
 export type Post = {
   slug: string;
@@ -38,8 +39,9 @@ export type Post = {
   cat: string;
   time: string;
   cover: string;
+  alt?: string;
 };
-export type Person = { name: string; role: string; cover: string; bio?: string };
+export type Person = { name: string; role: string; cover: string; bio?: string; alt?: string };
 export type Space = {
   slug: string;
   name: string;

@@ -18,6 +18,7 @@ export function DemoFormulier({
   demoTekst,
   opslaan,
   bevestiging,
+  naVerzenden,
 }: {
   children: ReactNode;
   className?: string;
@@ -26,6 +27,8 @@ export function DemoFormulier({
   opslaan?: "contact" | "nieuwsbrief";
   /** Eigen bevestigingstekst (CMS-veld bevestigingstekst) na een geslaagde inzending. */
   bevestiging?: string;
+  /** CMS-veld na_verzenden: na een geslaagde inzending naar dit (interne) pad, bv. /bedankt. */
+  naVerzenden?: string;
 }) {
   const [status, setStatus] = useState<{
     soort: "ok" | "fout";
@@ -82,6 +85,7 @@ export function DemoFormulier({
           tekst: data.ok && bevestiging ? bevestiging : data.melding,
         });
       if (data.ok) form.reset();
+      if (data.ok && naVerzenden && /^\/(?!\/)/.test(naVerzenden)) window.location.assign(naVerzenden);
     } catch {
       setStatus({
         soort: "fout",

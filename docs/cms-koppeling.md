@@ -85,3 +85,22 @@ geldig token) en maakt testtokens op `/test/voorvertoningstoken`. Met de site op
 ```bash
 ALLEEN=voorvertoning SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e
 ```
+
+## Welke blokvelden NOVA gebruikt
+
+NOVA leest alle velden die een redacteur van Demo Klant in het CMS ziet, waaronder: kruimelpad
+(handmatig, of `auto_kruimelpad` = aan), het nieuwsbriefformulier in de header (`extras` =
+formulier), een tweede knop en "inbegrepen"-punten bij prijskaarten, bijschriften bij portfolio,
+pictogrammen (`icoon`) bij kaarten en reeksen, `slotregel`/`belofte`/`uitkomsten` bij een reeks, de
+volledige A- en B-variant van de A/B-test, de "terugkerende bezoeker"-velden van personalisatie,
+`na_verzenden` bij formulieren, `toon_als` in de formulierbouwer, `toelichting`/`standaard_aan` bij
+de configurator, afspraakgegevens en tijdzone bij agenda en aftelklok, en `foto_alt` bij collecties.
+Knopvelden (`knop`/`knoptekst`) op Team, Artikelen, Partner uitgelicht, Flexibel en Kaarten gaan
+vóór de vaste NOVA-knoppen.
+
+Bewust **niet** gebruikt:
+- velden met `alleenHoofdsite` (alleen voor linkandlead.nl; Demo Klant ziet ze niet);
+- `meld_naar` en `sleutel` van de formulierbouwer (NOVA mailt nooit en kent geen CMS-leadvelden);
+- `ai_titel`/`ai_intro` bij Team, `breedte` bij een reeks en `toont_als` bij de configurator
+  (de NOVA-configurator is één keuzelijst);
+- interne editorvelden zoals `_v` en `_variant`.

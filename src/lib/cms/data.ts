@@ -67,6 +67,7 @@ export async function getCases(): Promise<Collectie<Case>> {
         cover: cmsMedia(r.foto),
         desc: s(r.uitdaging),
         statement: s(r.citaat),
+        alt: s(r.foto_alt) || undefined,
         diensten: Array.isArray(r.schakels) ? r.schakels.map(s).filter(Boolean) : [],
       }))
       .filter((c) => c.name),
@@ -114,6 +115,7 @@ export async function getPosts(): Promise<Collectie<PostDetail>> {
         cat: s(r.rubriek).toUpperCase(),
         time: leestijd(s(r.hoofdtekst)),
         cover: cmsMedia(r.foto),
+        alt: s(r.foto_alt) || undefined,
         lead: s(r.samenvatting),
         body: s(r.hoofdtekst)
           .split(/\n\s*\n/)
@@ -155,6 +157,7 @@ export async function getPeople(): Promise<Collectie<Person>> {
         role: s(r.functie),
         cover: cmsMedia(r.foto),
         bio: s(r.tekst) || undefined,
+        alt: s(r.foto_alt) || undefined,
       }))
       .filter((p) => p.name),
   };
