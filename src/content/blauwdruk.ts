@@ -293,7 +293,7 @@ const verhalen: BlauwdrukPagina = {
     ),
     blok("artikelen_grid", "mist", {
       eyebrow: "NIEUWSTE VERHALEN",
-      titel: "Frisse perspectieven. Nieuwe mogelijkheden.",
+      titel: "Frisse perspectieven. Nieuwe mogelijkheden.\nZes verhalen om even anders naar de wereld te kijken.",
       maximaal: 12,
     }),
     blok("formulier", "limoenlicht", {
@@ -352,7 +352,7 @@ const belevingen: BlauwdrukPagina = {
       ],
     }),
     blok("sprekers", "wit", {
-      titel: "Ontmoet de denkers achter de ideeën.",
+      titel: "OP HET PODIUM\nOntmoet de denkers achter de ideeën.",
       sub: "Vier fictieve sprekers met elk hun eigen invalshoek.",
       items: [
         { naam: "Maya Chen", tekst: "Ontwerpen voor morgen", foto: m("comm_face") },
@@ -362,8 +362,10 @@ const belevingen: BlauwdrukPagina = {
       ],
     }),
     blok("prijskaarten", "nacht", {
-      titel: "Jouw beleving, op jouw manier.",
-      intro: "Vergelijk voorbeeldtickets. Deze prijzen zijn fictief; bestellen of betalen is niet mogelijk in de demo.",
+      titel: "KIES JE BELEVING\nJouw beleving, op jouw manier.",
+      // Eerste regel naast de kop; volgende regels als opmerking onder de kaarten.
+      intro:
+        "Vergelijk voorbeeldtickets. Deze prijzen zijn fictief; bestellen of betalen is niet mogelijk in de demo.\nFictieve prijzen en fictief evenement. Er worden geen tickets verkocht.",
       items: [
         { naam: "Dagkaart", prijs: "€ 49", voordeel: "Toegang tot één programmadag en de centrale expo.", knoptekst: "Bekijk tickets" },
         {
@@ -418,8 +420,8 @@ const eventPaginas: BlauwdrukPagina[] = evenementen.map((e) => ({
       stappen: e.dagen.flatMap((dag) => dag.items.map(([tijd, tekst]) => ({ label: tijd, titel: dag.titel, tekst }))),
     }),
     blok("prijskaarten", "mist", {
-      titel: "Kies je beleving.",
-      intro: e.disclaimer,
+      titel: "JOUW TICKET\nKies je beleving.",
+      intro: `Demoprijzen: bestellen of betalen is niet mogelijk.\n${e.disclaimer}`,
       items: e.tickets.map(([naam, prijs, voordeel], i) => ({
         naam,
         prijs,
@@ -475,7 +477,7 @@ const ruimtes: BlauwdrukPagina = {
       })),
     }),
     blok("statistieken", "mist", {
-      titel: "Elk idee verdient een eigen ruimte.",
+      titel: "RUIMTE OM TE CREËREN\nElk idee verdient een eigen ruimte.",
       intro: "Drie voorbeeldruimtes, ieder met een andere sfeer. Capaciteiten zijn alleen voorbeeldgegevens voor deze demo.",
       items: [
         { waarde: "3", label: "Fictieve ruimtes" },
@@ -575,7 +577,7 @@ const community: BlauwdrukPagina = {
       ],
     }),
     blok("mensen", "mist", {
-      titel: "De mensen achter de mogelijkheden.",
+      titel: "ONZE MAKERS\nDe mensen achter de mogelijkheden.",
       intro: "Vier makers. Verschillende disciplines. Eén gedeelde nieuwsgierigheid.",
       maximaal: 4,
     }),
@@ -591,7 +593,8 @@ const community: BlauwdrukPagina = {
         "Maak kennis met Atelier North, een fictieve partner die verbeelding verbindt met ruimtelijk ontwerp. Samen onderzoeken we hoe plekken niet alleen functioneel, maar ook betekenisvol kunnen zijn.",
     }),
     blok("citaten_carrousel", "wit", {
-      titel: "Kleine momenten. Grote gesprekken.",
+      titel:
+        "STEMMEN UIT DE COMMUNITY\nKleine momenten. Grote gesprekken.\nWat fictieve communityleden zeggen over de NOVA-ervaring. De citaten zijn verzonnen en worden alleen getoond als CMS-demovulling.",
       items: citaten.map(([citaat, naam]) => ({ citaat, naam, functie: "fictief teamlid, voorbeeldcitaat" })),
     }),
     cta(
@@ -839,9 +842,23 @@ const sport: BlauwdrukPagina = {
       eyebrow: "VOLGENDE WEDSTRIJD",
       titel: "De volgende wedstrijd begint hier.",
       intro: "NOVA United tegen Atlas FC. Geen live wedstrijdfeed; de datum is voorbeeldcontent.",
-      kolommen: [{ label: "Datum" }, { label: "Wedstrijd" }],
+      // Kolom 2 is ook de kop boven het programma; kolom 3–5 vullen de uitgelichte rij (markeer).
+      kolommen: [
+        { label: "Datum" },
+        { label: "Het programma · het hele seizoen in één oogopslag" },
+        { label: "Kop" },
+        { label: "Toelichting" },
+        { label: "Thuis of uit" },
+      ],
+      markeer: "Atlas FC",
       rijen: [
-        { c1: "24 APR", c2: "NOVA United — Atlas FC · thuis · 16.00 uur" },
+        {
+          c1: "24 APR",
+          c2: "NOVA United — Atlas FC · thuis · 16.00 uur",
+          c3: "NOVA / ATLAS",
+          c4: "Voorbeeldwedstrijd · 24 april 2027 · 16.00 uur",
+          c5: "THUIS",
+        },
         { c1: "1 MEI", c2: "Harbor City — NOVA United · uit · 14.30 uur" },
         { c1: "8 MEI", c2: "NOVA United — Riverside SC · thuis · 15.00 uur" },
       ],

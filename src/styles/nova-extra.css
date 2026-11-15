@@ -622,3 +622,4 @@ button.btn:disabled {
   background-size: 64px 64px, 64px 64px, 100% 100%; }
 .kaart-pin { position: absolute; left: 52%; top: 44%; width: 30px; height: 30px; background: var(--night); border: 6px solid var(--lime); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
 @media (max-width: 760px) { .kaart-blok { grid-template-columns: 1fr; } .kaart-visual { height: 240px; } }
+.ticket-noot { font-size: 12px; color: #cbd2e0; }

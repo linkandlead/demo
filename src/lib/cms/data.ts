@@ -167,7 +167,7 @@ export async function cmsRecords(soort: string): Promise<Record<string, unknown>
   return rij?.length ? rij : null;
 }
 
-export type Partner = { naam: string; vak: string; tekst: string; uitgelicht: boolean };
+export type Partner = { naam: string; vak: string; tekst: string; uitgelicht: boolean; quote?: string };
 
 /** Partners (CMS-collectie "partners"); zonder CMS de fictieve partners uit de teksten. */
 export async function getPartners(): Promise<Collectie<Partner>> {
@@ -176,7 +176,13 @@ export async function getPartners(): Promise<Collectie<Partner>> {
   if (!rij)
     return {
       bron: "demo",
-      items: demoPartners.map(([naam, vak, tekst], i) => ({ naam, vak, tekst, uitgelicht: i === 0 })),
+      items: demoPartners.map(([naam, vak, tekst], i) => ({
+        naam,
+        vak,
+        tekst,
+        uitgelicht: i === 0,
+        quote: i === 0 ? "Mooie dingen ontstaan als werelden elkaar ontmoeten." : undefined,
+      })),
     };
   return {
     bron: "cms",
@@ -186,6 +192,7 @@ export async function getPartners(): Promise<Collectie<Partner>> {
         vak: s(r.branche),
         tekst: s(r.tagline) || s(r.over_tekst),
         uitgelicht: r.uitgelicht === true,
+        quote: s(r.quote) || undefined,
       }))
       .filter((p) => p.naam),
   };

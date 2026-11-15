@@ -122,3 +122,8 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   fictieve, als voorbeeld gemarkeerde gegevens (`src/content/voorbeelddata.ts`).
 - Pulse Festival-hero (`feature-media`): ruimte onder de knoppen, compactere kop en een extra
   verloop onderaan; het actieve menu-item staat niet langer 4px hoger dan de rest.
+- Overige pagina's: alle onderdelen van vóór de CMS-koppeling zijn terug (gecontroleerd met een
+  tekstvergelijking per pagina tegen commit 502b140). Kopjes en toelichtingen staan in het CMS
+  (titelregels, intro-regels, tabelkolommen, partnerquote); enkele navigatieknoppen staan vast
+  (zie docs/cms-instructie.md). Enige verschil: de tegels bij de citaten tonen het blokkopje
+  "STEMMEN UIT DE COMMUNITY" (meervoud) in plaats van "STEM UIT DE COMMUNITY".
