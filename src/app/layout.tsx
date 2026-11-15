@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DemoProvider } from "@/components/nova/DemoMode";
 import { SiteHeader } from "@/components/nova/SiteHeader";
+import { VoorbeeldBalk } from "@/components/nova/VoorbeeldBalk";
 import { cmsInfo, siteInstellingen } from "@/lib/cms/data";
 import "@/styles/nova.css";
 import "@/styles/nova-extra.css";
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
         </DemoProvider>
+        <VoorbeeldBalk />
       </body>
     </html>
   );
