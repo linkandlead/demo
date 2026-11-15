@@ -1,6 +1,7 @@
 // End-to-end-controle van NOVA (Playwright, globaal geïnstalleerd) + axe-core toegankelijkheid.
 //   SITE=http://localhost:3000 [SITE_CMS=http://localhost:3001 LEADS_LOG=... MOCK_CMS=http://localhost:4000] node scripts/e2e.mjs
 //   Alleen de voorvertoning (geen formulieren, geen Supabase): ALLEEN=voorvertoning SITE_CMS=… MOCK_CMS=…
+//   Alleen bewerken en opslaan (B-090, geen Supabase):          ALLEEN=bewerken SITE_CMS=… MOCK_CMS=…
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
@@ -60,6 +61,13 @@ await ctx.route(/\/api\/(inzending|aanvraag)$/, async (route) => {
   } catch {}
   await route.continue({ postData: JSON.stringify({ ...data, _testcode: TESTCODE }) });
 });
+
+if (SITE_CMS && process.env.ALLEEN === "bewerken") {
+  await bewerken();
+  await browser.close();
+  console.log(`\n${ok} geslaagd, ${fout} mislukt`);
+  process.exit(fout ? 1 : 0);
+}
 
 if (SITE_CMS && process.env.ALLEEN === "voorvertoning") {
   await voorvertoning();
@@ -433,9 +441,116 @@ async function voorvertoning() {
   );
 }
 
+// Bewerken op de site (linkandlead-cms B-090): bewerktoken in de voorvertoningslink → httpOnly-cookie →
+// bewerkbalk bovenaan → tekst wijzigen → Opslaan via /api/cms-bewerken (eigen server) → concept in het nep-CMS.
+async function bewerken() {
+  const MOCK = process.env.MOCK_CMS ?? "http://localhost:4000";
+  console.log("Bewerken en opslaan (bewerkbalk, /api/cms-bewerken, nep-CMS)");
+  const token = await (await fetch(`${MOCK}/test/voorvertoningstoken`)).text();
+  const bt = await (await fetch(`${MOCK}/test/bewerktoken?pad=/`)).text();
+  const link = `${SITE_CMS}/__voorvertoning?pad=%2F&token=${encodeURIComponent(token)}&bewerken=${encodeURIComponent(bt)}`;
+
+  const los = await fetch(link, { redirect: "manual" });
+  const koek = los.headers.getSetCookie().find((c) => c.startsWith("nova_bewerken=")) ?? "";
+  check("bewerktoken in een httpOnly-, SameSite=Lax-cookie; niet in de doorverwijzing", /httponly/i.test(koek) && /samesite=lax/i.test(koek) && !(los.headers.get("location") ?? "").includes("bewerken"));
+  const zonder = await fetch(`${SITE_CMS}/__voorvertoning?pad=%2F&token=${encodeURIComponent(token)}&bewerken=vervalst`, { redirect: "manual" });
+  check("een bewerktoken met een verkeerde vorm wordt niet bewaard", !zonder.headers.getSetCookie().some((c) => c.startsWith("nova_bewerken=") && !/max-age=0|expires=thu, 01 jan 1970/i.test(c)));
+
+  const bctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const bp = await bctx.newPage();
+  await bp.goto(link, { waitUntil: "load" });
+  await bp.waitForSelector(".bewerk-balk");
+  const balk = bp.locator(".bewerk-balk");
+  check('bewerkbalk bovenaan: "Je bewerkt deze pagina live"', (await balk.textContent()).includes("Je bewerkt deze pagina live") && (await balk.boundingBox()).y === 0);
+  check(
+    "knoppen Opslaan, Openen in de editor en Stoppen; status in een live-regio",
+    (await bp.getByRole("button", { name: "Opslaan" }).count()) === 1 &&
+      (await bp.getByRole("link", { name: "Openen in de editor" }).count()) === 1 &&
+      (await bp.getByRole("link", { name: "Stoppen" }).count()) === 1 &&
+      (await bp.locator('.bewerk-status[aria-live="polite"]').count()) === 1,
+  );
+  check("de balk 'Voorbeeld van het concept' valt weg", !(await bp.locator(".voorbeeld-balk").isVisible().catch(() => false)));
+  await bp.waitForFunction(() => document.querySelectorAll("[data-cms-veld]").length > 0);
+  const titel = bp.locator('[data-cms-veld="titel"]', { hasText: "Titel uit Tekst met beeld." });
+  check("platte tekstvelden zijn bewerkbaar (contenteditable, data-cms-veld)", (await titel.count()) === 1 && ["plaintext-only", "true"].includes(await titel.getAttribute("contenteditable")));
+  check("geen token in de HTML", !(await bp.content()).includes(bt));
+
+  // Bezoeker: geen balk, geen bewerkattributen.
+  const bezoeker = await (await fetch(`${SITE_CMS}/`)).text();
+  check("bezoeker: geen bewerkbalk, geen data-cms-veld of -sectie", !bezoeker.includes("bewerk-balk") && !bezoeker.includes("data-cms-veld") && !bezoeker.includes("data-cms-sectie"));
+
+  await titel.click();
+  await bp.keyboard.press("ControlOrMeta+A");
+  await bp.keyboard.type("Nieuwe titel vanaf de site.");
+  await bp.waitForFunction(() => document.querySelector(".bewerk-status")?.textContent?.includes("niet opgeslagen"));
+  check("status: wijziging niet opgeslagen", (await bp.locator(".bewerk-status").textContent()).includes("1 wijziging niet opgeslagen"));
+  await bp.getByRole("button", { name: "Opslaan" }).click();
+  await bp.waitForFunction(() => document.querySelector(".bewerk-status")?.textContent?.includes("Alle wijzigingen opgeslagen"));
+  const opgeslagen = await (await fetch(`${MOCK}/test/bewerkingen`)).json();
+  const laatste = opgeslagen.at(-1);
+  check("opgeslagen als concept in het CMS (via de server van de site)", laatste?.waarde === "Nieuwe titel vanaf de site." && laatste?.pagina === "/" && laatste?.pad?.join(".") === "titel");
+  await bp.reload({ waitUntil: "load" });
+  await bp.waitForSelector(".bewerk-balk");
+  check("na herladen staat het concept er", (await bp.locator("main").textContent()).includes("Nieuwe titel vanaf de site."));
+
+  // CSRF en browserweigering.
+  const verzoek = { pagina: "/", sectie: laatste?.sectie, pad: ["titel"], waarde: "Kwaad", versie: laatste?.versie };
+  const cookie = (await bctx.cookies()).map((c) => `${c.name}=${c.value}`).join("; ");
+  const kwaad = await fetch(`${SITE_CMS}/api/cms-bewerken`, { method: "POST", headers: { "content-type": "application/json", origin: "https://evil.example", cookie }, body: JSON.stringify(verzoek) });
+  check("/api/cms-bewerken weigert een andere Origin (CSRF)", kwaad.status === 403);
+  const geenOrigin = await fetch(`${SITE_CMS}/api/cms-bewerken`, { method: "POST", headers: { "content-type": "application/json", cookie }, body: JSON.stringify(verzoek) });
+  check("/api/cms-bewerken weigert een verzoek zonder Origin", geenOrigin.status === 403);
+  const zonderCookie = await fetch(`${SITE_CMS}/api/cms-bewerken`, { method: "POST", headers: { "content-type": "application/json", origin: new URL(SITE_CMS).origin }, body: JSON.stringify(verzoek) });
+  check("/api/cms-bewerken zonder bewerkcookie: 401", zonderCookie.status === 401);
+  const rechtstreeks = await fetch(`${MOCK}/api/v1/live-bewerken`, { method: "POST", headers: { "content-type": "application/json", origin: new URL(SITE_CMS).origin }, body: JSON.stringify({ ...verzoek, bewerktoken: bt }) });
+  check("het CMS weigert een browserverzoek (Origin) zonder CORS-headers", rechtstreeks.status === 403 && !rechtstreeks.headers.get("access-control-allow-origin"));
+  check("na de weigeringen is er niets extra opgeslagen", (await (await fetch(`${MOCK}/test/bewerkingen`)).json()).length === opgeslagen.length);
+
+  // Conflict: iemand anders bewaart intussen dezelfde sectie (server-naar-server, met de nieuwste versie).
+  const ander = await fetch(`${MOCK}/api/v1/live-bewerken`, {
+    method: "POST",
+    headers: { "content-type": "application/json", authorization: `Bearer ${process.env.MOCK_TOKEN ?? "cms_test"}` },
+    body: JSON.stringify({ ...verzoek, waarde: "Titel van iemand anders.", bewerktoken: bt }),
+  });
+  check("(voorbereiding) een andere bewerker bewaart dezelfde sectie", ander.status === 200);
+  const veld = bp.locator('[data-cms-veld="titel"]', { hasText: "Nieuwe titel vanaf de site." });
+  await veld.click();
+  await bp.keyboard.press("End");
+  await bp.keyboard.type(" Nog meer.");
+  await bp.getByRole("button", { name: "Opslaan" }).click();
+  await bp.waitForSelector(".bewerk-melding.conflict");
+  check("conflict (409): duidelijke melding met de keuze Herladen", (await bp.locator(".bewerk-melding").textContent()).includes("Iemand anders") && (await bp.getByRole("button", { name: "Herladen" }).count()) === 1);
+  await bp.getByRole("button", { name: "Herladen" }).click();
+  await bp.waitForLoadState("load");
+  await bp.waitForSelector(".bewerk-balk");
+  check("na Herladen de nieuwste versie", (await bp.locator("main").textContent()).includes("Titel van iemand anders."));
+
+  // Axe op de balk.
+  await bp.addScriptTag({ path: AXE });
+  const v = await bp.evaluate(async () => (await window.axe.run(".bewerk-balk", { runOnly: ["wcag2a", "wcag2aa"] })).violations.map((x) => x.id));
+  check("bewerkbalk zonder axe-fouten (WCAG 2 A/AA)", v.length === 0, v.join(", "));
+
+  // Mobiel: de balk past en dekt de kop niet af.
+  await bp.setViewportSize({ width: 390, height: 844 });
+  const mb = await balk.boundingBox();
+  const kop = await bp.locator(".site-header").boundingBox();
+  check("mobiel: balk bovenaan, kop eronder", mb.y === 0 && kop.y >= mb.height - 1, `balk ${mb.height}, kop ${kop.y}`);
+  await bp.setViewportSize({ width: 1440, height: 900 });
+
+  await bp.getByRole("link", { name: "Stoppen" }).click();
+  await bp.waitForLoadState("load");
+  check(
+    "Stoppen: geen balk, geen draft-, voorvertonings- of bewerkcookie",
+    (await bp.locator(".bewerk-balk").count()) === 0 &&
+      !(await bctx.cookies()).some((c) => ["__prerender_bypass", "nova_voorvertoning", "nova_bewerken"].includes(c.name)),
+  );
+  await bctx.close();
+}
+
 if (SITE_CMS) {
   console.log("Met CMS-koppeling (nep-CMS met het echte contract)");
   await voorvertoning();
+  await bewerken();
   await page.goto(SITE_CMS + "/", { waitUntil: "load" });
   check(
     "hero-tekst komt uit het CMS",

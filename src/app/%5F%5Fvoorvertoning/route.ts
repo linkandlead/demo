@@ -1,5 +1,6 @@
 import { cookies, draftMode } from "next/headers";
 import type { NextRequest } from "next/server";
+import { BEWERK_COOKIE, bewerktokenSecondenGeldig } from "@/lib/cms/bewerken";
 import { tokenGeldig } from "@/lib/cms/concept";
 import {
   leesVoorvertoningsVerzoek,
@@ -15,6 +16,10 @@ import {
 // op ?pad=/ met een geldig token 200 geeft (redirects volgt het zelf). Zonder geldig token: de gewone
 // pagina, nooit een 404. Het token controleert het CMS zelf via de lees-API (concept: true); de site
 // kent geen geheim. Het token wordt niet gelogd.
+//
+// Bewerken (B-090): staat er ook &bewerken=<bewerktoken> in de link (voor wie de pagina mag bewerken), dan komt
+// dat in een eigen httpOnly-cookie. Alleen /api/cms-bewerken leest het, serverkant; het CMS controleert het bij
+// elke wijziging. Zonder geldig bewerktoken: alleen het voorbeeld, een oud bewerkcookie gaat weg.
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +49,7 @@ export async function GET(request: NextRequest) {
     // Geweigerd: geen draft mode, geen token; door naar de gepubliceerde pagina.
     if (draft.isEnabled) draft.disable();
     if (jar.has(VOORVERTONING_COOKIE)) jar.delete(VOORVERTONING_COOKIE);
+    if (jar.has(BEWERK_COOKIE)) jar.delete(BEWERK_COOKIE);
     return doorsturen(request, veiligPad(zoek.get("pad") || "/") ?? "/");
   }
 
@@ -55,5 +61,16 @@ export async function GET(request: NextRequest) {
     path: "/",
     maxAge: tokenSecondenGeldig(verzoek.token),
   });
+  const bewerken = zoek.get("bewerken");
+  const bewerkSeconden = Math.min(bewerktokenSecondenGeldig(bewerken), tokenSecondenGeldig(verzoek.token));
+  if (bewerken && bewerkSeconden > 0) {
+    jar.set(BEWERK_COOKIE, bewerken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "lax",
+      path: "/",
+      maxAge: bewerkSeconden,
+    });
+  } else if (jar.has(BEWERK_COOKIE)) jar.delete(BEWERK_COOKIE);
   return doorsturen(request, verzoek.pad);
 }

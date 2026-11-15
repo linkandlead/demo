@@ -7,6 +7,7 @@
 // De site kent het geheim niet: alleen het CMS kan het token controleren. Een geldig token geeft in
 // het antwoord `concept: true`; een ongeldig token geeft gewoon de gepubliceerde pagina (`concept: false`).
 
+import { valideerBewerken } from "./bewerken.ts";
 import { isObj, str, type CmsBlok } from "./valideer.ts";
 
 /** Naam van de cookie met het voorvertoningstoken (httpOnly, alleen serverkant gelezen). */
@@ -87,11 +88,18 @@ export function valideerPaginaV1(json: unknown): ConceptPagina | null {
       beschrijving: str(p.beschrijving),
       blokken: (Array.isArray(p.blokken) ? p.blokken : [])
         .filter(isObj)
-        .map((b) => ({
-          type: str(b.type),
-          bg: typeof b.bg === "string" ? b.bg : null,
-          content: isObj(b.inhoud) ? b.inhoud : {},
-        }))
+        .map((b) => {
+          const blok: CmsBlok = {
+            type: str(b.type),
+            bg: typeof b.bg === "string" ? b.bg : null,
+            content: isObj(b.inhoud) ? b.inhoud : {},
+          };
+          // B-090: sectie-id en bewerkbare velden, alleen als het CMS ze meestuurt (in een concept).
+          if (typeof b.id === "string" && /^[0-9a-f-]{36}$/i.test(b.id)) blok.id = b.id;
+          const bewerken = valideerBewerken(b.bewerken);
+          if (blok.id && bewerken) blok.bewerken = bewerken;
+          return blok;
+        })
         .filter((b) => b.type),
     },
   };
