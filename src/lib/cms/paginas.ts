@@ -19,6 +19,7 @@ export type PaginaInhoud = {
   slug: string;
   titel: string;
   beschrijving: string;
+  ogBeeld?: string;
   blokken: Blok[];
   bron: "cms" | "blauwdruk" | "concept";
   /** Bewerkmodus (B-090): een concept uit het CMS én een bewerktoken. Alleen dan krijgen blokken
@@ -57,14 +58,38 @@ export async function slugsOnder(prefix: string): Promise<string[]> {
     .map((s) => s.slice(prefix.length));
 }
 
-/** SEO-titel en -beschrijving per pagina, beheerd in het CMS. Een concept wordt nooit geïndexeerd. */
+/** Deelbeeld: het CMS-veld og_beeld, anders het eerste beeld van de pagina (header, tekst met beeld …). */
+export function deelbeeld(p: Pick<PaginaInhoud, "ogBeeld" | "blokken">): string | undefined {
+  if (p.ogBeeld) return p.ogBeeld;
+  for (const b of p.blokken)
+    for (const veld of ["media_afbeelding", "beeld"]) {
+      const v = str(b.content[veld]);
+      if (/^(https:\/\/|\/media\/)/.test(v)) return v;
+    }
+  return undefined;
+}
+
+/** SEO-titel, -beschrijving en deelgegevens (Open Graph) per pagina, beheerd in het CMS.
+ *  Een concept wordt nooit geïndexeerd. */
 export async function paginaMetadata(slug: string, absoluut = false): Promise<Metadata> {
   const p = await laadPagina(slug);
   if (!p) return {};
   const titel = str(p.titel);
+  const beeld = deelbeeld(p);
   return {
     title: titel ? (absoluut ? { absolute: titel } : titel) : undefined,
     description: p.beschrijving || undefined,
+    alternates: { canonical: slug },
+    openGraph: {
+      type: "website",
+      locale: "nl_NL",
+      siteName: "NOVA",
+      url: slug,
+      title: titel || undefined,
+      description: p.beschrijving || undefined,
+      ...(beeld ? { images: [{ url: beeld, alt: titel }] } : {}),
+    },
+    twitter: { card: beeld ? "summary_large_image" : "summary", title: titel || undefined, description: p.beschrijving || undefined },
     ...(p.bron === "concept" ? { robots: { index: false, follow: false } } : {}),
   };
 }

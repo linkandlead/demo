@@ -806,3 +806,12 @@ body:has(.bewerk-balk) .voorbeeld-balk {
 .pv-pagina { min-height: 100%; }
 /* Binnen een iframe (blokvoorbeeld): alleen het blok, zonder siteheader en demoknop. */
 .in-frame .site-header, .in-frame .mobile-nav, .in-frame .demo-fab, .in-frame .demo-panel, .in-frame .skip-link, .in-frame .tour { display: none !important; }
+
+/* Profielpagina's (makers): foto naast de tekst. */
+.profiel { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 56px; align-items: start; }
+.profiel-foto { height: 560px; }
+.profiel h1.hero-kop { font-size: clamp(56px, 7vw, 110px); line-height: .94; margin: 16px 0 26px; }
+.profiel .body-copy p { font-size: 17px; color: #566171; margin-bottom: 18px; max-width: 60ch; }
+.inner-hero h1.hero-kop { margin: 16px 0 26px; }
+@media (max-width: 760px) { .profiel { grid-template-columns: 1fr; gap: 28px; } .profiel-foto { height: 380px; } }
+.partner-tegel:hover { outline: 2px solid var(--night); outline-offset: -2px; }

@@ -30,6 +30,8 @@ const ROUTES = [
   "/playground/sports",
   "/demo",
   "/one",
+  "/mensen/maya-chen",
+  "/partners/atelier-north",
 ];
 
 let ok = 0,
@@ -318,6 +320,34 @@ check(
 await page.locator(".block-list button", { hasText: "Review verzamelen" }).first().click();
 await voorbeeld().locator(".sterren-rij button").first().waitFor({ timeout: 10000 }).catch(() => {});
 check("blokkenverkenner: reviewformulier met sterren", (await voorbeeld().locator(".sterren-rij button").count()) === 5);
+
+// Vindbaarheid: deelbeeld, sitemap, robots, structured data
+await page.goto(SITE + "/", { waitUntil: "load" });
+check("homepage: deelbeeld (og:image) uit het CMS", !!(await page.locator('meta[property="og:image"]').getAttribute("content")));
+check("homepage: structured data voor de organisatie", (await page.locator('script[type="application/ld+json"]').count()) >= 1);
+const sitemap = await (await fetch(SITE + "/sitemap.xml")).text();
+check("sitemap.xml bevat pagina's, artikelen en profielen", sitemap.includes("/journal/") && sitemap.includes("/mensen/maya-chen") && sitemap.includes("/partners/"));
+const robotsTxt = await (await fetch(SITE + "/robots.txt")).text();
+check("robots.txt houdt de demo buiten zoekmachines", /Disallow: \/\s*$/m.test(robotsTxt), robotsTxt);
+await page.goto(SITE + "/journal/de-kracht-van-immersive-experiences", { waitUntil: "load" });
+check("artikel: structured data Article", (await page.locator('script[type="application/ld+json"]').allTextContents()).some((t) => t.includes('"Article"')));
+
+// Verhalen: rubriekfilter
+await page.goto(SITE + "/journal", { waitUntil: "load" });
+const kaartenVoor = await page.locator(".article-card").count();
+await page.getByRole("group", { name: "Filter op rubriek" }).getByRole("button").nth(1).click();
+const kaartenNa = await page.locator(".article-card").count();
+check("verhalen: rubriekfilter toont alleen die rubriek", kaartenNa > 0 && kaartenNa < kaartenVoor, `${kaartenVoor} → ${kaartenNa}`);
+
+// Profielpagina's
+await page.goto(SITE + "/community", { waitUntil: "load" });
+await page.locator('.people-grid a[href="/mensen/maya-chen"]').first().click();
+await page.waitForURL(/\/mensen\/maya-chen$/);
+check("community → profielpagina van een maker", (await page.locator("h1").textContent())?.includes("Maya Chen"));
+await page.goto(SITE + "/community", { waitUntil: "load" });
+await page.locator('a[href^="/partners/"]').first().click();
+await page.waitForURL(/\/partners\//);
+check("community → profielpagina van een partner", (await page.locator("h1").count()) === 1);
 
 // Homepage: videoblok uit het CMS (Header met media_type video)
 await page.goto(SITE + "/", { waitUntil: "load" });

@@ -14,6 +14,7 @@ import { Aftelklok } from "./Aftelklok";
 import { BlokGrens } from "./BlokGrens";
 import { VideoAchtergrond } from "./VideoAchtergrond";
 import { VIDEO } from "@/content/media";
+import { persoonSlug } from "@/lib/slug";
 import { CMS_MEDIA } from "@/content/cms-media";
 import { merk } from "@/content/blauwdruk";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
@@ -24,6 +25,7 @@ import { TourStart } from "./DemoMode";
 import { FormulierBouwer, ReviewFormulier } from "./LabFormulieren";
 import { Configurator, Nps, Wissel } from "./LabInteractief";
 import { WorkGrid } from "./WorkGrid";
+import { VerhalenFilter } from "./VerhalenFilter";
 import {
   Btn,
   EmptyState,
@@ -1094,7 +1096,6 @@ async function ArtikelenGrid({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
 
   if (ctx.slug === "/journal") {
     const [uitgelicht, ...rest] = posts;
-    const rubrieken = [...new Set(posts.map((p) => p.cat).filter(Boolean))];
     return (
       <>
         {uitgelicht ? (
@@ -1119,22 +1120,8 @@ async function ArtikelenGrid({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
         <section data-cms={label(b)} className={sectie(b.bg)}>
           <div className="container">
             <SectionTitle num={nr(n)} {...kop(c)} />
-            {rubrieken.length > 1 ? (
-              <div className="chip-row" style={{ marginBottom: 25 }} aria-label="Rubrieken">
-                <span className="chip active">Alles</span>
-                {rubrieken.map((r) => (
-                  <span className="chip" key={r}>
-                    {r.charAt(0) + r.slice(1).toLowerCase()}
-                  </span>
-                ))}
-              </div>
-            ) : null}
             {rest.length ? (
-              <div className="article-grid">
-                {rest.map((p) => (
-                  <StoryCard key={p.slug} post={p} />
-                ))}
-              </div>
+              <VerhalenFilter posts={rest} />
             ) : (
               <EmptyState>
                 {posts.length ? "Dit is op dit moment het enige artikel." : "Er zijn nog geen artikelen gepubliceerd."}
@@ -1177,7 +1164,7 @@ async function Mensen({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
           <div className="people-grid">
             {mensen.map((p) => (
               <div key={p.name}>
-                <PersonCard p={p} />
+                <PersonCard p={p} href={`/mensen/${persoonSlug(p.name)}`} />
                 {p.bio && ctx.slug !== "/" ? <p className="person-bio">{p.bio}</p> : null}
               </div>
             ))}
@@ -1191,8 +1178,9 @@ async function Mensen({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
   );
 }
 
-function Sprekers({ b, n }: { b: Blok; n: number }) {
+async function Sprekers({ b, n }: { b: Blok; n: number }) {
   const c = b.content;
+  const team = await teamSlugs();
   return (
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
@@ -1203,12 +1191,17 @@ function Sprekers({ b, n }: { b: Blok; n: number }) {
               key={tx(s, "naam")}
               p={{ name: tx(s, "naam"), role: tx(s, "tekst"), cover: media(s, "foto"), alt: tx(s, "foto_alt") || undefined }}
               prefix="Spreker · "
+              href={team.has(persoonSlug(tx(s, "naam"))) ? `/mensen/${persoonSlug(tx(s, "naam"))}` : undefined}
             />
           ))}
         </div>
       </div>
     </section>
   );
+}
+
+async function teamSlugs(): Promise<Set<string>> {
+  return new Set((await getPeople()).items.map((p) => persoonSlug(p.name)));
 }
 
 async function PartnersGrid({ b, n }: { b: Blok; n: number }) {
@@ -1231,11 +1224,13 @@ async function PartnersGrid({ b, n }: { b: Blok; n: number }) {
         {items.length ? (
           <div className="card-3 card-4">
             {items.map((p) => (
-              <div className="info-tile" key={p.naam}>
+              <Link className="info-tile partner-tegel" href={`/partners/${p.slug}`} key={p.naam}>
                 <span className="eyebrow">{p.vak}</span>
                 <strong>{p.naam}</strong>
-                <p>{p.tekst}</p>
-              </div>
+                <p>
+                  {p.tekst} <span className="meta">Meer ↗</span>
+                </p>
+              </Link>
             ))}
           </div>
         ) : (
@@ -1261,6 +1256,13 @@ async function PartnerUitgelicht({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }
               <p key={a}>{a}</p>
             ))}
             {p?.quote && p.tekst ? <p>{p.tekst}</p> : null}
+            {p ? (
+              <p>
+                <Link href={`/partners/${p.slug}`} className="meta" style={{ textDecoration: "underline" }}>
+                  Meer over {p.naam} ↗
+                </Link>
+              </p>
+            ) : null}
             <BlokKnop c={c} marge={0} vast={ctx.slug === "/community" ? { tekst: "Lees over onze aanpak", naar: "/about" } : null} />
           </div>
         </div>

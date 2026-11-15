@@ -224,9 +224,9 @@ export function StoryCard({ post }: { post: Post & { lead?: string } }) {
   );
 }
 
-export function PersonCard({ p, prefix = "" }: { p: Person; prefix?: string }) {
-  return (
-    <div className="person-card">
+export function PersonCard({ p, prefix = "", href }: { p: Person; prefix?: string; href?: string }) {
+  const inhoud = (
+    <>
       <div className="image-frame">
         <Photo src={p.cover} alt={p.alt || p.name} />
       </div>
@@ -235,7 +235,15 @@ export function PersonCard({ p, prefix = "" }: { p: Person; prefix?: string }) {
         {prefix}
         {p.role}
       </p>
-    </div>
+    </>
+  );
+  // Met een profielpagina (CMS-collectie Teamleden) is de hele kaart een link.
+  return href ? (
+    <Link href={href} className="person-card">
+      {inhoud}
+    </Link>
+  ) : (
+    <div className="person-card">{inhoud}</div>
   );
 }
 

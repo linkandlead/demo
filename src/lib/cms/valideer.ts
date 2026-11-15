@@ -16,6 +16,8 @@ export type CmsPagina = {
   titel: string;
   beschrijving: string;
   blokken: CmsBlok[];
+  /** Deelbeeld (og:image) uit het CMS-veld og_beeld; alleen https of /media/. */
+  ogBeeld?: string;
 };
 export type CmsLink = { titel: string; href: string };
 export type CmsNavigatie = {
@@ -56,6 +58,7 @@ export function valideerRespons(json: unknown): CmsSite | null {
       slug: str(p.slug),
       titel: str(p.titel),
       beschrijving: str(p.beschrijving),
+      ...(/^(https:\/\/|\/media\/)/.test(str(p.og_beeld)) ? { ogBeeld: str(p.og_beeld) } : {}),
       blokken: (Array.isArray(p.blokken) ? p.blokken : [])
         .filter(isObj)
         .map((b) => ({

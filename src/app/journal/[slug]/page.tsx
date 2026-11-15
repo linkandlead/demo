@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Page } from "@/components/nova/Page";
-import { Btn, Photo, SectionTitle, StoryCard } from "@/components/nova/ui";
+import { JsonLd } from "@/components/nova/JsonLd";
+import { SITE_URL } from "@/content/cms-media";
+import { Btn, Photo, SectionTitle, StoryCard, mediaSrc } from "@/components/nova/ui";
 import { altTeksten, artikelAlsTekst, artikelen } from "@/content/teksten";
 import { splitsOproep } from "@/components/nova/Blokken";
 import { getPosts } from "@/lib/cms/data";
@@ -16,9 +18,22 @@ export async function generateMetadata({
 }: PageProps<"/journal/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const post = (await getPosts()).items.find((p) => p.slug === slug);
+  const beschrijving = post?.lead || (post ? artikelen[post.slug]?.intro : undefined);
+  const beeld = post ? mediaSrc(post.cover) : "";
   return {
     title: post?.title ?? "Artikel",
-    description: post?.lead || (post ? artikelen[post.slug]?.intro : undefined),
+    description: beschrijving,
+    alternates: { canonical: `/journal/${slug}` },
+    openGraph: {
+      type: "article",
+      locale: "nl_NL",
+      siteName: "NOVA",
+      url: `/journal/${slug}`,
+      title: post?.title,
+      description: beschrijving,
+      ...(beeld ? { images: [{ url: beeld, alt: post?.alt || post?.title }] } : {}),
+    },
+    twitter: { card: beeld ? "summary_large_image" : "summary" },
   };
 }
 
@@ -42,6 +57,19 @@ export default async function Artikel({
       : [];
   return (
     <Page oproep={oproep}>
+      <JsonLd
+        data={{
+          "@type": "Article",
+          headline: post.title,
+          description: post.lead || tekst?.intro,
+          image: post.cover ? new URL(mediaSrc(post.cover), SITE_URL).href : undefined,
+          inLanguage: "nl-NL",
+          author: { "@type": "Organization", name: "NOVA-redactie" },
+          publisher: { "@id": `${SITE_URL}/#organisatie` },
+          mainEntityOfPage: `${SITE_URL}/journal/${post.slug}`,
+          articleSection: post.cat,
+        }}
+      />
       <article className="container article-page" data-cms="Header + Tekstblok">
         <span className="eyebrow">{post.cat} / VERHALEN</span>
         <h1>{post.title}.</h1>

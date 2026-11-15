@@ -14,6 +14,7 @@ import { bios, partners as demoPartners } from "@/content/teksten";
 import { leesTabel, supabase, supabaseConfig } from "@/lib/supabase/server";
 import { cmsMedia, cmsUrl, laadCms, type CmsStatus } from "./client";
 import type { CmsNavigatie } from "./valideer";
+import { persoonSlug } from "@/lib/slug";
 
 // Eén plek die bepaalt waar de content vandaan komt. Volgorde: het gekoppelde Link & Lead One-CMS,
 // anders de NOVA-demodatabase in Supabase (project "demo"), anders de vaste demodata uit het ontwerp.
@@ -170,7 +171,19 @@ export async function cmsRecords(soort: string): Promise<Record<string, unknown>
   return rij?.length ? rij : null;
 }
 
-export type Partner = { naam: string; vak: string; tekst: string; uitgelicht: boolean; quote?: string };
+export type Partner = {
+  slug: string;
+  naam: string;
+  vak: string;
+  tekst: string;
+  uitgelicht: boolean;
+  quote?: string;
+  quoteNaam?: string;
+  over?: string;
+  website?: string;
+  diensten?: string[];
+  logo?: string;
+};
 
 /** Partners (CMS-collectie "partners"); zonder CMS de fictieve partners uit de teksten. */
 export async function getPartners(): Promise<Collectie<Partner>> {
@@ -180,6 +193,7 @@ export async function getPartners(): Promise<Collectie<Partner>> {
     return {
       bron: "demo",
       items: demoPartners.map(([naam, vak, tekst], i) => ({
+        slug: persoonSlug(naam),
         naam,
         vak,
         tekst,
@@ -191,11 +205,17 @@ export async function getPartners(): Promise<Collectie<Partner>> {
     bron: "cms",
     items: rij
       .map((r) => ({
+        slug: s(r.slug) || persoonSlug(s(r.naam)),
         naam: s(r.naam),
         vak: s(r.branche),
         tekst: s(r.tagline) || s(r.over_tekst),
         uitgelicht: r.uitgelicht === true,
         quote: s(r.quote) || undefined,
+        quoteNaam: s(r.quote_naam) || undefined,
+        over: s(r.over_tekst) || undefined,
+        website: /^https:\/\//.test(s(r.website)) ? s(r.website) : undefined,
+        diensten: Array.isArray(r.diensten) ? r.diensten.map(s).filter(Boolean) : undefined,
+        logo: cmsMedia(r.logo) || undefined,
       }))
       .filter((p) => p.naam),
   };
