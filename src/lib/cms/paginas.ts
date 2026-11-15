@@ -21,6 +21,9 @@ export type PaginaInhoud = {
   beschrijving: string;
   blokken: Blok[];
   bron: "cms" | "blauwdruk" | "concept";
+  /** Bewerkmodus (B-090): een concept uit het CMS én een bewerktoken. Alleen dan krijgen blokken
+   *  bewerkattributen; een bezoeker nooit. */
+  bewerkbaar?: boolean;
 };
 
 const laadGepubliceerd = async (slug: string): Promise<PaginaInhoud | null> => {
@@ -39,7 +42,9 @@ export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | nul
   const gepubliceerd = concept?.soort === "concept" ? null : await laadGepubliceerd(slug);
   const gekozen = kiesInhoud({ draftMode: stand.aan, concept, gepubliceerd });
   if (!gekozen) return null;
-  return "bron" in gekozen ? gekozen : { ...gekozen, bron: "concept" };
+  if ("bron" in gekozen) return gekozen;
+  const bewerkbaar = stand.aan && stand.bewerken && gekozen.blokken.some((b) => b.id && b.bewerken);
+  return { ...gekozen, bron: "concept", ...(bewerkbaar ? { bewerkbaar: true } : {}) };
 });
 
 /** Alle paginaslugs onder een prefix (bv. "/spaces/"), uit het CMS én de blauwdruk. */

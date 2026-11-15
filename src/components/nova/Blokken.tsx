@@ -2288,6 +2288,7 @@ export function Blokken({
     if (!ZONDER_NUMMER.has(b.type)) n++;
     const nHier = n; // vastzetten: de blokken renderen pas na deze lus
     const k = `${b.type}-${i}`;
+    const voor = uit.length;
     switch (b.type) {
       case "header":
         uit.push(<VeiligBlok key={k} naam={label(b)} maak={() => Header({ b, ctx, eerste: !blokken.slice(0, i).some((x) => x.type === "header") })} />);
@@ -2422,6 +2423,14 @@ export function Blokken({
         }
       // Onbekend bloktype: overslaan (veilige terugval).
     }
+    // Bewerkmodus (B-090): het blok in een omhulsel met de sectie-id, zodat de bewerkbalk de velden in dit
+    // blok kan vinden. display: contents (nova-extra.css), dus de opmaak verandert niet. Bezoekers nooit.
+    if (pagina.bewerkbaar && b.id && b.bewerken && uit.length > voor)
+      uit[voor] = (
+        <div key={`sectie-${k}`} className="cms-sectie" data-cms-sectie={b.id}>
+          {uit[voor]}
+        </div>
+      );
     if (na?.[b.type] && !gehad.has(b.type)) {
       gehad.add(b.type);
       uit.push(<Fragment key={`na-${k}`}>{na[b.type]}</Fragment>);

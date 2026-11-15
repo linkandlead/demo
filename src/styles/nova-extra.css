@@ -552,6 +552,140 @@ button.btn:disabled {
 .primary-nav a { position: relative; }
 .primary-nav a.active::after { position: absolute; left: 0; right: 0; top: 100%; }
 
+/* Bewerkbalk (linkandlead-cms B-090): alleen in bewerkmodus (draft mode + bewerktoken). Vast bovenaan, zoals
+   de bewerkbalk van de gedeelde renderer (B-083). De site schuift eronder: body krijgt ruimte en de vaste kop
+   (.site-header, top: 0 in nova.css) zakt evenveel. De balk "Voorbeeld van het concept" valt dan weg: deze
+   balk zegt hetzelfde en meer. Bezoekers zien niets hiervan (de klassen komen alleen in bewerkmodus voor). */
+.cms-sectie {
+  display: contents;
+}
+body:has(.bewerk-balk) {
+  padding-top: 52px;
+}
+body:has(.bewerk-balk) .site-header {
+  top: 52px;
+}
+body:has(.bewerk-balk) .voorbeeld-balk {
+  display: none;
+}
+.bewerk-balk {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 400;
+  box-sizing: border-box;
+  min-height: 52px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 8px 16px;
+  background: var(--night);
+  color: #fff;
+  border-bottom: 3px solid var(--lime);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.bewerk-balk strong {
+  color: var(--lime);
+  font-weight: 800;
+}
+.bewerk-badge {
+  background: var(--lime);
+  color: var(--night);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.bewerk-status {
+  color: #dfe3ea;
+  flex: 1 1 160px;
+  min-width: 0;
+}
+.bewerk-knoppen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+.bewerk-knop {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.bewerk-knop.primair {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--night);
+}
+.bewerk-knop:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.bewerk-knop:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.bewerk-melding {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 0 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.bewerk-melding.conflict span,
+.bewerk-melding.fout span {
+  flex: 1 1 260px;
+  font-weight: 700;
+}
+/* Een bewerkbaar tekstveld: een stippellijn bij aanwijzen, een doorgetrokken lijn tijdens het typen. */
+.cms-veld {
+  outline: 1px dashed transparent;
+  outline-offset: 4px;
+  border-radius: 2px;
+  cursor: text;
+  transition: outline-color 0.1s;
+}
+.cms-veld:hover {
+  outline-color: var(--lime);
+}
+.cms-veld:focus {
+  outline: 2px solid var(--lime);
+}
+@media (max-width: 640px) {
+  /* Op een smal scherm drie regels: titel, status, knoppen. */
+  body:has(.bewerk-balk) {
+    padding-top: 112px;
+  }
+  body:has(.bewerk-balk) .site-header {
+    top: 112px;
+  }
+  .bewerk-balk {
+    min-height: 112px;
+    padding: 6px 12px;
+    gap: 4px 8px;
+  }
+  .bewerk-status {
+    flex-basis: 100%;
+    order: 3;
+  }
+}
+
+
 /* ---- Kernblokken die het prototype niet uitwerkte (zelfde beeldtaal, eigen klassen) ---- */
 .demo-knop { display: block; }
 .hero-midden { text-align: center; }
