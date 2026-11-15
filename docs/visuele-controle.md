@@ -69,6 +69,7 @@ Toelichting op de grotere verschillen:
 | Playground-varianten "Standaard/Compact/Uitgebreid" → officiële PDF-varianten per blok                                                                                                                                 | Masterprompt: alleen officiële varianten                                                        |
 | Skip-link "Naar de inhoud", `aria-*` op menu, filters en paneel                                                                                                                                                        | Toegankelijkheid                                                                                |
 | Nieuwe balk "Voorbeeld van het concept" linksonder (`.voorbeeld-balk`), alleen in draft mode                                                                                                                          | "Voorbeeld op de site" uit het CMS; bezoekers zien hem nooit |
+| Nieuwe bewerkbalk bovenaan (`.bewerk-balk`, 52 px; mobiel 112 px) die de kop en de pagina omlaag schuift, en een stippellijn rond bewerkbare teksten (`.cms-veld`); alleen in bewerkmodus (draft mode + bewerktoken) | Bewerken op de site (CMS B-090); vervangt dan de voorbeeldbalk; bezoekers zien niets hiervan |
 
 ## Functioneel en toegankelijkheid
 

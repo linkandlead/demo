@@ -29,7 +29,7 @@ en als productiebranch is ingesteld, gaat dat vanzelf.
 
 `/` · `/work` · `/work/:slug` · `/journal` · `/journal/:slug` · `/experiences` · `/experiences/:slug` ·
 `/spaces` · `/spaces/:slug` · `/community` · `/about` · `/contact` · `/lab` · `/members` · `/playground` ·
-`/playground/sports` · `/demo` · `/one` (+ `POST /api/aanvraag`, `GET /__voorvertoning`)
+`/playground/sports` · `/demo` · `/one` (+ `POST /api/aanvraag`, `GET /__voorvertoning`, `POST /api/cms-bewerken`)
 
 Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 stappen) → blokken
 (`/playground`) → aanvraag (`/one#aanvraag`).
@@ -64,6 +64,31 @@ Alle voorbeeldantwoorden zijn `no-store` en `noindex`.
 3. Het CMS controleert per website (tien minuten bewaard) of `?pad=/` met een geldig token 200 geeft;
    pas dan staat de knop aan. Het CMS zelf heeft daarvoor `VOORVERTONING_GEHEIM` (of
    `ADMIN_SESSIE_SECRET`) nodig; dat staat in het CMS-project, niet hier.
+
+## Bewerken op de site (opslaan als concept)
+
+Vanaf CMS-besluit B-090 (site-kit 1.16) kun je in het voorbeeld ook teksten aanpassen en opslaan. Wie de
+pagina in het CMS mag bewerken, krijgt bij "Voorbeeld op de site" een **bewerktoken** in de link
+(`&bewerken=…`; 30 minuten, één gebruiker, één pagina). Dit werkt pas als het CMS die versie draait
+(linkandlead-cms, branch `claude/vp-eigen-frontend-opslaan`, nog niet gemerged). Zonder bewerktoken in de
+link blijft alles zoals hierboven: alleen het voorbeeld. Zo werkt het hier:
+
+- `/__voorvertoning` bewaart het bewerktoken in een eigen cookie (`nova_bewerken`: httpOnly, Secure,
+  SameSite=Lax) naast het voorvertoningstoken, en stuurt door zonder token in de URL.
+- In een concept geeft het CMS per blok de bewerkbare platte tekstvelden en de versie mee. Alleen dan staat
+  bovenaan de **bewerkbalk** ("Je bewerkt deze pagina live", de opslagstatus in een live-regio, Opslaan,
+  Openen in de editor, Stoppen) en worden die teksten `contenteditable` met `data-cms-veld`. Een tekst
+  die niet precies zo in de pagina staat (opmaak, hoofdletters via CSS, in een link of knop), blijft
+  in de editor. Bezoekers krijgen geen bewerkattributen.
+- **Opslaan** gaat naar `POST /api/cms-bewerken` (deze site). Die route controleert de Origin (CSRF),
+  werkt alleen in draft mode met het bewerkcookie, en stuurt de wijziging server-naar-server naar
+  `POST {CMS_URL}/api/v1/live-bewerken` met het leestoken (`CMS_TOKEN`) en het bewerktoken. Het CMS
+  controleert alles opnieuw en bewaart alleen het **concept**; publiceren gaat via de editor.
+- Heeft iemand anders het blok intussen gewijzigd (409), dan toont de balk een melding met **Herladen**.
+- **Stoppen** gaat via `/__voorvertoning/sluiten`: draft mode uit, beide tokens weg.
+
+Er is geen extra variabele nodig: alleen `CMS_URL` en `CMS_TOKEN` (server-env). Lokaal testen:
+`ALLEEN=bewerken SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e`.
 
 Lokaal testen: start het nep-CMS en een build ertegen, en draai dan
 `ALLEEN=voorvertoning SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e`

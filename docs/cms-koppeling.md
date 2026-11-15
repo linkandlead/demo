@@ -85,3 +85,11 @@ geldig token) en maakt testtokens op `/test/voorvertoningstoken`. Met de site op
 ```bash
 ALLEEN=voorvertoning SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e
 ```
+
+Bewerken en opslaan (CMS B-090) lokaal: het nep-CMS kent ook `POST /api/v1/live-bewerken` (alleen
+server-naar-server, leestoken + bewerktoken, 409 bij een conflict) en maakt testbewerktokens op
+`/test/bewerktoken?pad=/`; de bewaarde wijzigingen staan op `/test/bewerkingen`:
+
+```bash
+ALLEEN=bewerken SITE_CMS=http://localhost:3001 MOCK_CMS=http://localhost:4000 npm run e2e
+```

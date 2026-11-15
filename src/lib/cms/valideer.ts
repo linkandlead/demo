@@ -1,10 +1,15 @@
 // Runtime-validatie van de CMS-lees-API (contract: linkandlead-cms src/routes/api/cms/content.ts).
 // Puur (geen server-only), zodat het los te testen is.
 
+import type { BlokBewerken } from "./bewerken.ts";
+
 export type CmsBlok = {
   type: string;
   bg: string | null;
   content: Record<string, unknown>;
+  /** Alleen in een concept uit de lees-API v1: de sectie-id en wat de site op de pagina mag bewerken (B-090). */
+  id?: string;
+  bewerken?: BlokBewerken;
 };
 export type CmsPagina = {
   slug: string;

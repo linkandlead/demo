@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies, draftMode } from "next/headers";
+import { BEWERK_COOKIE, bewerktokenSecondenGeldig } from "./bewerken";
 import { cmsUrl } from "./client";
 import {
   beoordeelAntwoord,
@@ -55,13 +56,21 @@ export async function tokenGeldig(
 }
 
 export type VoorbeeldStand =
-  { aan: false } | { aan: true; token: string | null };
+  | { aan: false }
+  | { aan: true; token: string | null; bewerken: boolean };
 
 /** Draft mode en het token uit de cookie. Buiten draft mode wordt de cookie niet eens gelezen, zodat
- *  gewone pagina's statisch blijven en bezoekers niets anders zien dan voorheen. */
+ *  gewone pagina's statisch blijven en bezoekers niets anders zien dan voorheen. `bewerken` = er is ook
+ *  een (nog niet verlopen) bewerktoken (B-090); het token zelf verlaat de server nooit. */
 export async function voorbeeldStand(): Promise<VoorbeeldStand> {
   const { isEnabled } = await draftMode();
   if (!isEnabled) return { aan: false };
-  const token = (await cookies()).get(VOORVERTONING_COOKIE)?.value ?? null;
-  return { aan: true, token: tokenSecondenGeldig(token) > 0 ? token : null };
+  const jar = await cookies();
+  const token = jar.get(VOORVERTONING_COOKIE)?.value ?? null;
+  const geldig = tokenSecondenGeldig(token) > 0;
+  return {
+    aan: true,
+    token: geldig ? token : null,
+    bewerken: geldig && bewerktokenSecondenGeldig(jar.get(BEWERK_COOKIE)?.value) > 0,
+  };
 }
