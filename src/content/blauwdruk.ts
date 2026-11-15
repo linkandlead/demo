@@ -15,7 +15,7 @@ import {
   ruimteDemolabel,
   ruimteDetails,
 } from "./teksten.ts";
-import { CMS_MEDIA, SITE_URL } from "./cms-media.ts";
+import { CMS_MEDIA, CMS_VIDEO } from "./cms-media.ts";
 
 export type BlauwdrukBlok = { type: string; bg: string | null; content: Record<string, unknown> };
 export type BlauwdrukPagina = {
@@ -154,7 +154,7 @@ const home: BlauwdrukPagina = {
       cta_primair_label: "Bekijk ons werk",
       cta_primair_link: "/work",
       media_type: "video",
-      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
+      media_video: CMS_VIDEO.liggend,
       media_afbeelding: m("nova-film-poster"),
       media_alt: "Korte film over NOVA: blauwe boogarchitectuur, lichtinstallaties, een concertzaal en bewegende lijnen.",
       overlay: "donker",
@@ -347,7 +347,7 @@ const belevingen: BlauwdrukPagina = {
       cta_secundair_link: "/experiences/nova-sessions",
       // Videohero: dezelfde NOVA-film als op de homepage (met staande versie voor telefoons).
       media_type: "video",
-      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
+      media_video: CMS_VIDEO.liggend,
       media_afbeelding: m("nova-film-poster"),
       media_alt: "Korte film over NOVA: lichtinstallaties, een concertzaal, boogarchitectuur en bewegende lijnen.",
       overlay: "donker",

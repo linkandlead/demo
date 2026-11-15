@@ -375,8 +375,8 @@ const video = await page.evaluate(() => {
   return v ? { bronnen: [...v.querySelectorAll("source")].map((s) => s.getAttribute("src")), muted: v.muted, h1: document.querySelectorAll("h1").length } : null;
 });
 check(
-  "homepage: videoblok met desktop- en mobiele video, zonder geluid, één h1",
-  !!video && video.bronnen.some((b) => b.startsWith("/media/nova-film-liggend.mp4")) && video.bronnen.some((b) => b.startsWith("/media/nova-film-staand.mp4")) && video.muted && video.h1 === 1,
+  "homepage: videoblok met desktop- en mobiele video uit de CMS-mediabibliotheek, zonder geluid, één h1",
+  !!video && video.bronnen.some((b) => /\/nova-film-liggend-[a-z0-9-]+\.mp4$/.test(b)) && video.bronnen.some((b) => /\/nova-film-staand-[a-z0-9-]+\.mp4$/.test(b)) && video.muted && video.h1 === 1,
   JSON.stringify(video),
 );
 check("homepage: video is te pauzeren", (await page.getByRole("button", { name: /Pauzeer video|Speel video af/ }).count()) === 1);

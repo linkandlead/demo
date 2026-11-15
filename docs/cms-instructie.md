@@ -100,11 +100,10 @@ toelichting en kolom 5 het label (bijvoorbeeld THUIS).
 - Een videoblok is een **Header-blok** met *Media* = **video** en bij *Video-URL* een volledige
   URL naar een mp4- of webm-bestand. Zet *Lay-out* op **achtergrond** voor een filmisch blok midden
   op een pagina (zoals op de homepage), of *Hoogte* op **fullscreen** voor een videohero.
-- **Video's kunnen niet in de mediabibliotheek**: die neemt alleen JPG, PNG, WebP, GIF en AVIF aan.
-  De NOVA-film staat daarom op de website zelf:
-  `https://demo.linkandlead.nl/media/nova-film-liggend.mp4`. Gebruik altijd de **volledige URL**,
-  dan werkt de video ook in de CMS-editor en in "Voorbeeld op de site".
-- Op telefoons speelt bij deze film automatisch de staande versie (`nova-film-staand.mp4`).
+- **Video's staan in de mediabibliotheek** (MP4 of WebM, tot 50 MB). Upload ze daar en kies bij een
+  video **Kopieer URL**; plak die URL bij *Video-URL*. De NOVA-film staat er als
+  `nova-film-liggend-….mp4` (full HD), met `nova-film-liggend-720-….mp4` en `nova-film-staand-….mp4`.
+- Op tablets speelt bij deze film automatisch de 720p-versie en op telefoons de staande versie.
 - Zet bij *Afbeelding* het posterbeeld uit de mediabibliotheek (*NOVA-film poster*). Dat zie je
   tot de video speelt, en ook bij "beweging verminderen".
 - De video speelt zonder geluid, herhaalt, en speelt alleen als hij in beeld is. Bezoekers kunnen

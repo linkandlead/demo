@@ -241,17 +241,16 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
   // Alleen de eerste header van een pagina is de paginakop (h1); een volgende header is een sectie.
   const Kop = eerste ? "h1" : "h2";
   // Video (media_type "video"): alleen mp4/webm als achtergrond; YouTube/Vimeo passen niet in deze vorm.
-  // Een video op deze website zelf (volledige URL in het CMS, zodat ook de CMS-editor hem toont)
-  // laden we via het eigen pad: dan werkt hij op elke omgeving en horen de mobiele versie en
-  // posters erbij (src/content/media.ts).
+  // De mobiele en middelgrote versie en de posters per video staan in src/content/media.ts. Het oude
+  // adres op deze website zelf verwijst daar naar de CMS-bestanden.
   const ruweVideo = tx(c, "media_video").replace(/^https:\/\/demo\.linkandlead\.nl(?=\/media\/)/, "");
   const videoSrc =
     tx(c, "media_type") === "video" && /\.(mp4|webm)(\?|$)/i.test(ruweVideo) ? cmsMedia(ruweVideo) : "";
   const extra = VIDEO[ruweVideo] ?? {};
   const video = videoSrc ? (
     <VideoAchtergrond
-      src={extra.versie ? `${videoSrc}?v=${extra.versie}` : videoSrc}
-      mobielSrc={extra.mobiel && extra.versie ? `${extra.mobiel}?v=${extra.versie}` : extra.mobiel}
+      src={extra.src ?? videoSrc}
+      mobielSrc={extra.mobiel}
       middelSrc={extra.middel}
       poster={media(c, "media_afbeelding") || extra.poster}
       mobielPoster={extra.mobielPoster}

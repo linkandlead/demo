@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { paginas } from "@/content/blauwdruk";
+import { CMS_VIDEO } from "@/content/cms-media";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
 import { Blokken } from "./Blokken";
@@ -184,7 +185,7 @@ function variantPatch(type: string, variant: string, c: Inhoud): Inhoud {
         "beeld links": { layout: "split-links", hoogte: "normaal" },
         // Met een achtergrondvideo (CMS: media_type = video), gemaakt uit eigen NOVA-beelden.
         "beeld rechts": { layout: "split-rechts", hoogte: "fullscreen", media_type: "video", media_video: "/media/nova-header.mp4" },
-        achtergrondbeeld: { layout: "achtergrond", hoogte: "normaal", media_afbeelding: m("nova-film-poster"), media_type: "video", media_video: "/media/nova-film-liggend.mp4" },
+        achtergrondbeeld: { layout: "achtergrond", hoogte: "normaal", media_afbeelding: m("nova-film-poster"), media_type: "video", media_video: CMS_VIDEO.liggend },
         compact: { layout: "compact", hoogte: "normaal", media_afbeelding: "", usps: [{ tekst: "HET INTERACTIEVE LAB" }] },
       }[v] ?? {};
     case "mediatekst":

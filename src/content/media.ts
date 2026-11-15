@@ -1,4 +1,4 @@
-import { CMS_MEDIA } from "./cms-media";
+import { CMS_MEDIA, CMS_VIDEO } from "./cms-media";
 // Gegenereerd bij het plaatsen van de verbeterde beelden (NOVA_17_afbeeldingen_verbeterd.zip).
 // Per mediasleutel: originele afmetingen en beschikbare kleinere breedtes (`<naam>-<breedte>.webp`).
 
@@ -93,18 +93,20 @@ export const MEDIA: Record<
   },
 };
 
-/** Video's in deze frontend: bij een desktopvideo uit het CMS horen automatisch een staande
- *  mobiele versie en posterbeelden. Een video die in het CMS is geüpload, speelt zonder deze extra's. */
+// Video's per bron-URL: de kleinere versies en de posters die erbij horen. De video's staan in de
+// mediabibliotheek van het CMS. Het oude pad op de site zelf (/media/nova-film-liggend.mp4, zo stond het
+// eerder in het CMS) verwijst naar dezelfde CMS-bestanden.
+const NOVA_FILM = {
+  mobiel: CMS_VIDEO.staand,
+  // 1280×720 voor tablets en kleinere laptops (4,4 MB in plaats van 10,9 MB)
+  middel: CMS_VIDEO.liggend720,
+  poster: CMS_MEDIA["nova-film-poster"],
+  mobielPoster: CMS_MEDIA["nova-film-mobiel-poster"],
+};
 export const VIDEO: Record<
   string,
-  { versie?: string; mobiel?: string; middel?: string; poster?: string; mobielPoster?: string }
+  { src?: string; mobiel?: string; middel?: string; poster?: string; mobielPoster?: string }
 > = {
-  // Een nieuw bestand krijgt een nieuwe naam: /media/ wordt een jaar gecachet ("immutable").
-  "/media/nova-film-liggend.mp4": {
-    mobiel: "/media/nova-film-staand.mp4",
-    // 1280×720 voor tablets en kleinere laptops (4,4 MB in plaats van 10,9 MB)
-    middel: "/media/nova-film-liggend-720.mp4",
-    poster: CMS_MEDIA["nova-film-poster"],
-    mobielPoster: CMS_MEDIA["nova-film-mobiel-poster"],
-  },
+  [CMS_VIDEO.liggend]: NOVA_FILM,
+  "/media/nova-film-liggend.mp4": { ...NOVA_FILM, src: CMS_VIDEO.liggend },
 };

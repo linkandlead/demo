@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-// Zet de NOVA-video's in de mediabibliotheek van het CMS (site Demo Klant) via de officiële
-// media-API (POST {CMS_URL}/api/cms/media, token-gescopet). Werkt zodra het CMS MP4/WebM aanneemt.
-// Een video die al in de bibliotheek staat (zelfde inhoud), slaat het CMS als dubbel over.
+// Zet video's in de mediabibliotheek van het CMS (site Demo Klant) via de officiële route voor grote
+// video's (POST {CMS_URL}/api/cms/video-upload: start → PUT naar een ondertekende URL → klaar).
 //
-// Gebruik: CMS_URL=https://linkandlead.nl CMS_TOKEN=… node scripts/cms-video-upload.mjs
-// Uitvoer: per bestand de CMS-URL, om in src/content/cms-media.ts te zetten.
+// Gebruik: CMS_URL=… CMS_TOKEN=… node scripts/cms-video-upload.mjs film.mp4 [nog-een.webm …]
+// Uitvoer: per bestand de CMS-URL, om in src/content/cms-media.ts (CMS_VIDEO) te zetten.
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -16,18 +15,22 @@ if (!CMS_URL || !TOKEN) {
   process.exit(1);
 }
 
-const VIDEOS = ["nova-film-liggend.mp4", "nova-film-liggend-720.mp4", "nova-film-staand.mp4"];
+const H = { authorization: `Bearer ${TOKEN}`, "content-type": "application/json" };
+const stap = async (body) => {
+  const r = await fetch(`${CMS_URL}/api/cms/video-upload`, { method: "POST", headers: H, body: JSON.stringify(body) });
+  return { status: r.status, ...(await r.json().catch(() => ({}))) };
+};
 let fout = false;
-for (const naam of VIDEOS) {
-  const bytes = await readFile(path.join("public/media", naam));
-  const fd = new FormData();
-  fd.append("file", new File([bytes], naam, { type: "video/mp4" }));
-  const r = await fetch(`${CMS_URL}/api/cms/media`, { method: "POST", headers: { authorization: `Bearer ${TOKEN}` }, body: fd });
-  const j = await r.json().catch(() => ({}));
-  if (r.ok && j.ok) console.log(`${naam} → ${j.url}`);
-  else {
-    fout = true;
-    console.error(`${naam}: ${r.status} ${j.melding ?? ""}`);
-  }
+for (const bestand of process.argv.slice(2)) {
+  const naam = path.basename(bestand);
+  const type = naam.endsWith(".webm") ? "video/webm" : "video/mp4";
+  const bytes = await readFile(bestand);
+  const start = await stap({ stap: "start", naam, type, grootte: bytes.length });
+  if (!start.ok) { fout = true; console.error(`${naam}: ${start.status} ${start.melding ?? ""}`); continue; }
+  const put = await fetch(start.uploadUrl, { method: "PUT", headers: { "content-type": type }, body: bytes });
+  if (!put.ok) { fout = true; console.error(`${naam}: uploaden mislukt (${put.status})`); continue; }
+  const klaar = await stap({ stap: "klaar", pad: start.pad, naam });
+  if (klaar.ok) console.log(`${naam} → ${klaar.url}`);
+  else { fout = true; console.error(`${naam}: ${klaar.status} ${klaar.melding ?? ""}`); }
 }
 process.exit(fout ? 1 : 0);

@@ -25,8 +25,15 @@ export const CMS_MEDIA: Record<string, string> = {
   "work_person": "https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/work-person-mwhq1yam-ck5o02.webp",
 };
 
-/** Video's kunnen niet in de mediabibliotheek (alleen JPG, PNG, WebP, GIF, AVIF). Ze staan op de
- *  website zelf; in het CMS staat de volledige URL, zodat ook de CMS-editor ze kan tonen. */
+/** Video's in de mediabibliotheek van het CMS (MP4, sinds het CMS video aanneemt; groot via
+ *  /api/cms/video-upload). Liggend in full HD en 720p, en staand voor telefoons. */
+const OPSLAG = "https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222";
+export const CMS_VIDEO = {
+  liggend: `${OPSLAG}/nova-film-liggend-mwi686dh-m0ciqs.mp4`,
+  liggend720: `${OPSLAG}/nova-film-liggend-720-mwi5u82k-vh1zo0.mp4`,
+  staand: `${OPSLAG}/nova-film-staand-mwi5va6p-uh5cze.mp4`,
+} as const;
+
 export const SITE_URL = "https://demo.linkandlead.nl";
 
 /** Beeldnaam (bv. "hero_arch") bij een CMS-URL, voor de alt-tekst. */
