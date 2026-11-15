@@ -162,6 +162,7 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
       label={tx(c, "media_alt") || tx(c, "heading").replace(/\n/g, " ")}
       positie={focuspunt(c)}
       overlay={tx(c, "overlay")}
+      direct={eerste}
     />
   ) : null;
   const beeld = media(c, "media_afbeelding");

@@ -342,8 +342,11 @@ const belevingen: BlauwdrukPagina = {
       cta_primair_link: "/experiences/pulse-festival",
       cta_secundair_label: "Bekijk NOVA Sessions",
       cta_secundair_link: "/experiences/nova-sessions",
-      media_type: "afbeelding",
-      media_afbeelding: m("event_lights"),
+      // Videohero: dezelfde NOVA-film als op de homepage (met staande versie voor telefoons).
+      media_type: "video",
+      media_video: "/media/nova-film.mp4",
+      media_afbeelding: m("nova-film-poster"),
+      media_alt: "Korte film over NOVA: lichtinstallaties, een concertzaal, boogarchitectuur en bewegende lijnen.",
       overlay: "donker",
     }),
     blok("kaarten", "wit", {

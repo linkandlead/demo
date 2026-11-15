@@ -14,6 +14,7 @@ export function VideoAchtergrond({
   label,
   positie,
   overlay,
+  direct = false,
 }: {
   src: string;
   mobielSrc?: string;
@@ -24,6 +25,8 @@ export function VideoAchtergrond({
   positie?: string;
   /** CMS-veld overlay: "licht" of "sterk" legt een extra laag over het ontwerpverloop. */
   overlay?: string;
+  /** Bovenaan de pagina: poster direct laden in plaats van lui. */
+  direct?: boolean;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [speelt, setSpeelt] = useState(false);
@@ -67,7 +70,7 @@ export function VideoAchtergrond({
       {poster ? (
         <picture>
           {mobielPoster ? <source media="(max-width: 760px)" srcSet={mobielPoster} /> : null}
-          <img src={poster} alt="" loading="lazy" decoding="async" style={positie ? { objectPosition: positie } : undefined} />
+          <img src={poster} alt="" loading={direct ? "eager" : "lazy"} fetchPriority={direct ? "high" : undefined} decoding="async" style={positie ? { objectPosition: positie } : undefined} />
         </picture>
       ) : null}
       <video
