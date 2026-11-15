@@ -94,8 +94,10 @@ export const MEDIA: Record<
 
 /** Video's in deze frontend: bij een desktopvideo uit het CMS horen automatisch een staande
  *  mobiele versie en posterbeelden. Een video die in het CMS is geüpload, speelt zonder deze extra's. */
-export const VIDEO: Record<string, { mobiel?: string; poster?: string; mobielPoster?: string }> = {
+export const VIDEO: Record<string, { versie?: string; mobiel?: string; poster?: string; mobielPoster?: string }> = {
   "/media/nova-film.mp4": {
+    // Verhoog bij een nieuw bestand onder dezelfde naam: /media/ wordt een jaar gecachet.
+    versie: "2",
     mobiel: "/media/nova-film-mobiel.mp4",
     poster: "/media/nova-film-poster.webp",
     mobielPoster: "/media/nova-film-mobiel-poster.webp",

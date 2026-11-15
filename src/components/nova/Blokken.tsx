@@ -155,8 +155,8 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
   const extra = VIDEO[tx(c, "media_video")] ?? {};
   const video = videoSrc ? (
     <VideoAchtergrond
-      src={videoSrc}
-      mobielSrc={extra.mobiel}
+      src={extra.versie ? `${videoSrc}?v=${extra.versie}` : videoSrc}
+      mobielSrc={extra.mobiel && extra.versie ? `${extra.mobiel}?v=${extra.versie}` : extra.mobiel}
       poster={media(c, "media_afbeelding") || extra.poster}
       mobielPoster={extra.mobielPoster}
       label={tx(c, "media_alt") || tx(c, "heading").replace(/\n/g, " ")}

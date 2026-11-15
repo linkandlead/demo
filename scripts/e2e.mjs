@@ -307,7 +307,7 @@ const video = await page.evaluate(() => {
 });
 check(
   "homepage: videoblok met desktop- en mobiele video, zonder geluid, één h1",
-  !!video && video.bronnen.includes("/media/nova-film.mp4") && video.bronnen.includes("/media/nova-film-mobiel.mp4") && video.muted && video.h1 === 1,
+  !!video && video.bronnen.some((b) => b.startsWith("/media/nova-film.mp4")) && video.bronnen.some((b) => b.startsWith("/media/nova-film-mobiel.mp4")) && video.muted && video.h1 === 1,
   JSON.stringify(video),
 );
 check("homepage: video is te pauzeren", (await page.getByRole("button", { name: /Pauzeer video|Speel video af/ }).count()) === 1);

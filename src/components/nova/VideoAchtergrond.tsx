@@ -107,7 +107,7 @@ export function VideoAchtergrond({
         style={stijl}
       >
         {mobielSrc ? <source media="(max-width: 760px)" src={mobielSrc} type="video/mp4" /> : null}
-        <source src={src} type={src.endsWith(".webm") ? "video/webm" : "video/mp4"} />
+        <source src={src} type={/\.webm(\?|$)/i.test(src) ? "video/webm" : "video/mp4"} />
       </video>
       {overlay === "licht" || overlay === "sterk" ? (
         <span className={`hero-overlay hero-overlay-${overlay}`} aria-hidden="true" />
