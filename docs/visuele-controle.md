@@ -43,6 +43,9 @@ Toelichting op de grotere verschillen:
   (laatste stap van de verkoopflow).
 - **`/playground` (mobiel 9%):** de hero heeft een extra link naar de sportblokken. Onder de preview
   staat de lijst "Wat de redacteur invult".
+  Sinds de blokkenverkenner echte blokken toont (zie het verschilrapport) wijkt de preview bewust af
+  van het prototype, en telt de pagina twee `<h1>`-elementen: de kop van het getoonde header-blok
+  draagt `aria-level="2"`, zodat hulpmiddelen één hoofdkop zien. Bovenstaande meting is van daarvoor.
 - **`/contact`, `/members` (+12 / +29 px):** de statusregel onder het formulier.
 
 ![Home desktop](visuele-controle/home-desktop.jpg)
@@ -52,6 +55,9 @@ Toelichting op de grotere verschillen:
 
 | Afwijking                                                                                                                                                                                                              | Waarom                                                                                          |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Blokkenverkenner (`/playground`): de preview is het **echte blok** uit de NOVA-renderer op schermbreedte, verkleind (CSS `zoom`), met inhoud uit de blauwdruk; achtergrond en variant zetten de echte velden. Blokken zonder renderer houden de prototype-preview, gelabeld als ontwerpindicatie | In het prototype was de preview voor elk blok dezelfde nepkaart (bv. Conclusieregel leek een hero met foto) |
+| Header met **achtergrondvideo** (`media_type` = video, mp4): video over de afbeelding (poster), onder het ontwerpverloop; pauzeknop; bij `prefers-reduced-motion` alleen de afbeelding. Overlay `licht`/`sterk` legt een extra laag over het beeld | CMS-veld bestond, het prototype kende alleen beelden. YouTube/Vimeo kunnen geen stille achtergrond zijn: terugval op de afbeelding |
+| Witte kaarttegels (`.info-tile`) in een donkere sectie krijgen donkere tekst | Titels vielen wit-op-wit weg bij achtergrond Donker/Diepst (zichtbaar geworden in de verkenner) |
 | "Selected work": 2-rijen-lay-out ook voor `<a>`-kaarten (`.portfolio-grid > a`)                                                                                                                                        | nova.css richtte zich op `div`-kinderen; de derde case viel onder de eerste, met een gat rechts |
 | **Alle zichtbare tekst in het Nederlands** (op verzoek van de opdrachtgever): koppen, knoppen, navigatie, labels, sectoren, rubrieken en paginatitels. Projectnamen blijven eigennamen; URL's (`/work`, …) ongewijzigd | Engels en Nederlands liepen door elkaar                                                         |
 | Mobiel (≤ 760px) schalen grote koppen mee met de schermbreedte                                                                                                                                                         | Lange Nederlandse woorden ("werkelijkheid.", "Experimenteren.") liepen buiten beeld             |

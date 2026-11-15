@@ -8,6 +8,7 @@ import { AanvraagFormulier } from "./AanvraagFormulier";
 import { DemoFormulier } from "./DemoFormulier";
 import { DemoKnop } from "./DemoKnop";
 import { TourStart } from "./DemoMode";
+import { VideoKnop } from "./VideoKnop";
 import { FormulierBouwer, ReviewFormulier } from "./LabFormulieren";
 import { Configurator, Nps, Wissel } from "./LabInteractief";
 import { WorkGrid } from "./WorkGrid";
@@ -15,6 +16,7 @@ import {
   Btn,
   EmptyState,
   Lines,
+  mediaSrc,
   PersonCard,
   PicCard,
   Photo,
@@ -29,7 +31,7 @@ import {
 // Onbekende bloktypes worden overgeslagen (veilige terugval), nooit een kapotte pagina.
 
 type Inhoud = Record<string, unknown>;
-type Ctx = { slug: string; one: boolean; detail: boolean };
+type Ctx = { slug: string; one: boolean; detail: boolean; voorbeeld: boolean };
 
 const tx = (c: Inhoud, k: string) => {
   const v = c[k];
@@ -111,10 +113,64 @@ function KopMetPunt({ tekst }: { tekst: string }) {
 }
 
 // ---------- Header ----------
+const VIDEO_ID = "hero-video";
+
+/** Achtergrondvideo: alleen een videobestand (mp4, lokaal of via https). YouTube en Vimeo zijn
+ *  spelers, geen bestand, en kunnen niet als stille achtergrond: dan valt de header terug op de
+ *  afbeelding. */
+function headerVideo(c: Inhoud): string {
+  if (tx(c, "media_type") !== "video") return "";
+  const v = cmsMedia(c.media_video);
+  return /\.mp4([?#]|$)/i.test(v) ? v : "";
+}
+
+/** Focuspunt (0–100, standaard 50) als object-position. */
+function focuspunt(c: Inhoud): string {
+  const pct = (k: string) => {
+    const n = Number(tx(c, k));
+    return tx(c, k) && Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 50;
+  };
+  return `${pct("focal_x")}% ${pct("focal_y")}%`;
+}
+
+/** Beeld of video van de header, met de gekozen overlay. Het NOVA-ontwerp heeft zelf al een donker
+ *  verloop voor leesbare tekst (= overlay "donker"); "licht" en "sterk" leggen daar een laag bij.
+ *  Bij een video is de afbeelding de poster, en bij prefers-reduced-motion het enige wat je ziet. */
+function HeaderMedia({ c, beeld, alt }: { c: Inhoud; beeld: string; alt: string }) {
+  const video = headerVideo(c);
+  const overlay = tx(c, "overlay");
+  return (
+    <>
+      {beeld ? <Photo src={beeld} alt={alt} priority /> : null}
+      {video ? (
+        <video
+          id={VIDEO_ID}
+          className="hero-video"
+          src={video}
+          poster={beeld ? mediaSrc(beeld) : undefined}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          style={{ objectPosition: focuspunt(c) }}
+        />
+      ) : null}
+      {(video || beeld) && (overlay === "licht" || overlay === "sterk") ? (
+        <span className={`hero-overlay hero-overlay-${overlay}`} aria-hidden="true" />
+      ) : null}
+    </>
+  );
+}
+
 function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
   const c = b.content;
   const beeld = media(c, "media_afbeelding");
   const alt = tx(c, "media_alt");
+  const video = headerVideo(c);
+  // In de blokkenverkenner staat de header ín een pagina met een eigen h1: daar telt hij als kop 2.
+  const kopNiveau = ctx.voorbeeld ? 2 : undefined;
   const knop1 = link(c, "cta_primair_link");
   const knop2 = link(c, "cta_secundair_link");
   const knoppen =
@@ -134,16 +190,17 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
   if (tx(c, "hoogte") === "fullscreen")
     return (
       <section data-cms={label(b)} className="hero-home">
-        {beeld ? (
+        {beeld || video ? (
           <div className="hero-visual">
-            <Photo src={beeld} alt={alt} priority />
+            <HeaderMedia c={c} beeld={beeld} alt={alt} />
           </div>
         ) : null}
+        {video ? <VideoKnop doel={VIDEO_ID} /> : null}
         <div className="container hero-copy">
           <div className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </div>
-          <h1>
+          <h1 aria-level={kopNiveau}>
             <KopMetPunt tekst={tx(c, "heading")} />
           </h1>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
@@ -172,7 +229,7 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </span>
-          <h1>
+          <h1 aria-level={kopNiveau}>
             <Rijk tekst={tx(c, "heading")} accent="limoen" />
           </h1>
           {tx(c, "subheading") ? <p className="one-intro">{tx(c, "subheading")}</p> : null}
@@ -195,12 +252,13 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
     const cls = ctx.detail ? "detail-hero" : "feature-media";
     return (
       <section data-cms={label(b)} className={cls}>
-        {beeld ? <Photo src={beeld} alt={alt} priority /> : null}
+        <HeaderMedia c={c} beeld={beeld} alt={alt} />
+        {video ? <VideoKnop doel={VIDEO_ID} /> : null}
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </span>
-          <h1>
+          <h1 aria-level={kopNiveau}>
             <Lines text={tx(c, "heading")} />
           </h1>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
@@ -217,7 +275,7 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
         <span className="eyebrow" style={donker ? { color: "var(--lime)" } : undefined}>
           {tx(c, "eyebrow")}
         </span>
-        <h1>
+        <h1 aria-level={kopNiveau}>
           <Lines text={tx(c, "heading")} />
         </h1>
         {meta ? (
@@ -229,9 +287,10 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
           <p style={{ maxWidth: 490, color: donker ? "#c0c7d8" : "#58626c" }}>{tx(c, "subheading")}</p>
         ) : null}
         {knoppen}
-        {beeld ? (
+        {beeld || video ? (
           <div className="lead-image image-frame">
-            <Photo src={beeld} alt={alt} priority />
+            <HeaderMedia c={c} beeld={beeld} alt={alt} />
+            {video ? <VideoKnop doel={VIDEO_ID} /> : null}
           </div>
         ) : null}
       </div>
@@ -1482,16 +1541,20 @@ export function Blokken({
   pagina,
   blokken,
   na,
+  voorbeeld = false,
 }: {
-  pagina: PaginaInhoud;
+  pagina: Pick<PaginaInhoud, "slug">;
   blokken: Blok[];
   /** Extra (niet-CMS) inhoud direct na het eerste blok van een type, bv. de blokkenverkenner. */
   na?: Partial<Record<string, ReactNode>>;
+  /** Losse blokken in de blokkenverkenner (binnen een andere pagina). */
+  voorbeeld?: boolean;
 }) {
   const ctx: Ctx = {
     slug: pagina.slug,
     one: pagina.slug === "/one",
     detail: pagina.slug.split("/").filter(Boolean).length > 1,
+    voorbeeld,
   };
   const uit: ReactNode[] = [];
   const gehad = new Set<string>();

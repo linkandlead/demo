@@ -436,6 +436,16 @@ export const KERNBLOKKEN: KernBlok[] = [
 // Waar de PDF-tekst een beschrijving is i.p.v. een lijst keuzes, staan de keuzes hier expliciet.
 const VARIANT_KEUZES: Record<string, string[]> = {
   "Flexibel blok": ["1 kolom", "2 kolommen", "3 kolommen"],
+  "Reeks stappen": [
+    "genummerde keten",
+    "pijplijn",
+    "stappen of weken",
+    "systeem",
+    "AI-kringloop",
+    "groeiloop (cirkel)",
+    "fasenstrip",
+    "tijdlijn",
+  ],
   Statement: ["Standaard (gedeeld)"],
   "Afsluitende oproep (CTA)": ["Standaard (gedeeld)"],
   "Veelgestelde vragen": ["Standaard"],

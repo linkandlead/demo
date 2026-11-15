@@ -472,6 +472,7 @@ button.btn:disabled {
 
 /* Overgangsblok in donkere stijl (CMS-veld stijl = donker). */
 .one-promo-ribbon.donker { background: var(--night); color: var(--cream); }
+.one-promo-ribbon.donker p { color: #c0c7d8; } /* toelichting was donker op donker */
 
 /* Statement met cijfer (CMS-velden cijfer / cijfer_label). */
 .stat-cijfer { margin-top: 20px; color: #c9d2e1; }
@@ -546,3 +547,33 @@ button.btn:disabled {
 /* Actief menu-item: het streepje eronder mag de tekst niet omhoog duwen (prototype: 4px hoger). */
 .primary-nav a { position: relative; }
 .primary-nav a.active::after { position: absolute; left: 0; right: 0; top: 100%; }
+
+/* Achtergrondvideo in de header (CMS-velden media_type = video, media_video, focal_x/focal_y,
+   overlay). Niet in het prototype, dat alleen beelden kende. De video ligt over de afbeelding (die
+   poster en terugval is) en onder het ontwerpverloop, zodat de tekst even leesbaar blijft. */
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-visual .hero-video { filter: saturate(1.3) contrast(1.12); }
+.hero-overlay { position: absolute; inset: 0; pointer-events: none; }
+.hero-overlay-licht { background: rgba(9, 15, 36, .18); }
+.hero-overlay-sterk { background: rgba(9, 15, 36, .55); }
+.video-knop { position: absolute; z-index: 4; top: 96px; right: 26px; border: 1px solid rgba(255,255,255,.55); background: rgba(9,15,36,.55); color: white; border-radius: 999px; padding: 9px 15px; font-size: 11px; font-weight: 750; backdrop-filter: blur(6px); }
+.lead-image .video-knop { top: 16px; right: 16px; }
+@media (max-width: 760px) { .video-knop { top: 82px; right: 14px; } }
+/* Geen bewegend beeld voor wie dat heeft uitgezet: dan blijft de afbeelding staan. */
+@media (prefers-reduced-motion: reduce) { .hero-video, .video-knop { display: none; } }
+
+/* Blokkenverkenner: het echte blok op schermbreedte, verkleind tot de viewer (zoom wordt in de
+   client gemeten; deze waarden zijn de terugval vóór het meten). Niet in het prototype, waar de
+   preview een vaste nepweergave was. */
+.blok-podium { background: var(--cream); color: var(--night); overflow: hidden; border-radius: 3px; position: relative; transition: opacity .2s; }
+.blok-podium[data-laden] { opacity: .55; }
+.blok-podium-doek { width: 100vw; zoom: .62; }
+.block-viewer { min-width: 0; } /* gridkolom mag smaller worden dan het (verkleinde) blok */
+.blok-podium-leeg { min-height: 320px; display: grid; place-items: center; }
+.blok-notities { margin: 12px 0 0; padding: 14px 18px 14px 34px; background: white; font-size: 12px; color: #4b5563; line-height: 1.55; display: grid; gap: 4px; }
+@media (max-width: 1050px) { .blok-podium-doek { zoom: .6; } }
+@media (max-width: 760px) { .blok-podium-doek { zoom: .8; } }
+
+/* Kaarten (witte tegels) in een donkere sectie: de tegel erft anders de witte sectietekst en de
+   titel valt weg (zichtbaar geworden in de blokkenverkenner met achtergrond Donker/Diepst). */
+.section-dark .info-tile { color: var(--night); }

@@ -261,12 +261,26 @@ const npsOk = await page
   .then(() => true, () => false);
 check("NPS: score en toelichting worden opgeslagen", npsOk);
 
-// Blokkenverkenner: een andere variant verandert de preview zichtbaar
+// Blokkenverkenner: het gekozen blok komt uit de echte renderer; variant en achtergrond veranderen die
 await page.goto(SITE + "/playground", { waitUntil: "load" });
-const klasVoor = await page.locator(".block-preview").getAttribute("class");
+check(
+  "blokkenverkenner: header-voorbeeld met achtergrondvideo (echte renderer)",
+  (await page.locator(".blok-podium .hero-home video.hero-video").count()) === 1,
+);
+await page.getByLabel("Kies hoogte").selectOption("normaal");
 await page.getByLabel("Kies variant").selectOption("achtergrondbeeld");
-const klasNa = await page.locator(".block-preview").getAttribute("class");
-check("blokkenverkenner: variant 'achtergrondbeeld' verandert de preview", klasVoor !== klasNa && /v-achtergrond/.test(klasNa), klasNa);
+const achtergrondOk = await page
+  .locator(".blok-podium .feature-media")
+  .waitFor({ timeout: 10000 })
+  .then(() => true, () => false);
+check("blokkenverkenner: variant 'achtergrondbeeld' rendert de header met achtergrondbeeld", achtergrondOk, page.url());
+await page.getByRole("option", { name: /Conclusieregel/ }).click();
+await page.getByLabel("Kies variant").selectOption("donker");
+const regelOk = await page
+  .locator(".blok-podium .one-promo-ribbon.donker")
+  .waitFor({ timeout: 10000 })
+  .then(() => true, () => false);
+check("blokkenverkenner: Conclusieregel 'donker' zet het veld stijl", regelOk, page.url());
 
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
 await page
