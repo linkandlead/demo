@@ -26,8 +26,12 @@ uit `GET {CMS_URL}/api/cms/content` (token per site); zonder koppeling uit `src/
 - NOVA-formulieren mailen nooit. Contact, nieuwsbrief en demo-aanvraag worden opgeslagen in Supabase
   (`aanvragen`); alleen `/api/aanvraag` stuurt daarnaast door naar het CMS, en alleen met `CMS_LEAD_SITE_ID`.
 - Databaseschema alleen via migraties in `supabase/migrations/`; RLS blijft altijd aan.
-- Nooit schrijven naar productie-CMS-data of naar andere sites ("Nova Studio" en "Stadstheater Nova"
-  zijn andere sites). Secrets nooit committen.
+- Schrijven naar productie-CMS-data mag **alleen voor de site Demo Klant** (site-id
+  `22222222-2222-2222-2222-222222222222`), met toestemming van de eigenaar: via de officiële
+  CMS-API's (sync, media-upload) of afgebakende SQL met `where site_id = '2222…'`. Controleer vóór het
+  overschrijven van pagina's of ze in het CMS zijn aangepast, en vervang liever gericht dan hele
+  pagina's. Nooit schrijven naar andere sites ("Nova Studio" en "Stadstheater Nova" zijn andere
+  sites). Secrets (zoals het CMS-token) nooit committen of tonen.
 
 ## Controles voor een PR
 
