@@ -93,6 +93,20 @@ toelichting en kolom 5 het label (bijvoorbeeld THUIS).
 - **Bestaande NOVA-beelden** hergebruik je met een pad als `/media/hero_arch.webp`.
 - Vul altijd de **alt-tekst** in: een korte beschrijving van wat er op het beeld staat.
 
+### Video
+
+- Een videoblok is een **Header-blok** met *Media* = **video** en een mp4- of webm-bestand bij
+  *Video-URL*. Zet *Lay-out* op **achtergrond** voor een filmisch blok midden op een pagina (zoals
+  op de homepage), of *Hoogte* op **fullscreen** voor een videohero.
+- De NOVA-film is `/media/nova-film.mp4`. Op telefoons speelt automatisch de staande versie
+  `/media/nova-film-mobiel.mp4`, met bijpassende posterbeelden.
+- Een eigen video uploaden kan ook. Die speelt op elk scherm, zonder mobiele versie. Zet een beeld
+  bij *Afbeelding*: dat is de poster tot de video speelt.
+- De video speelt zonder geluid, herhaalt, en speelt alleen als hij in beeld is. Bezoekers kunnen
+  hem pauzeren. Met "beweging verminderen" start hij niet vanzelf.
+- YouTube- of Vimeo-links werken niet als achtergrondvideo.
+- Vul *Media alt-tekst* in: een korte beschrijving van wat de film laat zien.
+
 ### Collecties
 
 | Collectie | Waar op de site | Belangrijke velden |
@@ -123,6 +137,13 @@ Alleen **gepubliceerde** items verschijnen. Reviews verschijnen pas na **goedkeu
   is ingesteld.
 
 ---
+
+### Blokkenbibliotheek
+
+Op `/playground` zie je elk blok zoals het op de site verschijnt, in elke variant. De formulierbouwer
+en het reviewformulier openen op **ware grootte**, zodat je ze kunt invullen. Bij de formulierbouwer
+kies je tussen voorbeeldopstellingen: contactformulier, aanmelding workshop of offerteaanvraag.
+Inzendingen vanuit de bibliotheek worden net als op de site opgeslagen.
 
 ## Wat je niet in het CMS aanpast
 

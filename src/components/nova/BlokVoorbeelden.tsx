@@ -97,6 +97,65 @@ const EIGEN: Record<string, Blok> = {
   collectie_lijst: { type: "collectie_lijst", bg: "wit", content: { eyebrow: "COLLECTIE", titel: "Projecten uit de collectie." } },
 };
 
+/** Blokken met één variant krijgen voorbeeldopstellingen: andere inhoud van dezelfde CMS-velden. */
+const VOORBEELDOPSTELLINGEN: Record<string, Record<string, Inhoud>> = {
+  formulier_bouwer: {
+    "Lab-voorbeeld (alle veldtypes)": {},
+    Contactformulier: {
+      eyebrow: "CONTACT",
+      titel: "Stel je vraag.",
+      intro: "Drie velden, meer is niet nodig. Probeer het formulier leeg te versturen om de foutmeldingen te zien.",
+      velden: [
+        { label: "Naam", type: "tekst", verplicht: "ja" },
+        { label: "Telefoonnummer", type: "telefoon", verplicht: "nee" },
+        { label: "Je vraag", type: "tekstvak", verplicht: "ja" },
+      ],
+      knoptekst: "Verstuur mijn vraag",
+    },
+    "Aanmelding workshop": {
+      eyebrow: "AANMELDEN",
+      titel: "Meld je aan voor een workshop.",
+      intro: "Kies een van de fictieve NOVA-workshops. Je aanmelding wordt opgeslagen, er volgt geen bevestigingsmail.",
+      velden: [
+        { label: "Naam", type: "tekst", verplicht: "ja" },
+        { label: "Organisatie", type: "bedrijf", verplicht: "nee" },
+        { label: "Workshop", type: "keuze", opties: "Licht en ruimte, Verhalen vertellen, Snel prototypen", verplicht: "ja" },
+        { label: "Dieetwensen of andere wensen", type: "tekstvak", verplicht: "nee" },
+      ],
+      knoptekst: "Meld me aan",
+      bevestigingstekst: "Je aanmelding is opgeslagen in de NOVA-demodatabase.",
+    },
+    Offerteaanvraag: {
+      eyebrow: "OFFERTE",
+      titel: "Vraag een offerte aan.",
+      intro: "Vertel wat je wilt organiseren. Alle keuzes zijn verplicht, op de toelichting na.",
+      velden: [
+        { label: "Naam", type: "tekst", verplicht: "ja" },
+        { label: "Bedrijf", type: "bedrijf", verplicht: "ja" },
+        { label: "Soort bijeenkomst", type: "keuze", opties: "Workshop, Presentatie, Evenement", verplicht: "ja" },
+        { label: "Aantal personen", type: "keuze", opties: "10 tot 25, 25 tot 100, Meer dan 100", verplicht: "ja" },
+        { label: "Toelichting", type: "tekstvak", verplicht: "nee" },
+      ],
+      knoptekst: "Vraag een offerte aan",
+    },
+  },
+  review_verzamelen: {
+    "Algemene review": {},
+    "Na een evenement": {
+      eyebrow: "JOUW ERVARING",
+      titel: "Hoe was Pulse Festival?",
+      intro: "Je was erbij. Laat in een paar woorden weten wat je is bijgebleven.",
+      knoptekst: "Deel mijn ervaring",
+    },
+    "Voor een ruimte": {
+      eyebrow: "REVIEW",
+      titel: "Wat vond je van The Atrium?",
+      intro: "Je review helpt anderen kiezen. Hij verschijnt pas na controle op de site.",
+      knoptekst: "Plaats mijn review",
+    },
+  },
+};
+
 /** Basisvoorbeeld per bloktype: liefst de echte inzet op een NOVA-pagina. */
 function basis(type: string): Blok | undefined {
   const voorkeur: Record<string, string> = {
@@ -200,8 +259,10 @@ export function blokVoorbeelden(): Record<string, BlokVoorbeeld> {
     const b = basis(type);
     if (!b) continue;
     const varianten: Record<string, ReactNode> = {};
-    for (const variant of variantOpties(k.varianten, k.naam)) {
-      const blok: Blok = { ...b, content: { ...b.content, ...variantPatch(type, variant, b.content) } };
+    const opstellingen = VOORBEELDOPSTELLINGEN[type];
+    for (const variant of opstellingen ? Object.keys(opstellingen) : variantOpties(k.varianten, k.naam)) {
+      const patch = opstellingen ? opstellingen[variant] : variantPatch(type, variant, b.content);
+      const blok: Blok = { ...b, content: { ...b.content, ...patch } };
       varianten[variant] =
         type === "cta" ? (
           <OproepSectie oproep={blok} />

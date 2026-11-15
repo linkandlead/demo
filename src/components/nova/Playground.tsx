@@ -29,6 +29,9 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
   const natuurlijk = (naam: string) =>
     ACHTERGRONDEN.find(([, , token]) => token === voorbeelden[naam]?.bg)?.[0] ?? "Licht";
   const [achtergrond, setAchtergrond] = useState(() => natuurlijk("Header (hero)"));
+  // Formulieren en interactie bekijk je op ware grootte (in de verkleinde weergave zijn velden te klein).
+  const interactief = (naam: string) => KERNBLOKKEN.find((b) => b.naam === naam)?.categorie === "Conversie en formulieren";
+  const [wareGrootte, setWareGrootte] = useState(false);
   const [variant, setVariant] = useState<string | null>(null);
 
   const blokken =
@@ -37,7 +40,10 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
       : KERNBLOKKEN.filter((b) => b.categorie === groep);
   const blok = blokken.find((b) => b.naam === blokNaam) ?? blokken[0];
   const voorbeeld = voorbeelden[blok.naam];
-  const opties = variantOpties(blok.varianten, blok.naam);
+  // Voorbeeldopstellingen (bv. bij de formulierbouwer) gaan voor de varianten uit de specificatie.
+  const opties = voorbeelden[blok.naam]
+    ? Object.keys(voorbeelden[blok.naam].varianten)
+    : variantOpties(blok.varianten, blok.naam);
   const huidigeVariant =
     variant && opties.includes(variant) ? variant : opties[0];
   const [, , bgToken] =
@@ -79,6 +85,7 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
                   setBlokNaam(b.naam);
                   setVariant(null);
                   setAchtergrond(natuurlijk(b.naam));
+                  setWareGrootte(interactief(b.naam));
                 }}
               >
                 <span>{b.naam}</span>
@@ -112,11 +119,19 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
                   <option key={o}>{o}</option>
                 ))}
               </select>
+              <button
+                type="button"
+                className={`chip ${wareGrootte ? "active" : ""}`}
+                aria-pressed={wareGrootte}
+                onClick={() => setWareGrootte((w) => !w)}
+              >
+                Ware grootte
+              </button>
             </div>
           </div>
           <div className="pv-venster" aria-label={`Voorbeeld van het blok ${blok.naam}`}>
             <div
-              className="pv-frame"
+              className={`pv-frame${wareGrootte ? " ware-grootte" : ""}`}
               data-bg={bgToken}
               data-variant={huidigeVariant}
               // Interactie in de preview is echt (formulieren, configurator), maar links openen niets.
@@ -143,7 +158,7 @@ export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVo
               </span>
             </div>
             <div>
-              <strong>Previewvariant</strong>
+              <strong>{voorbeelden[blok.naam] && !variantOpties(blok.varianten, blok.naam).includes(huidigeVariant) ? "Voorbeeldopstelling" : "Previewvariant"}</strong>
               <br />
               <span>{huidigeVariant}</span>
             </div>

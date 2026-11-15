@@ -284,6 +284,34 @@ await page.locator(".block-list button", { hasText: "Kaartenrij" }).first().clic
 await page.getByLabel("Kies variant").selectOption("4 kolommen");
 check("blokkenverkenner: Kaartenrij '4 kolommen' toont vier kaarten", (await page.locator(".pv-frame .info-tile").count()) === 4);
 
+await page.locator(".block-list button", { hasText: "Formulierbouwer" }).first().click();
+check(
+  "blokkenverkenner: formulierbouwer opent op ware grootte met voorbeeldopstellingen",
+  (await page.locator(".pv-frame.ware-grootte").count()) === 1 &&
+    (await page.getByLabel("Kies variant").locator("option", { hasText: "Offerteaanvraag" }).count()) === 1,
+);
+await page.getByLabel("Kies variant").selectOption("Offerteaanvraag");
+await page.locator(".pv-frame").getByRole("button", { name: /Vraag een offerte aan/ }).click();
+check(
+  "blokkenverkenner: leeg versturen toont foutmeldingen in de preview",
+  (await page.locator('.pv-frame [aria-invalid="true"]').count()) >= 4,
+);
+await page.locator(".block-list button", { hasText: "Review verzamelen" }).first().click();
+check("blokkenverkenner: reviewformulier met sterren", (await page.locator(".pv-frame .sterren-rij button").count()) === 5);
+
+// Homepage: videoblok uit het CMS (Header met media_type video)
+await page.goto(SITE + "/", { waitUntil: "load" });
+const video = await page.evaluate(() => {
+  const v = document.querySelector(".met-video video");
+  return v ? { bronnen: [...v.querySelectorAll("source")].map((s) => s.getAttribute("src")), muted: v.muted, h1: document.querySelectorAll("h1").length } : null;
+});
+check(
+  "homepage: videoblok met desktop- en mobiele video, zonder geluid, één h1",
+  !!video && video.bronnen.includes("/media/nova-film.mp4") && video.bronnen.includes("/media/nova-film-mobiel.mp4") && video.muted && video.h1 === 1,
+  JSON.stringify(video),
+);
+check("homepage: video is te pauzeren", (await page.getByRole("button", { name: /Pauzeer video|Speel video af/ }).count()) === 1);
+
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
 await page
   .getByRole("button", { name: /Bekijk tickets/ })

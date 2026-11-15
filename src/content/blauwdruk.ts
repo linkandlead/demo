@@ -140,6 +140,22 @@ const home: BlauwdrukPagina = {
       knop: "/about",
       knoptekst: "Ontdek ons verhaal",
     }),
+    // Videoblok: een Header met media_type "video". De staande mobiele versie en de posters horen bij
+    // /media/nova-film.mp4 (zie src/content/media.ts); een geüploade video speelt zonder die extra's.
+    blok("header", "nacht", {
+      layout: "achtergrond",
+      hoogte: "normaal",
+      eyebrow: "NOVA IN BEWEGING",
+      heading: "Zie wat er\nmogelijk wordt.",
+      subheading: "Tweeëndertig seconden NOVA: architectuur, licht, ontmoetingen en ideeën die in beweging komen.",
+      cta_primair_label: "Bekijk ons werk",
+      cta_primair_link: "/work",
+      media_type: "video",
+      media_video: "/media/nova-film.mp4",
+      media_afbeelding: m("nova-film-poster"),
+      media_alt: "Korte film over NOVA: blauwe boogarchitectuur, lichtinstallaties, een concertzaal en bewegende lijnen.",
+      overlay: "donker",
+    }),
     blok("cases_grid", "mist", {
       eyebrow: "GESELECTEERD WERK",
       // Regels na de titel = toelichting naast de kop.

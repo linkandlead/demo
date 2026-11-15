@@ -11,6 +11,8 @@ import {
   voorbeeldWedstrijden,
 } from "@/content/voorbeelddata";
 import { Aftelklok } from "./Aftelklok";
+import { VideoAchtergrond } from "./VideoAchtergrond";
+import { VIDEO } from "@/content/media";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 import { DemoFormulier } from "./DemoFormulier";
@@ -134,8 +136,23 @@ function KopMetPunt({ tekst }: { tekst: string }) {
 }
 
 // ---------- Header ----------
-function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
+function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean }) {
   const c = b.content;
+  // Alleen de eerste header van een pagina is de paginakop (h1); een volgende header is een sectie.
+  const Kop = eerste ? "h1" : "h2";
+  // Video (media_type "video"): alleen mp4/webm als achtergrond; YouTube/Vimeo passen niet in deze vorm.
+  const videoSrc =
+    tx(c, "media_type") === "video" && /\.(mp4|webm)(\?|$)/i.test(tx(c, "media_video")) ? cmsMedia(c.media_video) : "";
+  const extra = VIDEO[tx(c, "media_video")] ?? {};
+  const video = videoSrc ? (
+    <VideoAchtergrond
+      src={videoSrc}
+      mobielSrc={extra.mobiel}
+      poster={media(c, "media_afbeelding") || extra.poster}
+      mobielPoster={extra.mobielPoster}
+      label={tx(c, "media_alt") || tx(c, "heading").replace(/\n/g, " ")}
+    />
+  ) : null;
   const beeld = media(c, "media_afbeelding");
   const alt = tx(c, "media_alt");
   const knop1 = link(c, "cta_primair_link");
@@ -163,7 +180,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
   if (tx(c, "hoogte") === "fullscreen")
     return (
       <section data-cms={label(b)} className="hero-home">
-        {beeld ? (
+        {video ? (
+          <div className="hero-visual">{video}</div>
+        ) : beeld ? (
           <div className="hero-visual">
             <Photo src={beeld} alt={alt} priority />
           </div>
@@ -172,9 +191,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
           <div className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </div>
-          <h1>
+          <Kop className="hero-kop">
             <KopMetPunt tekst={tx(c, "heading")} />
-          </h1>
+          </Kop>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
           {knoppen}
         </div>
@@ -201,9 +220,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </span>
-          <h1>
+          <Kop className="hero-kop">
             <Rijk tekst={tx(c, "heading")} accent="limoen" />
-          </h1>
+          </Kop>
           {tx(c, "subheading") ? <p className="one-intro">{tx(c, "subheading")}</p> : null}
           {knoppen}
           {stats.length ? (
@@ -227,9 +246,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
           <span className="eyebrow" style={b.bg === "nacht" || b.bg === "diep" ? { color: "var(--lime)" } : undefined}>
             {tx(c, "eyebrow")}
           </span>
-          <h1>
+          <Kop className="hero-kop">
             <KopMetPunt tekst={tx(c, "heading")} />
-          </h1>
+          </Kop>
           {tx(c, "subheading") ? <p className="hero-midden-tekst">{tx(c, "subheading")}</p> : null}
           {knoppen}
         </div>
@@ -251,9 +270,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
             <span className="eyebrow" style={{ color: "var(--lime)" }}>
               {tx(c, "eyebrow")}
             </span>
-            <h1>
+            <Kop className="hero-kop">
               <KopMetPunt tekst={tx(c, "heading")} />
-            </h1>
+            </Kop>
             {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
             {knoppen}
           </div>
@@ -266,15 +285,15 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
   if (tx(c, "layout") === "achtergrond") {
     const cls = ctx.detail ? "detail-hero" : "feature-media";
     return (
-      <section data-cms={label(b)} className={cls}>
-        {beeld ? <Photo src={beeld} alt={alt} priority /> : null}
+      <section data-cms={label(b)} className={video ? `${cls} met-video` : cls}>
+        {video ?? (beeld ? <Photo src={beeld} alt={alt} priority={eerste} /> : null)}
         <div className="container copy">
           <span className="eyebrow" style={{ color: "var(--lime)" }}>
             {tx(c, "eyebrow")}
           </span>
-          <h1>
+          <Kop className="hero-kop">
             <Lines text={tx(c, "heading")} />
-          </h1>
+          </Kop>
           {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
           {knoppen}
         </div>
@@ -289,9 +308,9 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
         <span className="eyebrow" style={donker ? { color: "var(--lime)" } : undefined}>
           {tx(c, "eyebrow")}
         </span>
-        <h1>
+        <Kop className="hero-kop">
           <Lines text={tx(c, "heading")} />
-        </h1>
+        </Kop>
         {meta ? (
           <div className="hero-description">
             <span className="meta">{meta}</span>
@@ -2066,7 +2085,7 @@ export function Blokken({
     const k = `${b.type}-${i}`;
     switch (b.type) {
       case "header":
-        uit.push(<Header key={k} b={b} ctx={ctx} />);
+        uit.push(<Header key={k} b={b} ctx={ctx} eerste={!blokken.slice(0, i).some((x) => x.type === "header")} />);
         break;
       case "marquee":
         uit.push(<Marquee key={k} b={b} />);

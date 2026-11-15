@@ -91,3 +91,13 @@ export const MEDIA: Record<
     varianten: [640, 1280],
   },
 };
+
+/** Video's in deze frontend: bij een desktopvideo uit het CMS horen automatisch een staande
+ *  mobiele versie en posterbeelden. Een video die in het CMS is geüpload, speelt zonder deze extra's. */
+export const VIDEO: Record<string, { mobiel?: string; poster?: string; mobielPoster?: string }> = {
+  "/media/nova-film.mp4": {
+    mobiel: "/media/nova-film-mobiel.mp4",
+    poster: "/media/nova-film-poster.webp",
+    mobielPoster: "/media/nova-film-mobiel-poster.webp",
+  },
+};
