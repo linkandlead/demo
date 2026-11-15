@@ -27,7 +27,7 @@ Het tempo van een ervaring bepaalt hoeveel aandacht bezoekers kunnen geven. Een 
 
 Een bijzondere ervaring is pas echt sterk wanneer zoveel mogelijk mensen eraan kunnen deelnemen. Heldere routing, leesbare informatie, rustige alternatieven en aandacht voor verschillende zintuiglijke behoeften maken een concept toegankelijker. Ontwerp daarom vanaf het begin voor uiteenlopende bezoekers, in plaats van achteraf extra oplossingen toe te voegen. Dat vraagt soms om concessies aan het spectaculaire, maar levert meestal iets beters op: een ervaring die niet alleen indruk maakt, maar ook uitnodigt.
 
-Een sterke ervaring is geen decor. Ze geeft mensen een nieuwe manier om naar de wereld te kijken.', '/media/journal_face.webp', '2026-11-06', true, 'NOVA-redactie');
+Een sterke ervaring is geen decor. Ze geeft mensen een nieuwe manier om naar de wereld te kijken.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/journal-face-mwhq1kyy-1i1bhv.webp', '2026-11-06', true, 'NOVA-redactie');
 insert into artikelen (site_id, slug, titel, rubriek, samenvatting, hoofdtekst, foto, gepubliceerd_op, published, auteur) values ('22222222-2222-2222-2222-222222222222', 'ruimtes-die-creativiteit-activeren', 'Ruimtes die creativiteit activeren', 'ONTWERP', 'Waarom sommige ruimtes onmiddellijk iets in beweging brengen, terwijl andere vooral functioneel zijn.', '## De ruimte is nooit neutraal
 
 Een omgeving beïnvloedt hoe we ons gedragen. In een formele vergaderzaal wachten mensen vaak op hun beurt. In een open studio lopen gesprekken sneller door elkaar. Het is niet zo dat de ene ruimte altijd beter is. Het gaat om de vraag welke vorm van interactie je wilt stimuleren.
@@ -56,7 +56,7 @@ Een goede ruimte kan nooit voor iedereen precies hetzelfde betekenen. Sommige be
 
 Je hoeft geen complete locatie te verbouwen om een andere dynamiek te creëren. Verplaats eens de ontvangst, begin een sessie staand of maak ruimte voor een korte wandeling. Vraag bezoekers achteraf welk moment hen hielp om verder te denken. Zo leer je stap voor stap welke elementen werkelijk iets toevoegen. Het mooiste ontwerp is uiteindelijk niet alleen wat goed oogt, maar wat een bijeenkomst beter laat verlopen.
 
-Een ruimte is pas inspirerend wanneer mensen er iets durven te doen.', '/media/journal_arch.webp', '2026-11-05', true, 'NOVA-redactie');
+Een ruimte is pas inspirerend wanneer mensen er iets durven te doen.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/journal-arch-mwhq1gfx-o6sdla.webp', '2026-11-05', true, 'NOVA-redactie');
 insert into artikelen (site_id, slug, titel, rubriek, samenvatting, hoofdtekst, foto, gepubliceerd_op, published, auteur) values ('22222222-2222-2222-2222-222222222222', 'achter-de-schermen-bij-pulse-festival', 'Achter de schermen bij Pulse Festival', 'BELEVINGEN', 'Hoe bouw je een festival waar het programma en de beleving één verhaal vertellen?', '## Eén idee als kompas
 
 Voor de fictieve editie van Pulse Festival kozen we drie woorden: ontdekken, creëren, verbinden. Ze vormen het kompas voor elke keuze. Een sessie, installatie of ontmoeting moet ten minste één van die woorden waarmaken.
@@ -85,7 +85,7 @@ Een evenement bestaat uit honderden keuzes die bezoekers meestal niet bewust opm
 
 Niet iedereen komt voor hetzelfde. De ene bezoeker wil nieuwe kennis opdoen, de ander zoekt makers om mee samen te werken. Daarom bevat het programma verschillende soorten momenten. Naast keynotes zijn er kleine gesprekken, open installaties en rustige plekken. Iedereen kan zo een eigen route samenstellen, zonder het gevoel te hebben iets te missen. Dat maakt een rijk programma toegankelijker en aantrekkelijker.
 
-Een festival is geslaagd als het niet alleen herinneringen, maar ook nieuwe plannen oplevert.', '/media/journal_event.webp', '2026-11-04', true, 'NOVA-redactie');
+Een festival is geslaagd als het niet alleen herinneringen, maar ook nieuwe plannen oplevert.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/journal-event-mwhq1i26-giygsm.webp', '2026-11-04', true, 'NOVA-redactie');
 insert into artikelen (site_id, slug, titel, rubriek, samenvatting, hoofdtekst, foto, gepubliceerd_op, published, auteur) values ('22222222-2222-2222-2222-222222222222', 'waarom-de-toekomst-menselijk-blijft', 'Waarom de toekomst menselijk blijft', 'TOEKOMST', 'In een wereld die steeds digitaler wordt, groeit juist de waarde van menselijke aandacht.', '## Nieuwe middelen, oude vragen
 
 Technologie verandert de snelheid waarmee we informatie delen en plannen maken. Toch blijven belangrijke vragen hetzelfde: voelen mensen zich gezien, begrijpen ze elkaar en ontstaat er vertrouwen? Daar kan geen interface alleen voor zorgen.
@@ -114,7 +114,7 @@ Wie met nieuwe technologie werkt, heeft niet alleen technische kennis nodig. Jui
 
 Mensen raken niet enthousiast van een systeem dat ze niet begrijpen of niet kunnen controleren. Transparante keuzes, begrijpelijke taal en een mogelijkheid om fouten te herstellen maken een groot verschil. Dat geldt voor organisaties, maar net zo goed voor digitale diensten. Goed ontwerpen betekent niet dat iedere bezoeker de techniek achter het product moet kennen. Wel dat duidelijk blijft wat iemand kan verwachten en waar de grenzen liggen.
 
-Vooruitgang voelt pas waardevol wanneer mensen er samen beter van worden.', '/media/comm_face.webp', '2026-11-03', true, 'NOVA-redactie');
+Vooruitgang voelt pas waardevol wanneer mensen er samen beter van worden.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/comm-face-mwhq18f0-viuawx.webp', '2026-11-03', true, 'NOVA-redactie');
 insert into artikelen (site_id, slug, titel, rubriek, samenvatting, hoofdtekst, foto, gepubliceerd_op, published, auteur) values ('22222222-2222-2222-2222-222222222222', 'designing-for-tomorrow-begins-today', 'Ontwerpen voor morgen begint vandaag', 'INZICHTEN', 'Een toekomstbestendig idee begint niet met voorspellen, maar met aandachtig ontwerpen.', '## Morgen is nooit helemaal voorspelbaar
 
 Een ontwerp moet vandaag bruikbaar zijn en morgen kunnen veranderen. Daarom is flexibiliteit niet alleen een technische eigenschap. Het is ook een manier van denken: maak keuzes die ruimte laten voor nieuwe inzichten.
@@ -143,7 +143,7 @@ Een flexibel ontwerp is opgebouwd uit elementen die hun functie kennen. Een arti
 
 Een website, ruimte of ervaring is nooit helemaal af zodra deze wordt opgeleverd. Pas wanneer mensen haar gebruiken, ontdek je welke keuzes werken en waar ze vastlopen. Kijk naar reacties, test kleine verbeteringen en blijf vragen wat echt waarde toevoegt. De kunst is om het ontwerp herkenbaar te houden terwijl de inhoud meegroeit. Toekomstbestendigheid zit niet in één spectaculaire lancering, maar in het vermogen om te blijven leren.
 
-De beste manier om klaar te zijn voor morgen, is vandaag iets te maken dat kan blijven groeien.', '/media/work_color.webp', '2026-11-02', true, 'NOVA-redactie');
+De beste manier om klaar te zijn voor morgen, is vandaag iets te maken dat kan blijven groeien.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/work-color-mwhq1wrh-07gtzs.webp', '2026-11-02', true, 'NOVA-redactie');
 insert into artikelen (site_id, slug, titel, rubriek, samenvatting, hoofdtekst, foto, gepubliceerd_op, published, auteur) values ('22222222-2222-2222-2222-222222222222', 'het-nieuwe-ontmoeten-is-persoonlijk', 'Het nieuwe ontmoeten is persoonlijk', 'COMMUNITY', 'Waarom echte verbinding niet ontstaat door meer contacten, maar door betere ontmoetingen.', '## De waarde zit tussen de agendapunten
 
 Een bijeenkomst is meer dan een zorgvuldig programma. Vaak ontstaan de waardevolste gesprekken in de minuten ervoor of erna. Een goede organisator ontwerpt daarom niet alleen inhoud, maar ook ruimte om elkaar te ontmoeten.
@@ -172,4 +172,4 @@ De toon van een bijeenkomst ontstaat vaak al bij de uitnodiging. Begrijpt iemand
 
 Niet iedere minuut hoeft geprogrammeerd te zijn. Juist wanneer mensen even niets hoeven, ontstaan vaak de interessantste verbindingen. Organiseer daarom niet alleen de inhoud, maar ook het toeval: plekken waar mensen blijven staan, tafels waar nieuwe combinaties ontstaan en momenten waarop een goed gesprek niet meteen onderbroken wordt. Dan wordt een evenement meer dan een reeks sprekers. Het wordt een omgeving waar iets nieuws kan beginnen.
 
-Betekenisvolle ontmoetingen beginnen bij de wens om iemand echt te leren kennen.', '/media/space_atrium.webp', '2026-11-01', true, 'NOVA-redactie');
+Betekenisvolle ontmoetingen beginnen bij de wens om iemand echt te leren kennen.', 'https://mucwwqjctynklovacwbv.supabase.co/storage/v1/object/public/media/22222222-2222-2222-2222-222222222222/space-atrium-mwhq1rio-gv03l3.webp', '2026-11-01', true, 'NOVA-redactie');

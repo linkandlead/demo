@@ -89,22 +89,29 @@ toelichting en kolom 5 het label (bijvoorbeeld THUIS).
 
 ### Beelden
 
-- **Beelden uploaden:** een upload in het CMS werkt overal.
-- **Bestaande NOVA-beelden** hergebruik je met een pad als `/media/hero_arch.webp`.
+- Alle NOVA-beelden staan in de **mediabibliotheek** van Demo Klant (19 stuks, met alt-tekst).
+  Kies ze daar, of upload een nieuw beeld. Pagina's en collecties verwijzen naar die beelden, dus de
+  bibliotheek laat zien waar elk beeld gebruikt wordt.
+- De site maakt zelf kleinere formaten voor telefoons. Je hoeft niets te verkleinen.
 - Vul altijd de **alt-tekst** in: een korte beschrijving van wat er op het beeld staat.
 
 ### Video
 
-- Een videoblok is een **Header-blok** met *Media* = **video** en een mp4- of webm-bestand bij
-  *Video-URL*. Zet *Lay-out* op **achtergrond** voor een filmisch blok midden op een pagina (zoals
-  op de homepage), of *Hoogte* op **fullscreen** voor een videohero.
-- De NOVA-film is `/media/nova-film.mp4`. Op telefoons speelt automatisch de staande versie
-  `/media/nova-film-mobiel.mp4`, met bijpassende posterbeelden.
-- Een eigen video uploaden kan ook. Die speelt op elk scherm, zonder mobiele versie. Zet een beeld
-  bij *Afbeelding*: dat is de poster tot de video speelt.
+- Een videoblok is een **Header-blok** met *Media* = **video** en bij *Video-URL* een volledige
+  URL naar een mp4- of webm-bestand. Zet *Lay-out* op **achtergrond** voor een filmisch blok midden
+  op een pagina (zoals op de homepage), of *Hoogte* op **fullscreen** voor een videohero.
+- **Video's kunnen niet in de mediabibliotheek**: die neemt alleen JPG, PNG, WebP, GIF en AVIF aan.
+  De NOVA-film staat daarom op de website zelf:
+  `https://demo.linkandlead.nl/media/nova-film-liggend.mp4`. Gebruik altijd de **volledige URL**,
+  dan werkt de video ook in de CMS-editor en in "Voorbeeld op de site".
+- Op telefoons speelt bij deze film automatisch de staande versie (`nova-film-staand.mp4`).
+- Zet bij *Afbeelding* het posterbeeld uit de mediabibliotheek (*NOVA-film poster*). Dat zie je
+  tot de video speelt, en ook bij "beweging verminderen".
 - De video speelt zonder geluid, herhaalt, en speelt alleen als hij in beeld is. Bezoekers kunnen
-  hem pauzeren. Met "beweging verminderen" start hij niet vanzelf.
-- YouTube- of Vimeo-links werken niet als achtergrondvideo.
+  hem pauzeren.
+- YouTube- en Vimeo-links werken niet als achtergrondvideo op de NOVA-site.
+- Vervang je een video, geef het bestand dan een **nieuwe naam**. Video's op de site worden een
+  jaar door browsers bewaard, dus onder dezelfde naam ziet niet iedereen de nieuwe versie.
 - Vul *Media alt-tekst* in: een korte beschrijving van wat de film laat zien.
 
 ### Collecties

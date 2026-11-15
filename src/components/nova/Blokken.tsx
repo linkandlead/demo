@@ -13,6 +13,7 @@ import {
 import { Aftelklok } from "./Aftelklok";
 import { VideoAchtergrond } from "./VideoAchtergrond";
 import { VIDEO } from "@/content/media";
+import { CMS_MEDIA } from "@/content/cms-media";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 import { DemoFormulier } from "./DemoFormulier";
@@ -150,9 +151,13 @@ function Header({ b, ctx, eerste = true }: { b: Blok; ctx: Ctx; eerste?: boolean
   // Alleen de eerste header van een pagina is de paginakop (h1); een volgende header is een sectie.
   const Kop = eerste ? "h1" : "h2";
   // Video (media_type "video"): alleen mp4/webm als achtergrond; YouTube/Vimeo passen niet in deze vorm.
+  // Een video op deze website zelf (volledige URL in het CMS, zodat ook de CMS-editor hem toont)
+  // laden we via het eigen pad: dan werkt hij op elke omgeving en horen de mobiele versie en
+  // posters erbij (src/content/media.ts).
+  const ruweVideo = tx(c, "media_video").replace(/^https:\/\/demo\.linkandlead\.nl(?=\/media\/)/, "");
   const videoSrc =
-    tx(c, "media_type") === "video" && /\.(mp4|webm)(\?|$)/i.test(tx(c, "media_video")) ? cmsMedia(c.media_video) : "";
-  const extra = VIDEO[tx(c, "media_video")] ?? {};
+    tx(c, "media_type") === "video" && /\.(mp4|webm)(\?|$)/i.test(ruweVideo) ? cmsMedia(ruweVideo) : "";
+  const extra = VIDEO[ruweVideo] ?? {};
   const video = videoSrc ? (
     <VideoAchtergrond
       src={extra.versie ? `${videoSrc}?v=${extra.versie}` : videoSrc}
@@ -794,7 +799,7 @@ function Reeks({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
               ))}
             </div>
             <div className="image-frame" style={{ height: 360 }}>
-              <Photo src="event_gradient" />
+              <Photo src={CMS_MEDIA.event_gradient ?? "event_gradient"} />
             </div>
           </div>
         </div>
@@ -1518,7 +1523,7 @@ function ConfiguratorBlok({ b, n }: { b: Blok; n: number }) {
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
         <div className="detail-split">
           <div className="image-frame" style={{ height: 470 }}>
-            <Photo src="space_atrium" />
+            <Photo src={CMS_MEDIA.space_atrium ?? "space_atrium"} />
           </div>
           <div style={{ display: "grid", alignContent: "start", gap: 20 }}>
             <Configurator

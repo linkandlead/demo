@@ -15,6 +15,7 @@ import {
   ruimteDemolabel,
   ruimteDetails,
 } from "./teksten.ts";
+import { CMS_MEDIA, SITE_URL } from "./cms-media.ts";
 
 export type BlauwdrukBlok = { type: string; bg: string | null; content: Record<string, unknown> };
 export type BlauwdrukPagina = {
@@ -25,7 +26,8 @@ export type BlauwdrukPagina = {
   blokken: BlauwdrukBlok[];
 };
 
-const m = (naam: string) => `/media/${naam}.webp`;
+// Beelden staan in de mediabibliotheek van het CMS (src/content/cms-media.ts).
+const m = (naam: string) => CMS_MEDIA[naam] ?? `/media/${naam}.webp`;
 const blok = (type: string, bg: string | null, content: Record<string, unknown>): BlauwdrukBlok => ({ type, bg, content });
 const cta = (eyebrow: string, titel: string, tekst: string, knoptekst: string, knop: string) =>
   blok("cta", "nacht", { eyebrow, titel, tekst, knoptekst, knop });
@@ -141,7 +143,8 @@ const home: BlauwdrukPagina = {
       knoptekst: "Ontdek ons verhaal",
     }),
     // Videoblok: een Header met media_type "video". De staande mobiele versie en de posters horen bij
-    // /media/nova-film.mp4 (zie src/content/media.ts); een geüploade video speelt zonder die extra's.
+    // de film op deze website (zie src/content/media.ts). Het CMS heeft de volledige URL, zodat ook de
+    // CMS-editor hem toont; video's kunnen niet in de mediabibliotheek.
     blok("header", "nacht", {
       layout: "achtergrond",
       hoogte: "normaal",
@@ -151,7 +154,7 @@ const home: BlauwdrukPagina = {
       cta_primair_label: "Bekijk ons werk",
       cta_primair_link: "/work",
       media_type: "video",
-      media_video: "/media/nova-film.mp4",
+      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
       media_afbeelding: m("nova-film-poster"),
       media_alt: "Korte film over NOVA: blauwe boogarchitectuur, lichtinstallaties, een concertzaal en bewegende lijnen.",
       overlay: "donker",
@@ -344,7 +347,7 @@ const belevingen: BlauwdrukPagina = {
       cta_secundair_link: "/experiences/nova-sessions",
       // Videohero: dezelfde NOVA-film als op de homepage (met staande versie voor telefoons).
       media_type: "video",
-      media_video: "/media/nova-film.mp4",
+      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
       media_afbeelding: m("nova-film-poster"),
       media_alt: "Korte film over NOVA: lichtinstallaties, een concertzaal, boogarchitectuur en bewegende lijnen.",
       overlay: "donker",
