@@ -108,10 +108,10 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   knop "Start de rondleiding" zijn hersteld. Chips en opsomming zijn regels die met "- " beginnen in
   het tekstveld van het statement- en formulierblok; de twee knoppen naar `/demo` staan vast in de
   frontend (de blokken hebben geen tweede knopveld).
-- Home: korte toelichtingen naast "Gemaakt om je iets te laten voelen" (cases) en "Goede ideeën…"
-  (artikelen) en de knoppen "Ontmoet de makers"/"Lees de verhalen" vervallen (cases_grid/artikelen_grid
-  hebben geen intro- of knopveld). "Bekijk alle projecten" volgt uit `link_naar_overzicht`.
-- Statistieken hebben geen eyebrow (alleen het sectienummer).
+- Home: de toelichtingen bij Werk en Verhalen, de eyebrows "IN DEZE DEMO" en "DE MENSEN", de knoppen
+  "Ontmoet de makers" en "Lees de verhalen" en het ◉-teken in de tweede heroknop zijn hersteld.
+  Toelichting en eyebrow staan in het titelveld van het blok (zie cms-koppeling.md); de twee knoppen
+  naar de overzichten staan vast op de home (de blokken hebben geen knopveld).
 - Ruimtedetail: de tekst-met-beeld-sectie gebruikt de homevorm (eyebrow en kop links naast het beeld).
 - Blokkenverkenner: elke variant verandert de preview nu zichtbaar (beeld links/rechts, gecentreerd,
   achtergrondbeeld, compact, kolommen, kleurbanden, stappenvormen, formuliersoort, NPS/sterren …).

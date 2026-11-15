@@ -29,6 +29,10 @@ Opsommingen: regels die met `- ` beginnen in een tekstveld (bv. de tekst van het
 intro van het aanvraagformulier op `/one`) worden chips of een lijst. In een overgangsblok is de
 eerste regel de kop en zijn de volgende regels de toelichting.
 
+Sectiekoppen: blokken zonder eyebrow- of introveld (bv. Cases, Artikelen, Team, Statistieken)
+lezen die uit het titelveld. Een eerste regel in HOOFDLETTERS wordt de eyebrow, regels ná de titel
+worden de toelichting naast de kop. Voorbeeld: `IN DEZE DEMO⏎Een wereld vol mogelijkheden.`
+
 Hoe een blok eruitziet volgt uit de NOVA-vormgeving (`src/components/nova/Blokken.tsx`): bijvoorbeeld
 kaarten mét beeld en link worden ruimtekaarten, een `reeks` met labels wordt een programma, een `header`
 met hoogte "fullscreen" wordt de home-hero. Onbekende bloktypes worden overgeslagen.

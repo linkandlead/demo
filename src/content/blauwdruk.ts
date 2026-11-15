@@ -142,7 +142,9 @@ const home: BlauwdrukPagina = {
     }),
     blok("cases_grid", "mist", {
       eyebrow: "GESELECTEERD WERK",
-      titel: "Gemaakt om je iets te laten voelen.",
+      // Regels na de titel = toelichting naast de kop.
+      titel:
+        "Gemaakt om je iets te laten voelen.\nOntdek zes voorbeeldprojecten waarin beeld, verhaal en ruimte samenkomen. Elk project heeft een eigen identiteit, precies zoals iedere website een eigen uitstraling verdient.",
       maximaal: 3,
       link_naar_overzicht: "/work",
     }),
@@ -154,7 +156,8 @@ const home: BlauwdrukPagina = {
       knoptekst: "Maak kennis met NOVA",
     }),
     blok("statistieken", "mist", {
-      titel: "Een wereld vol mogelijkheden.",
+      // Eerste regel in hoofdletters = eyebrow.
+      titel: "IN DEZE DEMO\nEen wereld vol mogelijkheden.",
       intro: "Geen verzonnen impactcijfers, maar aantallen die je in de demo zelf kunt bekijken.",
       items: [
         { waarde: "43", label: "Algemene CMS-blokken" },
@@ -164,11 +167,16 @@ const home: BlauwdrukPagina = {
       ],
     }),
     blok("mensen", "wit", {
-      titel: "Verschillende denkers. Gedeelde energie.",
+      titel: "DE MENSEN\nVerschillende denkers. Gedeelde energie.",
       intro: "Vier fictieve makers, vier perspectieven. Hun profielen laten zien hoe je een teamcollectie in het CMS beheert.",
       maximaal: 4,
     }),
-    blok("artikelen_grid", "mist", { eyebrow: "VERHALEN", titel: "Goede ideeën verdienen een goed verhaal.", maximaal: 3 }),
+    blok("artikelen_grid", "mist", {
+      eyebrow: "VERHALEN",
+      titel:
+        "Goede ideeën verdienen een goed verhaal.\nVerhalen over ontwerp, beleving, technologie en samenkomen. Ontdek hoe een redactionele collectie van overzicht tot detailpagina werkt.",
+      maximaal: 3,
+    }),
     cta(
       "07 / DE VOLGENDE STAP",
       "Je volgende idee begint hier.",
