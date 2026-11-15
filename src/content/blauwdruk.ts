@@ -15,6 +15,7 @@ import {
   ruimteDemolabel,
   ruimteDetails,
 } from "./teksten.ts";
+import { CMS_MEDIA, SITE_URL } from "./cms-media.ts";
 
 export type BlauwdrukBlok = { type: string; bg: string | null; content: Record<string, unknown> };
 export type BlauwdrukPagina = {
@@ -25,7 +26,8 @@ export type BlauwdrukPagina = {
   blokken: BlauwdrukBlok[];
 };
 
-const m = (naam: string) => `/media/${naam}.webp`;
+// Beelden staan in de mediabibliotheek van het CMS (src/content/cms-media.ts).
+const m = (naam: string) => CMS_MEDIA[naam] ?? `/media/${naam}.webp`;
 const blok = (type: string, bg: string | null, content: Record<string, unknown>): BlauwdrukBlok => ({ type, bg, content });
 const cta = (eyebrow: string, titel: string, tekst: string, knoptekst: string, knop: string) =>
   blok("cta", "nacht", { eyebrow, titel, tekst, knoptekst, knop });
@@ -140,9 +142,28 @@ const home: BlauwdrukPagina = {
       knop: "/about",
       knoptekst: "Ontdek ons verhaal",
     }),
+    // Videoblok: een Header met media_type "video". De staande mobiele versie en de posters horen bij
+    // de film op deze website (zie src/content/media.ts). Het CMS heeft de volledige URL, zodat ook de
+    // CMS-editor hem toont; video's kunnen niet in de mediabibliotheek.
+    blok("header", "nacht", {
+      layout: "achtergrond",
+      hoogte: "normaal",
+      eyebrow: "NOVA IN BEWEGING",
+      heading: "Zie wat er\nmogelijk wordt.",
+      subheading: "Tweeëndertig seconden NOVA: architectuur, licht, ontmoetingen en ideeën die in beweging komen.",
+      cta_primair_label: "Bekijk ons werk",
+      cta_primair_link: "/work",
+      media_type: "video",
+      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
+      media_afbeelding: m("nova-film-poster"),
+      media_alt: "Korte film over NOVA: blauwe boogarchitectuur, lichtinstallaties, een concertzaal en bewegende lijnen.",
+      overlay: "donker",
+    }),
     blok("cases_grid", "mist", {
       eyebrow: "GESELECTEERD WERK",
-      titel: "Gemaakt om je iets te laten voelen.",
+      // Regels na de titel = toelichting naast de kop.
+      titel:
+        "Gemaakt om je iets te laten voelen.\nOntdek zes voorbeeldprojecten waarin beeld, verhaal en ruimte samenkomen. Elk project heeft een eigen identiteit, precies zoals iedere website een eigen uitstraling verdient.",
       maximaal: 3,
       link_naar_overzicht: "/work",
     }),
@@ -154,7 +175,8 @@ const home: BlauwdrukPagina = {
       knoptekst: "Maak kennis met NOVA",
     }),
     blok("statistieken", "mist", {
-      titel: "Een wereld vol mogelijkheden.",
+      // Eerste regel in hoofdletters = eyebrow.
+      titel: "IN DEZE DEMO\nEen wereld vol mogelijkheden.",
       intro: "Geen verzonnen impactcijfers, maar aantallen die je in de demo zelf kunt bekijken.",
       items: [
         { waarde: "43", label: "Algemene CMS-blokken" },
@@ -164,11 +186,16 @@ const home: BlauwdrukPagina = {
       ],
     }),
     blok("mensen", "wit", {
-      titel: "Verschillende denkers. Gedeelde energie.",
+      titel: "DE MENSEN\nVerschillende denkers. Gedeelde energie.",
       intro: "Vier fictieve makers, vier perspectieven. Hun profielen laten zien hoe je een teamcollectie in het CMS beheert.",
       maximaal: 4,
     }),
-    blok("artikelen_grid", "mist", { eyebrow: "VERHALEN", titel: "Goede ideeën verdienen een goed verhaal.", maximaal: 3 }),
+    blok("artikelen_grid", "mist", {
+      eyebrow: "VERHALEN",
+      titel:
+        "Goede ideeën verdienen een goed verhaal.\nVerhalen over ontwerp, beleving, technologie en samenkomen. Ontdek hoe een redactionele collectie van overzicht tot detailpagina werkt.",
+      maximaal: 3,
+    }),
     cta(
       "07 / DE VOLGENDE STAP",
       "Je volgende idee begint hier.",
@@ -285,7 +312,7 @@ const verhalen: BlauwdrukPagina = {
     ),
     blok("artikelen_grid", "mist", {
       eyebrow: "NIEUWSTE VERHALEN",
-      titel: "Frisse perspectieven. Nieuwe mogelijkheden.",
+      titel: "Frisse perspectieven. Nieuwe mogelijkheden.\nZes verhalen om even anders naar de wereld te kijken.",
       maximaal: 12,
     }),
     blok("formulier", "limoenlicht", {
@@ -318,8 +345,11 @@ const belevingen: BlauwdrukPagina = {
       cta_primair_link: "/experiences/pulse-festival",
       cta_secundair_label: "Bekijk NOVA Sessions",
       cta_secundair_link: "/experiences/nova-sessions",
-      media_type: "afbeelding",
-      media_afbeelding: m("event_lights"),
+      // Videohero: dezelfde NOVA-film als op de homepage (met staande versie voor telefoons).
+      media_type: "video",
+      media_video: `${SITE_URL}/media/nova-film-liggend.mp4`,
+      media_afbeelding: m("nova-film-poster"),
+      media_alt: "Korte film over NOVA: lichtinstallaties, een concertzaal, boogarchitectuur en bewegende lijnen.",
       overlay: "donker",
     }),
     blok("kaarten", "wit", {
@@ -344,7 +374,7 @@ const belevingen: BlauwdrukPagina = {
       ],
     }),
     blok("sprekers", "wit", {
-      titel: "Ontmoet de denkers achter de ideeën.",
+      titel: "OP HET PODIUM\nOntmoet de denkers achter de ideeën.",
       sub: "Vier fictieve sprekers met elk hun eigen invalshoek.",
       items: [
         { naam: "Maya Chen", tekst: "Ontwerpen voor morgen", foto: m("comm_face") },
@@ -354,8 +384,10 @@ const belevingen: BlauwdrukPagina = {
       ],
     }),
     blok("prijskaarten", "nacht", {
-      titel: "Jouw beleving, op jouw manier.",
-      intro: "Vergelijk voorbeeldtickets. Deze prijzen zijn fictief; bestellen of betalen is niet mogelijk in de demo.",
+      titel: "KIES JE BELEVING\nJouw beleving, op jouw manier.",
+      // Eerste regel naast de kop; volgende regels als opmerking onder de kaarten.
+      intro:
+        "Vergelijk voorbeeldtickets. Deze prijzen zijn fictief; bestellen of betalen is niet mogelijk in de demo.\nFictieve prijzen en fictief evenement. Er worden geen tickets verkocht.",
       items: [
         { naam: "Dagkaart", prijs: "€ 49", voordeel: "Toegang tot één programmadag en de centrale expo.", knoptekst: "Bekijk tickets" },
         {
@@ -410,8 +442,8 @@ const eventPaginas: BlauwdrukPagina[] = evenementen.map((e) => ({
       stappen: e.dagen.flatMap((dag) => dag.items.map(([tijd, tekst]) => ({ label: tijd, titel: dag.titel, tekst }))),
     }),
     blok("prijskaarten", "mist", {
-      titel: "Kies je beleving.",
-      intro: e.disclaimer,
+      titel: "JOUW TICKET\nKies je beleving.",
+      intro: `Demoprijzen: bestellen of betalen is niet mogelijk.\n${e.disclaimer}`,
       items: e.tickets.map(([naam, prijs, voordeel], i) => ({
         naam,
         prijs,
@@ -467,7 +499,7 @@ const ruimtes: BlauwdrukPagina = {
       })),
     }),
     blok("statistieken", "mist", {
-      titel: "Elk idee verdient een eigen ruimte.",
+      titel: "RUIMTE OM TE CREËREN\nElk idee verdient een eigen ruimte.",
       intro: "Drie voorbeeldruimtes, ieder met een andere sfeer. Capaciteiten zijn alleen voorbeeldgegevens voor deze demo.",
       items: [
         { waarde: "3", label: "Fictieve ruimtes" },
@@ -567,7 +599,7 @@ const community: BlauwdrukPagina = {
       ],
     }),
     blok("mensen", "mist", {
-      titel: "De mensen achter de mogelijkheden.",
+      titel: "ONZE MAKERS\nDe mensen achter de mogelijkheden.",
       intro: "Vier makers. Verschillende disciplines. Eén gedeelde nieuwsgierigheid.",
       maximaal: 4,
     }),
@@ -583,7 +615,8 @@ const community: BlauwdrukPagina = {
         "Maak kennis met Atelier North, een fictieve partner die verbeelding verbindt met ruimtelijk ontwerp. Samen onderzoeken we hoe plekken niet alleen functioneel, maar ook betekenisvol kunnen zijn.",
     }),
     blok("citaten_carrousel", "wit", {
-      titel: "Kleine momenten. Grote gesprekken.",
+      titel:
+        "STEMMEN UIT DE COMMUNITY\nKleine momenten. Grote gesprekken.\nWat fictieve communityleden zeggen over de NOVA-ervaring. De citaten zijn verzonnen en worden alleen getoond als CMS-demovulling.",
       items: citaten.map(([citaat, naam]) => ({ citaat, naam, functie: "fictief teamlid, voorbeeldcitaat" })),
     }),
     cta(
@@ -831,9 +864,23 @@ const sport: BlauwdrukPagina = {
       eyebrow: "VOLGENDE WEDSTRIJD",
       titel: "De volgende wedstrijd begint hier.",
       intro: "NOVA United tegen Atlas FC. Geen live wedstrijdfeed; de datum is voorbeeldcontent.",
-      kolommen: [{ label: "Datum" }, { label: "Wedstrijd" }],
+      // Kolom 2 is ook de kop boven het programma; kolom 3–5 vullen de uitgelichte rij (markeer).
+      kolommen: [
+        { label: "Datum" },
+        { label: "Het programma · het hele seizoen in één oogopslag" },
+        { label: "Kop" },
+        { label: "Toelichting" },
+        { label: "Thuis of uit" },
+      ],
+      markeer: "Atlas FC",
       rijen: [
-        { c1: "24 APR", c2: "NOVA United — Atlas FC · thuis · 16.00 uur" },
+        {
+          c1: "24 APR",
+          c2: "NOVA United — Atlas FC · thuis · 16.00 uur",
+          c3: "NOVA / ATLAS",
+          c4: "Voorbeeldwedstrijd · 24 april 2027 · 16.00 uur",
+          c5: "THUIS",
+        },
         { c1: "1 MEI", c2: "Harbor City — NOVA United · uit · 14.30 uur" },
         { c1: "8 MEI", c2: "NOVA United — Riverside SC · thuis · 15.00 uur" },
       ],

@@ -8,17 +8,21 @@ export function DemoKnop({
   children,
   melding,
   style,
+  stijl,
 }: {
   children: ReactNode;
   melding: string;
   style?: CSSProperties;
+  /** "slot": een tijdvak in de agenda-inplanner in plaats van een gewone knop. */
+  stijl?: "slot";
 }) {
   const [toon, setToon] = useState(false);
+  const Omhulsel = stijl === "slot" ? "div" : "span";
   return (
-    <>
+    <Omhulsel className={stijl === "slot" ? "slot" : "demo-knop"}>
       <button
         type="button"
-        className="btn btn-dark"
+        className={stijl === "slot" ? "slot-knop" : "btn btn-dark"}
         style={style}
         onClick={() => setToon(true)}
       >
@@ -32,6 +36,6 @@ export function DemoKnop({
       >
         {melding}
       </p>
-    </>
+    </Omhulsel>
   );
 }

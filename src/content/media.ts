@@ -1,3 +1,4 @@
+import { CMS_MEDIA } from "./cms-media";
 // Gegenereerd bij het plaatsen van de verbeterde beelden (NOVA_17_afbeeldingen_verbeterd.zip).
 // Per mediasleutel: originele afmetingen en beschikbare kleinere breedtes (`<naam>-<breedte>.webp`).
 
@@ -89,5 +90,16 @@ export const MEDIA: Record<
     w: 1600,
     h: 1040,
     varianten: [640, 1280],
+  },
+};
+
+/** Video's in deze frontend: bij een desktopvideo uit het CMS horen automatisch een staande
+ *  mobiele versie en posterbeelden. Een video die in het CMS is geüpload, speelt zonder deze extra's. */
+export const VIDEO: Record<string, { versie?: string; mobiel?: string; poster?: string; mobielPoster?: string }> = {
+  // Een nieuw bestand krijgt een nieuwe naam: /media/ wordt een jaar gecachet ("immutable").
+  "/media/nova-film-liggend.mp4": {
+    mobiel: "/media/nova-film-staand.mp4",
+    poster: CMS_MEDIA["nova-film-poster"],
+    mobielPoster: CMS_MEDIA["nova-film-mobiel-poster"],
   },
 };

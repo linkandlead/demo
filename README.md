@@ -34,6 +34,8 @@ en als productiebranch is ingesteld, gaat dat vanzelf.
 Verkoopflow: homepage → _Ontdek het CMS_ (`/one`) → rondleiding (`/demo`, 7 stappen) → blokken
 (`/playground`) → aanvraag (`/one#aanvraag`).
 
+**Het CMS instellen en beheren:** zie [`docs/cms-instructie.md`](docs/cms-instructie.md).
+
 ## Voorbeeld op de site (concept vanuit het CMS)
 
 In het CMS-beheer opent de knop **"Voorbeeld op de site"** in de pagina-editor deze route:

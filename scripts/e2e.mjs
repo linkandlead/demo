@@ -277,12 +277,48 @@ const npsOk = await page
   .then(() => true, () => false);
 check("NPS: score en toelichting worden opgeslagen", npsOk);
 
-// Blokkenverkenner: een andere variant verandert de preview zichtbaar
+// Blokkenverkenner: de preview is het echte NOVA-blok en volgt de gekozen variant
 await page.goto(SITE + "/playground", { waitUntil: "load" });
-const klasVoor = await page.locator(".block-preview").getAttribute("class");
 await page.getByLabel("Kies variant").selectOption("achtergrondbeeld");
-const klasNa = await page.locator(".block-preview").getAttribute("class");
-check("blokkenverkenner: variant 'achtergrondbeeld' verandert de preview", klasVoor !== klasNa && /v-achtergrond/.test(klasNa), klasNa);
+check(
+  "blokkenverkenner: header 'achtergrondbeeld' toont de echte achtergrondhero",
+  (await page.locator(".pv-frame .feature-media").count()) === 1,
+);
+await page.getByLabel("Kies variant").selectOption("beeld links");
+check("blokkenverkenner: header 'beeld links' toont beeld links", (await page.locator(".pv-frame .hero-split").count()) === 1);
+await page.locator(".block-list button", { hasText: "Artikelen" }).first().click();
+check("blokkenverkenner: Artikelen toont echte artikelkaarten", (await page.locator(".pv-frame .article-card").count()) >= 3);
+await page.locator(".block-list button", { hasText: "Kaartenrij" }).first().click();
+await page.getByLabel("Kies variant").selectOption("4 kolommen");
+check("blokkenverkenner: Kaartenrij '4 kolommen' toont vier kaarten", (await page.locator(".pv-frame .info-tile").count()) === 4);
+
+await page.locator(".block-list button", { hasText: "Formulierbouwer" }).first().click();
+check(
+  "blokkenverkenner: formulierbouwer opent op ware grootte met voorbeeldopstellingen",
+  (await page.locator(".pv-frame.ware-grootte").count()) === 1 &&
+    (await page.getByLabel("Kies variant").locator("option", { hasText: "Offerteaanvraag" }).count()) === 1,
+);
+await page.getByLabel("Kies variant").selectOption("Offerteaanvraag");
+await page.locator(".pv-frame").getByRole("button", { name: /Vraag een offerte aan/ }).click();
+check(
+  "blokkenverkenner: leeg versturen toont foutmeldingen in de preview",
+  (await page.locator('.pv-frame [aria-invalid="true"]').count()) >= 4,
+);
+await page.locator(".block-list button", { hasText: "Review verzamelen" }).first().click();
+check("blokkenverkenner: reviewformulier met sterren", (await page.locator(".pv-frame .sterren-rij button").count()) === 5);
+
+// Homepage: videoblok uit het CMS (Header met media_type video)
+await page.goto(SITE + "/", { waitUntil: "load" });
+const video = await page.evaluate(() => {
+  const v = document.querySelector(".met-video video");
+  return v ? { bronnen: [...v.querySelectorAll("source")].map((s) => s.getAttribute("src")), muted: v.muted, h1: document.querySelectorAll("h1").length } : null;
+});
+check(
+  "homepage: videoblok met desktop- en mobiele video, zonder geluid, één h1",
+  !!video && video.bronnen.some((b) => b.startsWith("/media/nova-film-liggend.mp4")) && video.bronnen.some((b) => b.startsWith("/media/nova-film-staand.mp4")) && video.muted && video.h1 === 1,
+  JSON.stringify(video),
+);
+check("homepage: video is te pauzeren", (await page.getByRole("button", { name: /Pauzeer video|Speel video af/ }).count()) === 1);
 
 await page.goto(SITE + "/experiences", { waitUntil: "load" });
 await page

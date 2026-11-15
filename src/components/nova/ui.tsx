@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { MEDIA } from "@/content/media";
 import { altTeksten } from "@/content/teksten";
+import { naamBijCmsUrl } from "@/content/cms-media";
 import type { Case, Person, Post } from "@/content/nova";
 
 // Herbruikbare NOVA-bouwstenen. DOM en klassen zijn exact die van het prototype
@@ -16,12 +17,22 @@ export function mediaSrc(bron: string): string {
   return `/media/${bron}.webp`;
 }
 
-/** "/media/hero_arch.webp" of "hero_arch" → "hero_arch"; andere bronnen blijven gelijk. */
+/** "/media/hero_arch.webp", "hero_arch" of de CMS-URL van dat beeld → "hero_arch"; andere bronnen blijven gelijk. */
 export const mediaSleutel = (bron: string) =>
-  bron.match(/^\/media\/([\w-]+)\.webp$/)?.[1] ?? bron;
+  bron.match(/^\/media\/([\w-]+)\.webp$/)?.[1] ?? naamBijCmsUrl(bron) ?? bron;
+
+/** Een beeld uit de CMS-mediabibliotheek (Supabase Storage, bucket "media"). */
+const CMS_BEELD = /^(https:\/\/[^/]+)\/storage\/v1\/object\/public\/(media\/[^?#]+)$/;
 
 /** srcset voor lokale media (640 / 1280 / origineel); leeg voor CMS-URL's. */
 export function mediaSrcSet(bron: string): string | undefined {
+  // CMS-beelden: kleinere formaten via de beeldservice van het CMS (zelfde als de CMS-renderer,
+  // met resize=contain zodat de verhouding blijft).
+  const cms = bron.match(CMS_BEELD);
+  if (cms)
+    return [640, 1280, 1920]
+      .map((w) => `${cms[1]}/storage/v1/render/image/public/${cms[2]}?width=${w}&resize=contain&quality=78&format=webp ${w}w`)
+      .join(", ");
   bron = mediaSleutel(bron);
   const m = MEDIA[bron];
   if (!m) return undefined;

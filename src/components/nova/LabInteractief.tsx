@@ -74,11 +74,14 @@ export function Nps({
   toelichting,
   knoptekst,
   bevestiging,
+  sterren = false,
 }: {
   vraag: string;
   toelichting: string;
   knoptekst: string;
   bevestiging: string;
+  /** Enquêtesoort "sterren": 1–5 sterren in plaats van een score van 0 tot 10. */
+  sterren?: boolean;
 }) {
   const [score, setScore] = useState<number | null>(null);
   const [status, setStatus] = useState<{ soort: "ok" | "fout"; tekst: string } | null>(null);
@@ -87,7 +90,7 @@ export function Nps({
   async function verstuur(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (score === null) {
-      setStatus({ soort: "fout", tekst: "Kies eerst een score van 0 tot 10." });
+      setStatus({ soort: "fout", tekst: sterren ? "Kies eerst 1 tot 5 sterren." : "Kies eerst een score van 0 tot 10." });
       return;
     }
     const form = e.currentTarget;
@@ -106,20 +109,38 @@ export function Nps({
 
   return (
     <form onSubmit={verstuur} noValidate>
-      <div className="chip-row" role="radiogroup" aria-label={vraag || "Score van 0 tot 10"}>
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => (
-          <button
-            type="button"
-            key={x}
-            role="radio"
-            className={`chip ${score === x ? "active" : ""}`}
-            aria-checked={score === x}
-            onClick={() => setScore(x)}
-          >
-            {x}
-          </button>
-        ))}
-      </div>
+      {sterren ? (
+        <div className="sterren-rij" role="radiogroup" aria-label={vraag || "Aantal sterren"}>
+          {[1, 2, 3, 4, 5].map((x) => (
+            <button
+              type="button"
+              key={x}
+              role="radio"
+              aria-checked={score === x}
+              aria-label={`${x} ${x === 1 ? "ster" : "sterren"}`}
+              className={score !== null && x <= score ? "aan" : ""}
+              onClick={() => setScore(x)}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="chip-row" role="radiogroup" aria-label={vraag || "Score van 0 tot 10"}>
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => (
+            <button
+              type="button"
+              key={x}
+              role="radio"
+              className={`chip ${score === x ? "active" : ""}`}
+              aria-checked={score === x}
+              onClick={() => setScore(x)}
+            >
+              {x}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="form-field" style={{ marginTop: 14 }}>
         <label htmlFor="nps-waarom">{toelichting || "Waarom geef je deze score?"}</label>
         <textarea id="nps-waarom" name="vraag" style={{ minHeight: 80 }} maxLength={2000} />
@@ -140,14 +161,16 @@ export function Wissel({
   a,
   b,
   knop,
+  startMetB = false,
 }: {
   id: string;
   eyebrow: string;
   a: string;
   b: string;
   knop: string;
+  startMetB?: boolean;
 }) {
-  const [eerste, setEerste] = useState(true);
+  const [eerste, setEerste] = useState(!startMetB);
   return (
     <>
       <div>

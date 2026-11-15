@@ -110,12 +110,23 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   knop "Start de rondleiding" zijn hersteld. Chips en opsomming zijn regels die met "- " beginnen in
   het tekstveld van het statement- en formulierblok; de twee knoppen naar `/demo` staan vast in de
   frontend (de blokken hebben geen tweede knopveld).
-- Home: korte toelichtingen naast "Gemaakt om je iets te laten voelen" (cases) en "Goede ideeën…"
-  (artikelen) en de knoppen "Ontmoet de makers"/"Lees de verhalen" vervallen (cases_grid/artikelen_grid
-  hebben geen intro- of knopveld). "Bekijk alle projecten" volgt uit `link_naar_overzicht`.
-- Statistieken hebben geen eyebrow (alleen het sectienummer).
+- Home: de toelichtingen bij Werk en Verhalen, de eyebrows "IN DEZE DEMO" en "DE MENSEN", de knoppen
+  "Ontmoet de makers" en "Lees de verhalen" en het ◉-teken in de tweede heroknop zijn hersteld.
+  Toelichting en eyebrow staan in het titelveld van het blok (zie cms-koppeling.md); de twee knoppen
+  naar de overzichten staan vast op de home (de blokken hebben geen knopveld).
 - Ruimtedetail: de tekst-met-beeld-sectie gebruikt de homevorm (eyebrow en kop links naast het beeld).
-- Blokkenverkenner: elke variant verandert de preview nu zichtbaar (beeld links/rechts, gecentreerd,
-  achtergrondbeeld, compact, kolommen, kleurbanden, stappenvormen, formuliersoort, NPS/sterren …).
+- Blokkenverkenner: de preview is het **echte NOVA-blok** (dezelfde renderer als de site, verkleind),
+  voor alle 43 blokken en elke variant (`BlokVoorbeelden.tsx`). De variant zet het bijbehorende
+  CMS-veld (layout, kolommen, soort, stijl …). Elf blokken die NOVA niet op een pagina gebruikt
+  (tekst, intake, bewijsstrook, testimonial, logostrook, rolvoorbeelden, reviews, wedstrijden,
+  volgende wedstrijd, agenda, aftelklok) kregen een eigen renderer; zonder CMS-records tonen ze
+  fictieve, als voorbeeld gemarkeerde gegevens (`src/content/voorbeelddata.ts`).
 - Pulse Festival-hero (`feature-media`): ruimte onder de knoppen, compactere kop en een extra
   verloop onderaan; het actieve menu-item staat niet langer 4px hoger dan de rest.
+- Overige pagina's: alle onderdelen van vóór de CMS-koppeling zijn terug (gecontroleerd met een
+  tekstvergelijking per pagina tegen commit 502b140). Kopjes en toelichtingen staan in het CMS
+  (titelregels, intro-regels, tabelkolommen, partnerquote); enkele navigatieknoppen staan vast
+  (zie docs/cms-instructie.md). Enige verschil: de tegels bij de citaten tonen het blokkopje
+  "STEMMEN UIT DE COMMUNITY" (meervoud) in plaats van "STEM UIT DE COMMUNITY".
+
+- **Achtergrondvideo in de header** (niet in het prototype): bij `media_type` = video met een mp4 ligt de video over de afbeelding (poster en terugval) en onder het ontwerpverloop, met een pauzeknop rechtsboven (WCAG 2.2.2). Bij prefers-reduced-motion alleen de afbeelding. In de blokkenverkenner bij de varianten "beeld rechts" en "achtergrondbeeld" (`public/media/nova-header.mp4`, gemaakt uit eigen NOVA-beelden); de homepage-inhoud is ongewijzigd.
