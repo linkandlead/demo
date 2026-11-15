@@ -127,3 +127,5 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   (titelregels, intro-regels, tabelkolommen, partnerquote); enkele navigatieknoppen staan vast
   (zie docs/cms-instructie.md). Enige verschil: de tegels bij de citaten tonen het blokkopje
   "STEMMEN UIT DE COMMUNITY" (meervoud) in plaats van "STEM UIT DE COMMUNITY".
+
+- **Achtergrondvideo in de header** (niet in het prototype): bij `media_type` = video met een mp4 ligt de video over de afbeelding (poster en terugval) en onder het ontwerpverloop, met een pauzeknop rechtsboven (WCAG 2.2.2). Bij prefers-reduced-motion alleen de afbeelding. In de blokkenverkenner bij de varianten "beeld rechts" en "achtergrondbeeld" (`public/media/nova-header.mp4`, gemaakt uit eigen NOVA-beelden); de homepage-inhoud is ongewijzigd.
