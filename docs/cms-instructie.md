@@ -152,6 +152,28 @@ en het reviewformulier openen op **ware grootte**, zodat je ze kunt invullen. Bi
 kies je tussen voorbeeldopstellingen: contactformulier, aanmelding workshop of offerteaanvraag.
 Inzendingen vanuit de bibliotheek worden net als op de site opgeslagen.
 
+### Reviews goedkeuren
+
+Reviews uit het formulier in het Lab komen op twee plekken binnen:
+- in het **CMS** (Collecties → Reviews), zodra de CMS-update met de review-API live staat
+  (pull request linkandlead/linkandlead-cms#314). Keur ze daar goed; goedgekeurde reviews verschijnen
+  in het blok Reviews;
+- in de NOVA-database (Supabase, project "demo", tabel `aanvragen`, kolom `goedgekeurd`). Zet die op
+  `true` om een review te tonen zolang het CMS nog geen reviews levert.
+
+### Inzendingen bekijken
+
+Alle inzendingen staan in Supabase (project "demo") in de weergave **`inzendingen_overzicht`**,
+nieuwste eerst. Een melding per inzending kan naar Slack, Discord of Zapier via
+`INZENDING_WEBHOOK_URL` in Vercel. Er gaat nooit een e-mail uit.
+
+### Direct live na publiceren
+
+Met de webhook "Inhoud gepubliceerd" staat een wijziging direct live in plaats van na een minuut:
+1. CMS → **Beheer → Webhooks** → nieuwe webhook voor Demo Klant.
+2. Adres: `https://demo.linkandlead.nl/api/cms-webhook`, gebeurtenis **inhoud_gepubliceerd**.
+3. Zet het geheim van die webhook in Vercel als `CMS_WEBHOOK_SECRET` en deploy opnieuw.
+
 ## Wat je niet in het CMS aanpast
 
 Deze onderdelen staan bewust vast in de code:
@@ -160,7 +182,9 @@ Deze onderdelen staan bewust vast in de code:
 - de rondleiding en het demopaneel;
 - de footerregel "Gemaakt om te inspireren…" (de lees-API geeft die niet door);
 - veiligheidsmeldingen zoals "er wordt geen e-mail verstuurd";
-- een paar knoppen naar overzichtspagina's, op plekken waar het blok geen knopveld heeft:
+- een paar knoppen naar overzichtspagina's, alleen zolang het blok geen eigen knop heeft (vul je
+  bij Team, Artikelen, Partner uitgelicht, Flexibel of Kaarten de velden Knop en Knoptekst in, dan
+  gaat die voor):
   - "Ontmoet de makers" en "Lees de verhalen" op de home;
   - "Bekijk meer projecten" op projectpagina's;
   - "Probeer de configurator" op ruimtepagina's;

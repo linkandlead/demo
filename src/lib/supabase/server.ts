@@ -92,3 +92,37 @@ export async function bewaarInzending(
   }
   return "opgeslagen";
 }
+
+/** Limiet per bezoeker (punt 18): SHA-256 van IP + dagelijks zout, nooit het IP zelf. Ontbreekt de
+ *  databasefunctie of is Supabase onbereikbaar, dan laten we door (liever een spambericht dan een
+ *  echte aanvraag weigeren). */
+export async function magInzenden(request: Request): Promise<boolean> {
+  const sb = supabase();
+  if (!sb) return true;
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "onbekend";
+  const zout = `${process.env.INZENDING_ZOUT ?? "nova"}:${new Date().toISOString().slice(0, 10)}`;
+  const data = new TextEncoder().encode(`${zout}:${ip}`);
+  const hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", data))].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const maximum = Number(process.env.INZENDING_LIMIET) || 8;
+  const { data: mag, error } = await sb.rpc("mag_inzenden", { sleutel: hash, maximum });
+  if (error) {
+    console.error("Supabase: limietcontrole niet beschikbaar", error.message);
+    return true;
+  }
+  return mag !== false;
+}
+
+export type GoedgekeurdeReview = { naam: string; score: number; tekst: string };
+
+/** Goedgekeurde reviews uit de NOVA-demodatabase (alleen via de functie goedgekeurde_reviews). */
+export async function goedgekeurdeReviews(aantal = 6): Promise<GoedgekeurdeReview[] | null> {
+  const sb = supabase();
+  if (!sb) return null;
+  const { data, error } = await sb.rpc("goedgekeurde_reviews", { aantal });
+  if (error || !Array.isArray(data) || !data.length) return null;
+  return (data as Array<Record<string, unknown>>).map((r) => ({
+    naam: String(r.naam ?? ""),
+    score: Number(r.score) || 5,
+    tekst: String(r.tekst ?? ""),
+  }));
+}

@@ -116,3 +116,18 @@ Lokaal testen: start het nep-CMS en een build ertegen, en draai dan
 - [`docs/vervolgstappen.md`](docs/vervolgstappen.md): wat er nog moet gebeuren
 - `referentie/nova-bouwpakket/`: het aangeleverde overdrachtspakket (ontwerpbron, ongewijzigd)
 - `cms/nova-blauwdruk.mjs`: blauwdruk voor `scripts/cms-push.mjs` in de CMS-repo
+
+## Controles en CI
+
+- `npm run lint && npm run typecheck && npm test && npm run build`
+- `npm run e2e` (Playwright + axe-core; `BROWSER=webkit` voor Safari's motor). Start de site voor
+  de e2e-test met `INZENDING_LIMIET=1000`, anders houdt de limiet per bezoeker de test tegen.
+- `npm run lighthouse` (prestaties, toegankelijkheid, best practices met ondergrenzen).
+- GitHub Actions (`.github/workflows/ci.yml`) draait dit per pull request en op `main`, met e2e in
+  Chromium én WebKit.
+
+## Nieuwe routes
+
+`/mensen/<naam>` en `/partners/<naam>` (profielen uit de CMS-collecties), `/blokvoorbeeld/<blok>`
+(één blok voor het voorbeeldvenster van de blokkenbibliotheek), `/api/cms-webhook` (verversen na
+publiceren), `/sitemap.xml` en `/robots.txt`.

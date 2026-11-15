@@ -1,6 +1,7 @@
 import { lijktSpam, valideerAanvraag } from "@/lib/lead/aanvraag";
 import { testcode } from "@/lib/lead/inzending";
-import { bewaarInzending } from "@/lib/supabase/server";
+import { bewaarInzending, magInzenden, type Inzending } from "@/lib/supabase/server";
+import { meldInzending } from "@/lib/lead/melding";
 
 // Demo-aanvraag voor Link & Lead One → bestaande CMS-leadflow (linkandlead-cms
 // src/routes/api/cms/lead.ts). Server-to-server, dus zonder Origin-header (toegestaan door het
@@ -24,6 +25,11 @@ export async function POST(request: Request) {
     );
   }
   if (lijktSpam(body)) return Response.json({ ok: true, melding: "Bedankt!" });
+  if (!(await magInzenden(request)))
+    return Response.json(
+      { ok: false, melding: "Je hebt net al een paar keer iets verstuurd. Probeer het over tien minuten opnieuw." },
+      { status: 429 },
+    );
 
   const v = valideerAanvraag(body);
   if (!v.ok)
@@ -37,7 +43,7 @@ export async function POST(request: Request) {
     );
 
   // Altijd eerst bewaren in de NOVA-demodatabase (Supabase), als die is ingesteld.
-  const opgeslagen = await bewaarInzending({
+  const inzending: Inzending = {
     soort: "demo-aanvraag",
     naam: v.data.naam,
     email: v.data.email,
@@ -46,7 +52,9 @@ export async function POST(request: Request) {
     vraag: v.data.vraag,
     bron_pagina: "/one",
     testcode: testcode(body),
-  });
+  };
+  const opgeslagen = await bewaarInzending(inzending);
+  if (opgeslagen === "opgeslagen") await meldInzending(inzending);
 
   const cms = process.env.CMS_URL?.trim().replace(/\/$/, "");
   const siteId = process.env.CMS_LEAD_SITE_ID?.trim();

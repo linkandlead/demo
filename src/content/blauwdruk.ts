@@ -767,6 +767,12 @@ const lab: BlauwdrukPagina = {
       knoptekst: "Plaats mijn review",
       bevestigingstekst: "Bedankt voor je review! Hij is opgeslagen en wordt na controle zichtbaar.",
     }),
+    blok("reviews", "wit", {
+      eyebrow: "REVIEWS",
+      titel: "Wat anderen zeggen.",
+      intro: "Goedgekeurde reviews uit het formulier hierboven verschijnen hier vanzelf.",
+      maximaal: 3,
+    }),
     blok("enquete", "mist", {
       soort: "nps",
       eyebrow: "ENQUÊTE / NPS",

@@ -1,12 +1,14 @@
 // End-to-end-controle van NOVA (Playwright, globaal geïnstalleerd) + axe-core toegankelijkheid.
-//   SITE=http://localhost:3000 [SITE_CMS=http://localhost:3001 LEADS_LOG=... MOCK_CMS=http://localhost:4000] node scripts/e2e.mjs
+//   SITE=http://localhost:3000 [BROWSER=webkit] [SITE_CMS=http://localhost:3001 LEADS_LOG=... MOCK_CMS=http://localhost:4000] node scripts/e2e.mjs
 //   Alleen de voorvertoning (geen formulieren, geen Supabase): ALLEEN=voorvertoning SITE_CMS=… MOCK_CMS=…
 //   Alleen bewerken en opslaan (B-090, geen Supabase):          ALLEEN=bewerken SITE_CMS=… MOCK_CMS=…
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 const require = createRequire(import.meta.url);
-const { chromium } = require("playwright");
+const playwright = require("playwright");
+// BROWSER=webkit draait dezelfde controles in WebKit (de motor van Safari); standaard Chromium.
+const browserType = process.env.BROWSER === "webkit" ? playwright.webkit : playwright.chromium;
 const AXE = require.resolve("axe-core/axe.min.js");
 
 const SITE = process.env.SITE ?? "http://localhost:3000";
@@ -46,7 +48,8 @@ const check = (naam, voorwaarde, extra = "") => {
   }
 };
 
-const browser = await chromium.launch();
+const browser = await browserType.launch();
+console.log(`Browser: ${browserType.name()}`);
 const ctx = await browser.newContext({
   viewport: { width: 1440, height: 900 },
 });

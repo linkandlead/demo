@@ -3,6 +3,7 @@ import { Fragment, type ReactNode } from "react";
 import { KERNBLOKKEN } from "@/content/kernblokken";
 import { cmsMedia } from "@/lib/cms/client";
 import { cmsRecords, getCases, getPartners, getPeople, getPosts } from "@/lib/cms/data";
+import { goedgekeurdeReviews } from "@/lib/supabase/server";
 import {
   voorbeeldKlanten,
   voorbeeldReviews,
@@ -2036,11 +2037,16 @@ const Sterren = ({ n }: { n: number }) => (
 
 async function Reviews({ b, n }: { b: Blok; n: number }) {
   const c = b.content;
+  // Bron: goedgekeurde reviews uit het CMS, anders goedgekeurde reviews uit de NOVA-database,
+  // anders gemarkeerde voorbeeldreviews.
+  const max = Number(c.maximaal) || 3;
   const rij = await cmsRecords("reviews");
-  const reviews = (
+  const nova = rij ? null : await goedgekeurdeReviews(max);
+  const echt =
     rij?.map((r) => ({ naam: tx(r, "naam"), bedrijf: tx(r, "bedrijf"), rating: Number(r.rating) || 5, tekst: tx(r, "tekst") })) ??
-    voorbeeldReviews
-  ).slice(0, Number(c.maximaal) || 3);
+    nova?.map((r) => ({ naam: r.naam, bedrijf: "", rating: r.score, tekst: r.tekst })) ??
+    null;
+  const reviews = (echt ?? voorbeeldReviews).slice(0, max);
   return (
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
@@ -2057,7 +2063,7 @@ async function Reviews({ b, n }: { b: Blok; n: number }) {
             </div>
           ))}
         </div>
-        {rij ? null : <Voorbeeldnoot>Voorbeeldreviews: goedgekeurde reviews uit het CMS verschijnen hier automatisch.</Voorbeeldnoot>}
+        {echt ? null : <Voorbeeldnoot>Voorbeeldreviews: goedgekeurde reviews verschijnen hier automatisch.</Voorbeeldnoot>}
       </div>
     </section>
   );

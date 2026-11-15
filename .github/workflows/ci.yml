@@ -5,6 +5,14 @@ on:
     branches: [main]
   pull_request:
 
+# Per pull request: lint, typecheck, unittests, build, end-to-end in Chromium én WebKit (Safari) en
+# een Lighthouse-meting. Zonder CMS-geheimen: de site draait dan op de blauwdruk (zelfde inhoud).
+# Testinzendingen in de NOVA-demodatabase ruimt de e2e-test zelf op.
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -19,3 +27,77 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: .next
+          include-hidden-files: true
+          retention-days: 1
+
+  e2e:
+    needs: check
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+      - name: Playwright en ${{ matrix.browser }} installeren
+        run: |
+          npm i --no-save playwright@1.63.0
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Site starten
+        run: |
+          PORT=3000 INZENDING_LIMIET=1000 npm start &
+          npx --yes wait-on@8.0.3 http://localhost:3000 --timeout 60000
+      - name: End-to-end (${{ matrix.browser }})
+        run: SITE=http://localhost:3000 BROWSER=${{ matrix.browser }} node scripts/e2e.mjs 2>&1 | tee e2e-${{ matrix.browser }}.log
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-${{ matrix.browser }}
+          path: e2e-${{ matrix.browser }}.log
+          retention-days: 7
+
+  lighthouse:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+      - run: |
+          npm i --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Site starten
+        run: |
+          PORT=3000 npm start &
+          npx --yes wait-on@8.0.3 http://localhost:3000 --timeout 60000
+      - name: Lighthouse
+        run: |
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          SITE=http://localhost:3000 LIGHTHOUSE_RAPPORT=lighthouse.json npm run lighthouse
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse
+          path: lighthouse.json
+          retention-days: 7

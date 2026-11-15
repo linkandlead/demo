@@ -1,6 +1,8 @@
 import { lijktSpam } from "@/lib/lead/aanvraag";
 import { valideerInzending } from "@/lib/lead/inzending";
-import { bewaarInzending } from "@/lib/supabase/server";
+import { bewaarInzending, magInzenden } from "@/lib/supabase/server";
+import { meldInzending } from "@/lib/lead/melding";
+import { stuurReviewNaarCms } from "@/lib/cms/review";
 
 // NOVA-formulieren (contact, nieuwsbrief, formulierbouwer, review, NPS) → tabel `aanvragen` in de NOVA-demodatabase (Supabase).
 // Er wordt NIETS gemaild; inzendingen zijn alleen in het Supabase-dashboard te zien.
@@ -17,6 +19,11 @@ export async function POST(request: Request) {
     );
   }
   if (lijktSpam(body)) return Response.json({ ok: true, melding: "Bedankt!" });
+  if (!(await magInzenden(request)))
+    return Response.json(
+      { ok: false, melding: "Je hebt net al een paar keer iets verstuurd. Probeer het over tien minuten opnieuw." },
+      { status: 429 },
+    );
 
   const v = valideerInzending(body);
   if (!v.ok)
@@ -26,6 +33,12 @@ export async function POST(request: Request) {
     );
   const soort = v.inzending.soort;
   const r = await bewaarInzending(v.inzending);
+  if (r === "opgeslagen") {
+    await meldInzending(v.inzending);
+    // Reviews ook ter goedkeuring naar het CMS (niet bij testinzendingen).
+    if (soort === "review" && !v.inzending.testcode && v.inzending.naam && v.inzending.vraag)
+      await stuurReviewNaarCms({ naam: v.inzending.naam, tekst: v.inzending.vraag, rating: v.inzending.score ?? 5 });
+  }
   if (r === "opgeslagen")
     return Response.json({
       ok: true,
