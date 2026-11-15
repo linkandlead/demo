@@ -8,26 +8,31 @@ const tx = (c: Record<string, unknown>, k: string) => (typeof c[k] === "string" 
 
 // Afsluitende oproep (laatste cta-blok van de pagina in het CMS) + footer. De footerkolommen komen
 // uit de CMS-navigatie (merk → footer_kolommen). Markup gelijk aan callout()/footer() uit het prototype.
-export async function Footer({ oproep }: { oproep: Blok | null }) {
-  const { naam, navigatie } = await siteInstellingen();
-  const c = oproep?.content ?? {};
+/** De afsluitende oproep (laatste cta-blok van een pagina), ook gebruikt in de blokkenverkenner. */
+export function OproepSectie({ oproep }: { oproep: Blok }) {
+  const c = oproep.content;
   const knop = tx(c, "knop");
   return (
+    <section data-cms="Afsluitende oproep (CTA) · Diepst" className="footer-cta">
+      <div className="container">
+        <span className="eyebrow" style={{ color: "var(--lime)" }}>
+          {tx(c, "eyebrow")}
+        </span>
+        <h2>
+          <Lines text={tx(c, "titel")} />
+        </h2>
+        {tx(c, "tekst") ? <p className="footer-cta-tekst">{tx(c, "tekst")}</p> : null}
+        {knop ? <Btn to={knop}>{tx(c, "knoptekst")}</Btn> : null}
+      </div>
+    </section>
+  );
+}
+
+export async function Footer({ oproep }: { oproep: Blok | null }) {
+  const { naam, navigatie } = await siteInstellingen();
+  return (
     <>
-      {oproep ? (
-        <section data-cms="Afsluitende oproep (CTA) · Diepst" className="footer-cta">
-          <div className="container">
-            <span className="eyebrow" style={{ color: "var(--lime)" }}>
-              {tx(c, "eyebrow")}
-            </span>
-            <h2>
-              <Lines text={tx(c, "titel")} />
-            </h2>
-            {tx(c, "tekst") ? <p className="footer-cta-tekst">{tx(c, "tekst")}</p> : null}
-            {knop ? <Btn to={knop}>{tx(c, "knoptekst")}</Btn> : null}
-          </div>
-        </section>
-      ) : null}
+      {oproep ? <OproepSectie oproep={oproep} /> : null}
       <footer className="footer">
         <div className="container">
           <div className="footer-top">

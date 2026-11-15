@@ -2,7 +2,15 @@ import Link from "next/link";
 import { Fragment, type ReactNode } from "react";
 import { KERNBLOKKEN } from "@/content/kernblokken";
 import { cmsMedia } from "@/lib/cms/client";
-import { getCases, getPartners, getPeople, getPosts } from "@/lib/cms/data";
+import { cmsRecords, getCases, getPartners, getPeople, getPosts } from "@/lib/cms/data";
+import {
+  voorbeeldKlanten,
+  voorbeeldReviews,
+  voorbeeldSlots,
+  voorbeeldTestimonial,
+  voorbeeldWedstrijden,
+} from "@/content/voorbeelddata";
+import { Aftelklok } from "./Aftelklok";
 import type { Blok, PaginaInhoud } from "@/lib/cms/paginas";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 import { DemoFormulier } from "./DemoFormulier";
@@ -212,6 +220,49 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
       </section>
     );
 
+  if (tx(c, "layout") === "gecentreerd")
+    return (
+      <section data-cms={label(b)} className={`inner-hero hero-midden${b.bg === "nacht" || b.bg === "diep" ? " night" : ""}`}>
+        <div className="container">
+          <span className="eyebrow" style={b.bg === "nacht" || b.bg === "diep" ? { color: "var(--lime)" } : undefined}>
+            {tx(c, "eyebrow")}
+          </span>
+          <h1>
+            <KopMetPunt tekst={tx(c, "heading")} />
+          </h1>
+          {tx(c, "subheading") ? <p className="hero-midden-tekst">{tx(c, "subheading")}</p> : null}
+          {knoppen}
+        </div>
+      </section>
+    );
+
+  if (tx(c, "layout") === "split-links" || tx(c, "layout") === "split-rechts") {
+    const foto = beeld ? (
+      <div className="image-frame intro-image">
+        <Photo src={beeld} alt={alt} priority />
+      </div>
+    ) : null;
+    const links = tx(c, "layout") === "split-links";
+    return (
+      <section data-cms={label(b)} className="section section-dark hero-split">
+        <div className="container intro-grid">
+          {links ? foto : null}
+          <div>
+            <span className="eyebrow" style={{ color: "var(--lime)" }}>
+              {tx(c, "eyebrow")}
+            </span>
+            <h1>
+              <KopMetPunt tekst={tx(c, "heading")} />
+            </h1>
+            {tx(c, "subheading") ? <p>{tx(c, "subheading")}</p> : null}
+            {knoppen}
+          </div>
+          {links ? null : foto}
+        </div>
+      </section>
+    );
+  }
+
   if (tx(c, "layout") === "achtergrond") {
     const cls = ctx.detail ? "detail-hero" : "feature-media";
     return (
@@ -264,7 +315,7 @@ function Header({ b, ctx }: { b: Blok; ctx: Ctx }) {
 function Marquee({ b }: { b: Blok }) {
   const items = lijst(b.content, "items").map((i) => tx(i, "tekst")).filter(Boolean);
   return (
-    <div data-cms={label(b)} className="marquee">
+    <div data-cms={label(b)} className={`marquee marquee-${tx(b.content, "stijl") || "limoen"}`}>
       <div className="container">
         <span>{items.map((i) => `${i}  /  `).join(" ")}</span>
       </div>
@@ -471,7 +522,7 @@ function Flexibel({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
       ))}
     </div>
   ) : (
-    <div className={tx(c, "kolommen") === "4" ? "card-3 card-4" : "card-3"}>
+    <div className={tx(c, "kolommen") === "4" ? "card-3 card-4" : tx(c, "kolommen") === "2" ? "card-3 card-2" : "card-3"}>
       {items.map((i) => (
         <div className="info-tile" key={tx(i, "kop")}>
           <strong>{tx(i, "kop")}</strong>
@@ -710,7 +761,7 @@ function Reeks({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
-        <div className="timeline">
+        <div className={`timeline${tx(c, "_vorm") ? ` reeks-${tx(c, "_vorm")}` : ""}`}>
           {stappen.map((s, i) => (
             <div className="timeline-item" key={tx(s, "titel") + i}>
               <strong>{tx(s, "nummer") || nr(i + 1)}</strong>
@@ -991,6 +1042,16 @@ async function PartnersGrid({ b, n }: { b: Blok; n: number }) {
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        {tx(c, "toon_filter") === "ja" && items.length ? (
+          <div className="chip-row" style={{ marginBottom: 22 }} aria-label="Filter op branche (voorbeeld)">
+            <span className="chip active">Alle partners</span>
+            {[...new Set(items.map((p) => p.vak).filter(Boolean))].map((v) => (
+              <span className="chip" key={v}>
+                {v}
+              </span>
+            ))}
+          </div>
+        ) : null}
         {items.length ? (
           <div className="card-3 card-4">
             {items.map((p) => (
@@ -1051,7 +1112,6 @@ function Citaten({ b, n }: { b: Blok; n: number }) {
 
 function Prijskaarten({ b, n }: { b: Blok; n: number }) {
   const c = b.content;
-  const intro = tx(c, "intro");
   return (
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
@@ -1245,6 +1305,33 @@ function Formulier({ b, ctx, n, kaart }: { b: Blok; ctx: Ctx; n: number; kaart?:
       </section>
     );
 
+  if (tx(c, "soort") === "scan_url")
+    return (
+      <section data-cms={label(b)} className={sectie(b.bg)}>
+        <div className="container contact-layout">
+          <div>
+            <SectionLabel num={nr(n)}>{tx(c, "eyebrow")}</SectionLabel>
+            <h2 style={{ marginTop: 18 }}>{tx(c, "titel")}</h2>
+            {tx(c, "intro") ? <p className="side-note">{tx(c, "intro")}</p> : null}
+          </div>
+          <DemoFormulier
+            className="form-grid"
+            demoTekst="Dit is een voorbeeld van de scan. Er is geen website opgehaald of gecontroleerd."
+          >
+            <div className="form-field full">
+              <label htmlFor="scan-url">Websiteadres *</label>
+              <input id="scan-url" name="url" type="url" required placeholder="https://www.jouwwebsite.nl" />
+            </div>
+            <div className="form-field full">
+              <button className="btn btn-dark" style={{ width: "fit-content" }}>
+                {tx(c, "knoptekst") || "Scan mijn website"} ↗
+              </button>
+            </div>
+          </DemoFormulier>
+        </div>
+      </section>
+    );
+
   // Op de CMS-promotiepagina is het formulier de demo-aanvraag voor Link & Lead One.
   if (ctx.one)
     return (
@@ -1330,7 +1417,19 @@ function Kaart({ b, n }: { b: Blok; n: number }) {
     <section data-cms={label(b)} className={sectie(b.bg)}>
       <div className="container">
         <SectionTitle num={nr(n)} {...kop(c, "intro")} />
-        <Adres c={c} />
+        <div className="kaart-blok">
+          <div className="kaart-visual" role="img" aria-label="Kaartweergave (illustratie)">
+            <span className="kaart-pin" aria-hidden="true" />
+          </div>
+          <div>
+            <Adres c={c} />
+            {link(c, "knop") ? (
+              <Btn to={link(c, "knop")} cl="btn-dark">
+                {tx(c, "knoptekst") || "Plan je route"}
+              </Btn>
+            ) : null}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1375,7 +1474,7 @@ function Interacties({ blokken }: { blokken: Blok[] }) {
   return (
     <section data-cms={blokken.map(label).join(" · ")} className={sectie(blokken[0].bg)} style={{ paddingTop: 40 }}>
       <div className="container">
-        <div className="showcase-table">
+        <div className={`showcase-table${blokken.length === 1 ? " showcase-los" : ""}`}>
           {blokken.map((b, i) => {
             const c = b.content;
             if (b.type === "enquete")
@@ -1390,6 +1489,7 @@ function Interacties({ blokken }: { blokken: Blok[] }) {
                     toelichting={tx(c, "toelichtinglabel")}
                     knoptekst={tx(c, "knoptekst")}
                     bevestiging={tx(c, "bevestigingstekst")}
+                    sterren={tx(c, "soort") === "sterren"}
                   />
                 </div>
               );
@@ -1402,6 +1502,7 @@ function Interacties({ blokken }: { blokken: Blok[] }) {
                     a={tx(c, "titel_a")}
                     b={tx(c, "titel_b") || tx(c, "titel_a")}
                     knop={`${tx(c, "knoptekst_a") || "Wissel variant"} ↗`}
+                    startMetB={tx(c, "_start") === "b"}
                   />
                 </div>
               );
@@ -1413,6 +1514,7 @@ function Interacties({ blokken }: { blokken: Blok[] }) {
                   a={tx(c, "titel")}
                   b={tx(c, "warm_titel") || tx(c, "titel")}
                   knop={`${tx(c, "knoptekst") || "Wissel"} ↗`}
+                  startMetB={tx(c, "_start") === "b"}
                 />
               </div>
             );
@@ -1503,8 +1605,380 @@ function LedenToegang({ b }: { b: Blok }) {
   );
 }
 
+// ---------- Overige kernblokken ----------
+const datumNl = (d: string) => {
+  const t = Date.parse(d);
+  return Number.isNaN(t)
+    ? d
+    : new Date(t).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "long", timeZone: "Europe/Amsterdam" });
+};
+
+/** Melding bij blokken die zonder CMS-records fictieve voorbeeldgegevens tonen. */
+const Voorbeeldnoot = ({ children }: { children: ReactNode }) => (
+  <p className="demo-note" style={{ marginTop: 22 }}>
+    {children}
+  </p>
+);
+
+function TekstBlok({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  // Richtext: HTML-tags weg; witregels scheiden alinea's, "## " is een tussenkop.
+  const tekst = tx(c, "tekst").replace(/<\/(p|h2|h3|li)>/gi, "\n\n").replace(/<[^>]+>/g, "");
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container tekstblok">
+        <SectionLabel num={nr(n)}>{tx(c, "eyebrow")}</SectionLabel>
+        <h2>{tx(c, "titel")}</h2>
+        <div className="article-body">
+          {tekst
+            .split(/\n\s*\n/)
+            .map((a) => a.trim())
+            .filter(Boolean)
+            .map((a, i) => (a.startsWith("## ") ? <h3 key={i}>{a.slice(3)}</h3> : <p key={i}>{a}</p>))}
+        </div>
+        {tx(c, "bijgewerkt") ? <p className="meta">Laatst bijgewerkt: {datumNl(tx(c, "bijgewerkt"))}</p> : null}
+      </div>
+    </section>
+  );
+}
+
+function Intake({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container contact-layout">
+        <div>
+          <SectionLabel num={nr(n)}>INTAKE</SectionLabel>
+          <h2 style={{ marginTop: 18 }}>{tx(c, "titel")}</h2>
+          {tx(c, "tekst") ? <p className="side-note">{tx(c, "tekst")}</p> : null}
+          {tx(c, "muted") ? <p className="side-note" style={{ opacity: 0.7, fontSize: 13 }}>{tx(c, "muted")}</p> : null}
+        </div>
+        <ol className="intake-stappen">
+          {lijst(c, "stappen").map((s, i) => (
+            <li key={tx(s, "vraag") + i}>
+              <strong>{tx(s, "nummer") || nr(i + 1)}</strong>
+              <div>
+                <h3>{tx(s, "vraag")}</h3>
+                {tx(s, "veld") ? <span className="intake-hint">{tx(s, "veld")}</span> : null}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+async function Bewijsstrook({ b }: { b: Blok }) {
+  const c = b.content;
+  const klanten = (await cmsRecords("klanten"))?.map((k) => tx(k, "naam")).filter(Boolean) ?? voorbeeldKlanten;
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)} style={{ padding: "60px 0" }}>
+      <div className="container">
+        <div className="stats-grid stats-4" style={{ marginTop: 0 }}>
+          {lijst(c, "cijfers").map((s) => (
+            <div className="stat" key={tx(s, "label")}>
+              <strong>{tx(s, "waarde")}</strong>
+              <p>{tx(s, "label")}</p>
+            </div>
+          ))}
+        </div>
+        {tx(c, "toon_logos") !== "nee" ? (
+          <div className="logo-rij" aria-label="Klanten">
+            {klanten.slice(0, Number(c.maximaal_logos) || 6).map((k) => (
+              <span key={k}>{k}</span>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+async function Quote({ b }: { b: Blok }) {
+  const c = b.content;
+  const rij = (await cmsRecords("testimonials"))?.find((t) => !tx(c, "testimonial_id") || t.id === c.testimonial_id);
+  const q = rij
+    ? { citaat: tx(rij, "citaat"), naam: tx(rij, "naam"), functie: tx(rij, "functie"), organisatie: tx(rij, "organisatie"), foto: media(rij, "foto") }
+    : voorbeeldTestimonial;
+  const metFoto = tx(c, "toon_foto") !== "nee" && q.foto;
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className={`container testimonial${metFoto ? "" : " zonder-foto"}`}>
+        {metFoto ? (
+          <div className="image-frame">
+            <Photo src={q.foto} alt={q.naam} />
+          </div>
+        ) : null}
+        <figure>
+          <blockquote>“{q.citaat}”</blockquote>
+          <figcaption>
+            <strong>{q.naam}</strong> · {[q.functie, q.organisatie].filter(Boolean).join(", ")}
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  );
+}
+
+function Logostrook({ b }: { b: Blok }) {
+  const c = b.content;
+  const items = lijst(c, "items");
+  const namen = items.length ? items : voorbeeldKlanten.map((alt) => ({ alt }));
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)} style={{ padding: "60px 0" }}>
+      <div className="container">
+        {tx(c, "eyebrow") ? <span className="eyebrow">{tx(c, "eyebrow")}</span> : null}
+        {tx(c, "titel") ? <h2 style={{ fontSize: "clamp(32px,4vw,52px)", margin: "12px 0 0" }}>{tx(c, "titel")}</h2> : null}
+        <div className={`logo-rij${tx(c, "grijs") === "ja" ? " grijs" : ""}`}>
+          {namen.map((l, i) =>
+            media(l, "logo") ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={i} src={media(l, "logo")} alt={tx(l, "alt")} />
+            ) : (
+              <span key={i}>{tx(l, "alt")}</span>
+            ),
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Rolvoorbeelden({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        <div className="rollen">
+          {lijst(c, "items").map((r) => (
+            <div className="rol" key={tx(r, "tab")}>
+              <span className="chip active">{tx(r, "tab")}</span>
+              <div>
+                <span className="eyebrow">NU</span>
+                <p>{tx(r, "nu")}</p>
+              </div>
+              <div>
+                <span className="eyebrow">MET LINK & LEAD ONE</span>
+                <p>{tx(r, "met")}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const Sterren = ({ n }: { n: number }) => (
+  <span className="review-sterren" aria-label={`${n} van 5 sterren`}>
+    {"★".repeat(n)}
+    <span aria-hidden="true">{"★".repeat(5 - n)}</span>
+  </span>
+);
+
+async function Reviews({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  const rij = await cmsRecords("reviews");
+  const reviews = (
+    rij?.map((r) => ({ naam: tx(r, "naam"), bedrijf: tx(r, "bedrijf"), rating: Number(r.rating) || 5, tekst: tx(r, "tekst") })) ??
+    voorbeeldReviews
+  ).slice(0, Number(c.maximaal) || 3);
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        <div className="card-3">
+          {reviews.map((r) => (
+            <div className="info-tile" key={r.naam + r.tekst.slice(0, 10)}>
+              <Sterren n={Math.min(5, Math.max(1, r.rating))} />
+              <strong style={{ fontSize: 21 }}>“{r.tekst}”</strong>
+              <p>
+                — {r.naam}
+                {r.bedrijf ? ` · ${r.bedrijf}` : ""}
+              </p>
+            </div>
+          ))}
+        </div>
+        {rij ? null : <Voorbeeldnoot>Voorbeeldreviews: goedgekeurde reviews uit het CMS verschijnen hier automatisch.</Voorbeeldnoot>}
+      </div>
+    </section>
+  );
+}
+
+type Wedstrijd = { datum: string; tijd: string; thuis: boolean; tegenstander: string; competitie: string; locatie: string };
+async function wedstrijden(): Promise<{ items: Wedstrijd[]; voorbeeld: boolean }> {
+  const rij = await cmsRecords("wedstrijden");
+  if (!rij) return { items: voorbeeldWedstrijden, voorbeeld: true };
+  return {
+    voorbeeld: false,
+    items: rij.map((w) => ({
+      datum: tx(w, "datum"),
+      tijd: tx(w, "tijd").slice(0, 5),
+      thuis: w.thuis === true,
+      tegenstander: tx(w, "tegenstander"),
+      competitie: tx(w, "competitie"),
+      locatie: tx(w, "locatie"),
+    })),
+  };
+}
+
+async function Wedstrijden({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  const { items, voorbeeld } = await wedstrijden();
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        <div>
+          {items.map((w) => (
+            <div className="schedule-row" key={w.datum + w.tegenstander}>
+              <strong>{datumNl(w.datum)}</strong>
+              <span>
+                {w.thuis ? `NOVA United — ${w.tegenstander}` : `${w.tegenstander} — NOVA United`} · {w.competitie} · {w.tijd} uur
+              </span>
+              <span aria-hidden="true">↗</span>
+            </div>
+          ))}
+        </div>
+        {voorbeeld ? <Voorbeeldnoot>Fictieve wedstrijden: met wedstrijden in het CMS verschijnt hier het echte programma.</Voorbeeldnoot> : null}
+      </div>
+    </section>
+  );
+}
+
+async function VolgendeWedstrijd({ b }: { b: Blok }) {
+  const c = b.content;
+  const { items } = await wedstrijden();
+  const w = items.find((x) => tx(c, "alleen_thuis") !== "ja" || x.thuis);
+  if (!w) return null;
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <div className="featured-story" style={{ background: "#dff29e", minHeight: 300, color: "var(--night)" }}>
+          <div style={{ padding: 60 }}>
+            <span className="eyebrow">
+              {tx(c, "titel") || "VOLGENDE WEDSTRIJD"} / {w.thuis ? "THUIS" : "UIT"}
+            </span>
+            <h2 style={{ fontSize: "clamp(44px,6vw,80px)", marginTop: 15 }}>
+              {w.thuis ? `NOVA / ${w.tegenstander}` : `${w.tegenstander} / NOVA`}
+            </h2>
+            <p style={{ fontSize: 15, color: "#1b2b3c", marginTop: 15 }}>
+              {datumNl(w.datum)} · {w.tijd} uur · {w.locatie}
+            </p>
+          </div>
+          <div style={{ padding: 60, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ fontSize: 150, fontWeight: 950, letterSpacing: "-.1em" }} aria-hidden="true">
+              N<span style={{ color: "#738900" }}>.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+async function Agenda({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  const rij = await cmsRecords("agenda_slots");
+  const slots = (rij?.map((r) => ({ datum: tx(r, "datum"), tijd: tx(r, "tijd").slice(0, 5), persoon: tx(r, "persoon") })) ?? voorbeeldSlots)
+    .filter((sl) => !tx(c, "persoon") || sl.persoon === tx(c, "persoon"))
+    .slice(0, Number(c.maximaal_slots) || 6);
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        <div className="slots">
+          {slots.map((sl) => (
+            <DemoKnop
+              key={sl.datum + sl.tijd + sl.persoon}
+              melding="Dit is een voorbeeld: er wordt geen afspraak ingepland."
+              stijl="slot"
+            >
+              <strong>{datumNl(sl.datum)}</strong> {sl.tijd} uur · {sl.persoon}
+            </DemoKnop>
+          ))}
+        </div>
+        {rij ? null : <Voorbeeldnoot>Voorbeeldtijden: vrije agendaslots uit het CMS verschijnen hier automatisch.</Voorbeeldnoot>}
+      </div>
+    </section>
+  );
+}
+
+function AftelklokBlok({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  const knop = link(c, "knop");
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c, "intro")} />
+        <Aftelklok doel={tx(c, "doeldatum")} verlopen={tx(c, "verlopen_tekst") || "Het is zover."} />
+        {knop ? (
+          <div style={{ marginTop: 30 }}>
+            <Btn to={knop}>{tx(c, "knoptekst")}</Btn>
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+/** Collectie (lijst): staat in de specificatie maar heeft nog geen CMS-bloktype. Alleen voor de verkenner. */
+async function CollectieLijst({ b, n }: { b: Blok; n: number }) {
+  const c = b.content;
+  const { items } = await getCases();
+  const vorm = tx(c, "_vorm") || "raster";
+  return (
+    <section data-cms={label(b)} className={sectie(b.bg)}>
+      <div className="container">
+        <SectionTitle num={nr(n)} {...kop(c)} />
+        {vorm === "lijst" ? (
+          <div>
+            {items.slice(0, 5).map((x) => (
+              <Link className="schedule-row" href={`/work/${x.slug}`} key={x.slug}>
+                <strong>{x.type}</strong>
+                <span>{x.name}</span>
+                <span aria-hidden="true">↗</span>
+              </Link>
+            ))}
+          </div>
+        ) : vorm === "uitgelicht" && items[0] ? (
+          <Link href={`/work/${items[0].slug}`} className="featured-story">
+            <div className="photo">
+              <Photo src={items[0].cover} alt={items[0].name} />
+            </div>
+            <div className="copy">
+              <span className="eyebrow">UITGELICHT / {items[0].type}</span>
+              <h2>{items[0].name}.</h2>
+              <span className="meta">BEKIJK HET PROJECT &nbsp; ↗</span>
+            </div>
+          </Link>
+        ) : (
+          <div className="article-grid">
+            {items.slice(0, 3).map((x) => (
+              <PicCard key={x.slug} item={x} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // ---------- Paginaopbouw ----------
-const ZONDER_NUMMER = new Set(["header", "marquee", "feiten", "overgang", "portfolio", "leden_toegang"]);
+const ZONDER_NUMMER = new Set([
+  "header",
+  "marquee",
+  "feiten",
+  "overgang",
+  "portfolio",
+  "leden_toegang",
+  "bewijsstrook",
+  "quote",
+  "logostrook",
+  "volgende_wedstrijd",
+]);
 const INTERACTIE = new Set(["enquete", "ab_blok", "personalisatie"]);
 
 /** Splitst de afsluitende oproep (laatste cta-blok) af; die rendert de Footer. */
@@ -1624,6 +2098,42 @@ export function Blokken({
         break;
       case "leden_toegang":
         uit.push(<LedenToegang key={k} b={b} />);
+        break;
+      case "tekst":
+        uit.push(<TekstBlok key={k} b={b} n={n} />);
+        break;
+      case "intake":
+        uit.push(<Intake key={k} b={b} n={n} />);
+        break;
+      case "bewijsstrook":
+        uit.push(<Bewijsstrook key={k} b={b} />);
+        break;
+      case "quote":
+        uit.push(<Quote key={k} b={b} />);
+        break;
+      case "logostrook":
+        uit.push(<Logostrook key={k} b={b} />);
+        break;
+      case "rolvoorbeelden":
+        uit.push(<Rolvoorbeelden key={k} b={b} n={n} />);
+        break;
+      case "reviews":
+        uit.push(<Reviews key={k} b={b} n={n} />);
+        break;
+      case "wedstrijden":
+        uit.push(<Wedstrijden key={k} b={b} n={n} />);
+        break;
+      case "volgende_wedstrijd":
+        uit.push(<VolgendeWedstrijd key={k} b={b} />);
+        break;
+      case "agenda":
+        uit.push(<Agenda key={k} b={b} n={n} />);
+        break;
+      case "aftelklok":
+        uit.push(<AftelklokBlok key={k} b={b} n={n} />);
+        break;
+      case "collectie_lijst":
+        uit.push(<CollectieLijst key={k} b={b} n={n} />);
         break;
       default:
         if (INTERACTIE.has(b.type)) {

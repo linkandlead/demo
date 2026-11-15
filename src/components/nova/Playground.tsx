@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { BLOKVOORBEELDEN } from "@/content/blokvoorbeelden";
 import { KERNBLOKKEN, variantOpties } from "@/content/kernblokken";
-import { variantWeergave } from "./PreviewVariant";
-import { mediaSrc, mediaSrcSet } from "./ui";
+import type { BlokVoorbeeld } from "./BlokVoorbeelden";
 
 // Block Playground — playground() uit het prototype, nu met de echte veldnamen, de officiële
 // varianten uit de PDF en het bijbehorende CMS-bloktype per blok. De preview zelf blijft een
@@ -24,24 +22,13 @@ const ACHTERGRONDEN: Array<[string, string, string]> = [
   ["Diepst", "deepest", "nacht"],
 ];
 
-function previewHeadline(b: string) {
-  if (/Formulier|Enquête|NPS|Review/.test(b))
-    return "Laten we in contact blijven.";
-  if (/Artikel|Cases|Portfolio|Collectie/.test(b))
-    return "Verhalen die het delen waard zijn.";
-  if (/Team|Partner|Sprekers|Testimonial/.test(b))
-    return "Mogelijk gemaakt door mensen.";
-  if (/Statist|Feiten|Bewijs/.test(b)) return "Ideeën met impact.";
-  if (/Tickets|Prijs|Configurat/.test(b))
-    return "Jouw beleving, op jouw manier.";
-  if (/Agenda|Aftel|Wedstrijd/.test(b)) return "De momenten die ons raken.";
-  return "Maak wat er komt.";
-}
-
-export function Playground() {
+// De preview is het echte NOVA-blok (zelfde renderer als de site), verkleind weergegeven.
+export function Playground({ voorbeelden }: { voorbeelden: Record<string, BlokVoorbeeld> }) {
   const [groep, setGroep] = useState(ALLE);
   const [blokNaam, setBlokNaam] = useState("Header (hero)");
-  const [achtergrond, setAchtergrond] = useState("Licht");
+  const natuurlijk = (naam: string) =>
+    ACHTERGRONDEN.find(([, , token]) => token === voorbeelden[naam]?.bg)?.[0] ?? "Licht";
+  const [achtergrond, setAchtergrond] = useState(() => natuurlijk("Header (hero)"));
   const [variant, setVariant] = useState<string | null>(null);
 
   const blokken =
@@ -49,14 +36,12 @@ export function Playground() {
       ? KERNBLOKKEN
       : KERNBLOKKEN.filter((b) => b.categorie === groep);
   const blok = blokken.find((b) => b.naam === blokNaam) ?? blokken[0];
-  const voorbeeld = BLOKVOORBEELDEN[blok.naam];
+  const voorbeeld = voorbeelden[blok.naam];
   const opties = variantOpties(blok.varianten, blok.naam);
   const huidigeVariant =
     variant && opties.includes(variant) ? variant : opties[0];
-  const weergave = variantWeergave(blok.naam, huidigeVariant);
-  const [, gekozenKlasse, bgToken] =
+  const [, , bgToken] =
     ACHTERGRONDEN.find(([n]) => n === achtergrond) ?? ACHTERGRONDEN[0];
-  const bgKlasse = weergave.achtergrond ?? gekozenKlasse;
 
   return (
     <>
@@ -93,6 +78,7 @@ export function Playground() {
                 onClick={() => {
                   setBlokNaam(b.naam);
                   setVariant(null);
+                  setAchtergrond(natuurlijk(b.naam));
                 }}
               >
                 <span>{b.naam}</span>
@@ -128,41 +114,19 @@ export function Playground() {
               </select>
             </div>
           </div>
-          <div
-            className={`block-preview ${bgKlasse} ${weergave.klasse}`.trim()}
-            data-variant={huidigeVariant}
-          >
-            <span
-              className="eyebrow"
-              style={{ position: "relative", zIndex: 1 }}
+          <div className="pv-venster" aria-label={`Voorbeeld van het blok ${blok.naam}`}>
+            <div
+              className="pv-frame"
+              data-bg={bgToken}
+              data-variant={huidigeVariant}
+              // Interactie in de preview is echt (formulieren, configurator), maar links openen niets.
+              onClickCapture={(e) => {
+                if ((e.target as HTMLElement).closest("a")) e.preventDefault();
+              }}
             >
-              {groep === ALLE ? "NOVA-BLOKKENSHOWCASE" : groep.toUpperCase()}
-            </span>
-            <h3 style={{ position: "relative", zIndex: 1 }}>
-              {weergave.kop ?? voorbeeld?.kop ?? previewHeadline(blok.naam)}
-            </h3>
-            <p style={{ position: "relative", zIndex: 1 }}>
-              {voorbeeld?.intro ??
-                `Een visueel voorbeeld van het blok “${blok.naam}”, binnen de NOVA-huisstijl.`}
-            </p>
-            {weergave.extra ? (
-              <div style={{ position: "relative", zIndex: 1 }}>{weergave.extra}</div>
-            ) : null}
-            <div style={{ position: "relative", zIndex: 1, marginTop: 25 }}>
-              <span className="btn btn-lime">
-                {voorbeeld?.knop ?? "Ontdek meer"} ↗
-              </span>
-            </div>
-            <div className="preview-art">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={mediaSrc("work_color")}
-                srcSet={mediaSrcSet("work_color")}
-                sizes="(max-width: 760px) 30vw, 340px"
-                alt="Abstracte ontwerpvisual"
-                loading="lazy"
-                decoding="async"
-              />
+              {voorbeeld?.varianten[huidigeVariant] ?? (
+                <div className="demo-note">Voor dit blok is nog geen voorbeeld beschikbaar.</div>
+              )}
             </div>
           </div>
           <div className="block-details">
@@ -202,9 +166,9 @@ export function Playground() {
             </ul>
           </div>
           <div className="demo-note" style={{ marginTop: 14 }}>
-            Visuele demo — geen live CMS-bewerking. De blokpreview is een
-            ontwerpdemonstratie; de 43 namen, velden en varianten komen uit de
-            CMS-specificatie.{" "}
+            Het voorbeeld is het echte NOVA-blok, gemaakt met dezelfde code als de
+            site, met voorbeeldinhoud. Links in het voorbeeld zijn uitgeschakeld.
+            De 43 namen, velden en varianten komen uit de CMS-specificatie.{" "}
             <Link href="/one#aanvraag" style={{ textDecoration: "underline" }}>
               Plan een kennismaking ↗
             </Link>

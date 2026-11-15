@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CmsPagina } from "@/components/nova/CmsPagina";
+import { blokVoorbeelden } from "@/components/nova/BlokVoorbeelden";
 import { Playground } from "@/components/nova/Playground";
 import { paginaMetadata } from "@/lib/cms/paginas";
 
@@ -14,7 +15,7 @@ export default function Blokkenbibliotheek() {
         header: (
           <section className="section section-soft" style={{ paddingTop: 50 }} data-cms="Blokkenverkenner (frontendmodule)">
             <div className="container">
-              <Playground />
+              <Playground voorbeelden={blokVoorbeelden()} />
               <p style={{ marginTop: 24, fontSize: 13 }}>
                 Bekijk ook de{" "}
                 <Link href="/playground/sports" style={{ textDecoration: "underline" }}>

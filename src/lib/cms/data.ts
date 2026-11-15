@@ -160,6 +160,13 @@ export async function getPeople(): Promise<Collectie<Person>> {
   };
 }
 
+/** Ruwe records van een soort uit het CMS (alleen als een blok op een pagina ze opvraagt). */
+export async function cmsRecords(soort: string): Promise<Record<string, unknown>[] | null> {
+  const st = await cmsStatus();
+  const rij = st.bron === "cms" ? st.site.records[soort] : undefined;
+  return rij?.length ? rij : null;
+}
+
 export type Partner = { naam: string; vak: string; tekst: string; uitgelicht: boolean };
 
 /** Partners (CMS-collectie "partners"); zonder CMS de fictieve partners uit de teksten. */

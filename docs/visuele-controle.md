@@ -114,7 +114,11 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   Toelichting en eyebrow staan in het titelveld van het blok (zie cms-koppeling.md); de twee knoppen
   naar de overzichten staan vast op de home (de blokken hebben geen knopveld).
 - Ruimtedetail: de tekst-met-beeld-sectie gebruikt de homevorm (eyebrow en kop links naast het beeld).
-- Blokkenverkenner: elke variant verandert de preview nu zichtbaar (beeld links/rechts, gecentreerd,
-  achtergrondbeeld, compact, kolommen, kleurbanden, stappenvormen, formuliersoort, NPS/sterren …).
+- Blokkenverkenner: de preview is het **echte NOVA-blok** (dezelfde renderer als de site, verkleind),
+  voor alle 43 blokken en elke variant (`BlokVoorbeelden.tsx`). De variant zet het bijbehorende
+  CMS-veld (layout, kolommen, soort, stijl …). Elf blokken die NOVA niet op een pagina gebruikt
+  (tekst, intake, bewijsstrook, testimonial, logostrook, rolvoorbeelden, reviews, wedstrijden,
+  volgende wedstrijd, agenda, aftelklok) kregen een eigen renderer; zonder CMS-records tonen ze
+  fictieve, als voorbeeld gemarkeerde gegevens (`src/content/voorbeelddata.ts`).
 - Pulse Festival-hero (`feature-media`): ruimte onder de knoppen, compactere kop en een extra
   verloop onderaan; het actieve menu-item staat niet langer 4px hoger dan de rest.
