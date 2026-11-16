@@ -38,10 +38,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <style id="huisstijl-cms">{huisstijl}</style>
         {/* In een iframe (blokvoorbeeld in de blokkenbibliotheek) alleen het blok tonen, vóór de eerste weergave.
-            In de automatische rondleiding (#rondleiding) de hele pagina, zonder demoknoppen. */}
+            In de automatische rondleiding (#rondleiding) en in de editor van het CMS (/__voorvertoning) de hele
+            pagina, met menu, zonder demoknoppen. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "if(window.self!==window.top)document.documentElement.classList.add(location.hash==='#rondleiding'?'in-rondleiding':'in-frame')",
+            __html: "if(window.self!==window.top)document.documentElement.classList.add(location.hash==='#rondleiding'||location.pathname.indexOf('/__voorvertoning')===0?'in-rondleiding':'in-frame')",
           }}
         />
       </head>

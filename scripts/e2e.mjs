@@ -488,8 +488,33 @@ async function voorvertoning() {
       ingHtml.includes(".voorbeeld-balk{display:none!important}"),
     `status ${ing.status}, ${fa}`,
   );
+  const ingCookie = ing.headers.getSetCookie().find((c) => c.startsWith("nova_voorvertoning=")) ?? "";
+  check(
+    "ingesloten: tokencookie met SameSite=None, Secure en Partitioned (komt mee in het iframe)",
+    /SameSite=none/i.test(ingCookie) && /Secure/i.test(ingCookie) && /Partitioned/i.test(ingCookie),
+    ingCookie.replace(/=[^;]+/, "=…"),
+  );
+  check("ingesloten: interne links lopen via /__voorvertoning", ingHtml.includes('"/__voorvertoning?ingesloten=1&pad="'));
+  // Doorklikken in het iframe: zonder token in het adres, met het token uit de cookie → nog steeds het concept.
+  const door = await fetch(`${SITE_CMS}/__voorvertoning?ingesloten=1&pad=${encodeURIComponent("/")}`, {
+    redirect: "manual",
+    headers: { cookie: `nova_voorvertoning=${token}` },
+  });
+  check("ingesloten doorklikken met de tokencookie: 200 met het concept", door.status === 200 && /<h1[^>]*>Concept/.test(await door.text()));
   const ingFout = await fetch(`${vv("/", ongeldig)}&ingesloten=1`, { redirect: "manual" });
-  check("ingesloten met ongeldig token: door naar de gewone pagina", ingFout.status === 307);
+  const ingFoutHtml = await ingFout.text();
+  check(
+    "ingesloten met ongeldig token: de gepubliceerde pagina, wel in te sluiten (200, frame-ancestors), geen concept",
+    ingFout.status === 200 && (ingFout.headers.get("content-security-policy") ?? "").includes("frame-ancestors") && !/<h1[^>]*>Concept/.test(ingFoutHtml),
+    `status ${ingFout.status}`,
+  );
+  // Controle van het CMS op insluiten: zonder token, met &ingesloten=1 (linkandlead-cms B-110/B-115).
+  const cmsCheck = await fetch(`${SITE_CMS}/__voorvertoning?pad=%2F&ingesloten=1`, { redirect: "manual" });
+  check(
+    "insluitcontrole van het CMS (zonder token): 200 met frame-ancestors van het CMS, zonder X-Frame-Options",
+    cmsCheck.status === 200 && (cmsCheck.headers.get("content-security-policy") ?? "").includes(`frame-ancestors 'self' ${new URL(MOCK).origin}`) && !cmsCheck.headers.get("x-frame-options"),
+    `status ${cmsCheck.status}`,
+  );
   const publiek = await fetch(`${SITE_CMS}/`);
   check("gewone pagina's blijven X-Frame-Options SAMEORIGIN", publiek.headers.get("x-frame-options") === "SAMEORIGIN");
 

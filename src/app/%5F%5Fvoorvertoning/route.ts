@@ -72,10 +72,11 @@ async function ingeslotenPagina(
       redirect: "manual",
       signal: AbortSignal.timeout(8000),
     });
-    // Geen eigen voorbeeldbalk: de editor van het CMS toont zelf dat het een concept is.
+    // Geen eigen voorbeeldbalk: de editor van het CMS toont zelf dat het een concept is. Een klik op een interne
+    // link gaat via deze route (de gewone pagina's laten zich niet insluiten), met het token uit de cookie.
     const html = (await res.text()).replace(
       "</head>",
-      "<style>.voorbeeld-balk{display:none!important}</style></head>",
+      `<style>.voorbeeld-balk{display:none!important}</style><script>${KLIK_SCRIPT}</script></head>`,
     );
     return new Response(html, {
       status: res.status === 404 ? 404 : res.ok ? 200 : 502,
@@ -98,6 +99,10 @@ async function ingeslotenPagina(
   }
 }
 
+// Interne links (zelfde origin, geen /__voorvertoning, geen anker op dezelfde pagina) openen in het ingesloten venster
+// opnieuw via /__voorvertoning?pad=…&ingesloten=1. Nieuwe tabbladen en downloads blijven zoals ze zijn.
+const KLIK_SCRIPT = `document.addEventListener("click",function(e){if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a||a.target==="_blank"||a.hasAttribute("download"))return;var u=new URL(a.href,location.href);if(u.origin!==location.origin||u.pathname.indexOf("/__voorvertoning")===0)return;if(u.pathname===location.pathname&&u.hash)return;e.preventDefault();e.stopPropagation();location.href="/__voorvertoning?ingesloten=1&pad="+encodeURIComponent(u.pathname+u.search+u.hash)},true);`;
+
 function doorsturen(request: NextRequest, pad: string): Response {
   // pad is gecontroleerd met veiligPad: altijd een intern pad op deze host.
   return new Response(null, {
@@ -113,7 +118,21 @@ export async function GET(request: NextRequest) {
   const zoek = request.nextUrl.searchParams;
   const draft = await draftMode();
   const jar = await cookies();
-  const verzoek = leesVoorvertoningsVerzoek(zoek);
+  const ingesloten = zoek.get("ingesloten") === "1";
+  // In de editor (ingesloten): een klik in het voorbeeld komt hier terug zonder token in het adres; dan het token
+  // uit de cookie (die in een iframe alleen meekomt met SameSite=None en Partitioned, zie hieronder).
+  const uitCookie = jar.get(VOORVERTONING_COOKIE)?.value;
+  const verzoek =
+    leesVoorvertoningsVerzoek(zoek) ??
+    (ingesloten && uitCookie
+      ? leesVoorvertoningsVerzoek(new URLSearchParams({ pad: zoek.get("pad") || "/", token: uitCookie }))
+      : null);
+
+  if (ingesloten && (!verzoek || !(await tokenGeldig(verzoek.pad, verzoek.token)))) {
+    // Zonder (geldig) token: de gepubliceerde pagina, ook ingesloten (200 met frame-ancestors). Zo slaagt ook de
+    // controle van het CMS, die zonder token vraagt of deze route zich laat insluiten (linkandlead-cms B-110).
+    return ingeslotenPagina(request, veiligPad(zoek.get("pad") || "/") ?? "/", "");
+  }
 
   if (!verzoek || !(await tokenGeldig(verzoek.pad, verzoek.token))) {
     // Geweigerd: geen draft mode, geen token; door naar de gepubliceerde pagina.
@@ -124,10 +143,13 @@ export async function GET(request: NextRequest) {
   }
 
   draft.enable();
+  // Ingesloten (iframe op het CMS) stuurt de browser alleen een cookie mee met SameSite=None; Secure; Partitioned.
+  const cookieSoort = ingesloten
+    ? ({ sameSite: "none", secure: true, partitioned: true } as const)
+    : ({ sameSite: "lax", secure: process.env.NODE_ENV !== "development" } as const);
   jar.set(VOORVERTONING_COOKIE, verzoek.token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: "lax",
+    ...cookieSoort,
     path: "/",
     maxAge: tokenSecondenGeldig(verzoek.token),
   });
@@ -139,13 +161,12 @@ export async function GET(request: NextRequest) {
   if (bewerken && bewerkSeconden > 0) {
     jar.set(BEWERK_COOKIE, bewerken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "lax",
+      ...cookieSoort,
       path: "/",
       maxAge: bewerkSeconden,
     });
   } else if (jar.has(BEWERK_COOKIE)) jar.delete(BEWERK_COOKIE);
-  if (zoek.get("ingesloten") === "1") {
+  if (ingesloten) {
     // De cookies die hierboven zijn gezet (draft mode en het token) gaan mee naar de pagina zelf.
     const mee = ["__prerender_bypass", VOORVERTONING_COOKIE]
       .map((naam) => {
