@@ -475,6 +475,24 @@ async function voorvertoning() {
   const controle = await fetch(vv("/", token));
   check("ondersteuningscontrole van het CMS krijgt 200", controle.status === 200, `status ${controle.status}`);
 
+  // Ingesloten in de pagina-editor van het CMS (B-110): de pagina zelf (200), alleen het CMS mag insluiten.
+  const ing = await fetch(`${vv("/", token)}&ingesloten=1`, { redirect: "manual" });
+  const ingHtml = await ing.text();
+  const fa = ing.headers.get("content-security-policy") ?? "";
+  check(
+    "ingesloten: 200 met frame-ancestors van het CMS, zonder X-Frame-Options, met het concept, zonder eigen balk",
+    ing.status === 200 &&
+      fa.includes(`frame-ancestors 'self' ${new URL(MOCK).origin}`) &&
+      !ing.headers.get("x-frame-options") &&
+      /<h1[^>]*>Concept/.test(ingHtml) &&
+      ingHtml.includes(".voorbeeld-balk{display:none!important}"),
+    `status ${ing.status}, ${fa}`,
+  );
+  const ingFout = await fetch(`${vv("/", ongeldig)}&ingesloten=1`, { redirect: "manual" });
+  check("ingesloten met ongeldig token: door naar de gewone pagina", ingFout.status === 307);
+  const publiek = await fetch(`${SITE_CMS}/`);
+  check("gewone pagina's blijven X-Frame-Options SAMEORIGIN", publiek.headers.get("x-frame-options") === "SAMEORIGIN");
+
   const los = await fetch(vv("/", token), { redirect: "manual" });
   const cookie = los.headers.getSetCookie().join("; ");
   check(

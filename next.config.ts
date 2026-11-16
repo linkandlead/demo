@@ -12,8 +12,13 @@ const nextConfig: NextConfig = {
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
         ],
+      },
+      {
+        // Niet op /__voorvertoning: die route mag in de editor van het CMS staan en zet zelf
+        // frame-ancestors 'self' <CMS> (linkandlead-cms B-110). De rest van de site blijft SAMEORIGIN.
+        source: "/:path((?!__voorvertoning).*)",
+        headers: [{ key: "X-Frame-Options", value: "SAMEORIGIN" }],
       },
       {
         source: "/(media|fonts|brand)/:path*",
