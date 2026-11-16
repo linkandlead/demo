@@ -25,6 +25,9 @@ export type PaginaInhoud = {
   /** Bewerkmodus (B-090): een concept uit het CMS én een bewerktoken. Alleen dan krijgen blokken
    *  bewerkattributen; een bezoeker nooit. */
   bewerkbaar?: boolean;
+  /** Ingesloten voorbeeld in de pagina-editor van het CMS (B-127): een concept, opgehaald door /__voorvertoning
+   *  met &ingesloten=1. Dan krijgt elk blok data-cms-sectie (klikken en typen); een bezoeker nooit. */
+  ingesloten?: boolean;
 };
 
 const laadGepubliceerd = async (slug: string): Promise<PaginaInhoud | null> => {
@@ -44,8 +47,10 @@ export const laadPagina = cache(async (slug: string): Promise<PaginaInhoud | nul
   const gekozen = kiesInhoud({ draftMode: stand.aan, concept, gepubliceerd });
   if (!gekozen) return null;
   if ("bron" in gekozen) return gekozen;
-  const bewerkbaar = stand.aan && stand.bewerken && gekozen.blokken.some((b) => b.id && b.bewerken);
-  return { ...gekozen, bron: "concept", ...(bewerkbaar ? { bewerkbaar: true } : {}) };
+  const ingesloten = stand.aan && stand.ingesloten;
+  // In de editor (ingesloten) typt de redacteur via het CMS (B-127); de eigen bewerkbalk (B-090) blijft dan uit.
+  const bewerkbaar = !ingesloten && stand.aan && stand.bewerken && gekozen.blokken.some((b) => b.id && b.bewerken);
+  return { ...gekozen, bron: "concept", ...(bewerkbaar ? { bewerkbaar: true } : {}), ...(ingesloten ? { ingesloten: true } : {}) };
 });
 
 /** Alle paginaslugs onder een prefix (bv. "/spaces/"), uit het CMS én de blauwdruk. */

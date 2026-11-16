@@ -494,7 +494,15 @@ async function voorvertoning() {
     /SameSite=none/i.test(ingCookie) && /Secure/i.test(ingCookie) && /Partitioned/i.test(ingCookie),
     ingCookie.replace(/=[^;]+/, "=…"),
   );
-  check("ingesloten: interne links lopen via /__voorvertoning", ingHtml.includes('"/__voorvertoning?ingesloten=1&pad="'));
+  // Klikken en typen in het echte ontwerp (linkandlead-cms B-127, site-kit 1.21): secties gemarkeerd, het klikscript
+  // onderaan met de origin van het CMS en de tekstvelden van het concept.
+  check(
+    "ingesloten: blokken met data-cms-sectie en het klikscript (site-kit 1.21) naar de CMS-origin",
+    /data-cms-sectie="[0-9a-f-]{36}"/.test(ingHtml) &&
+      ingHtml.includes(`"cmsUrl":"${new URL(MOCK).origin}","ingesloten":true,"velden":{"`) &&
+      ingHtml.includes(",{venster:window}))</script>") &&
+      !ingHtml.includes("bewerkbalk"),
+  );
   // Doorklikken in het iframe: zonder token in het adres, met het token uit de cookie → nog steeds het concept.
   const door = await fetch(`${SITE_CMS}/__voorvertoning?ingesloten=1&pad=${encodeURIComponent("/")}`, {
     redirect: "manual",
@@ -520,6 +528,15 @@ async function voorvertoning() {
 
   const los = await fetch(vv("/", token), { redirect: "manual" });
   const cookie = los.headers.getSetCookie().join("; ");
+  // Het voorbeeld in een eigen tabblad (draft mode, niet ingesloten) en de gewone pagina: geen klikscript of secties.
+  const losCookies = los.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ");
+  const losHtml = await (await fetch(`${SITE_CMS}/`, { headers: { cookie: losCookies } })).text();
+  const publiekHtml = await (await fetch(`${SITE_CMS}/`)).text();
+  check(
+    "niet ingesloten (eigen tabblad, gewone pagina): geen data-cms-sectie en geen klikscript",
+    /<h1[^>]*>Concept/.test(losHtml) &&
+      ![losHtml, publiekHtml].some((h) => h.includes("data-cms-sectie") || h.includes("cms-voorbeeld")),
+  );
   check(
     "geldig token: 307 naar het pad, draft mode + tokencookie, no-store en noindex",
     los.status === 307 &&
