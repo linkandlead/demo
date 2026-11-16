@@ -34,9 +34,8 @@ const KOPPEN = {
   "X-Robots-Tag": "noindex, nofollow",
 } as const;
 
-/** De origin van het CMS voor frame-ancestors; alleen https (of localhost in ontwikkeling). */
-function cmsOrigin(): string | null {
-  const u = cmsUrl();
+/** Een origin voor frame-ancestors; alleen https (of localhost in ontwikkeling). */
+function origin(u: string | undefined): string | null {
   if (!u) return null;
   try {
     const url = new URL(u);
@@ -50,12 +49,13 @@ function cmsOrigin(): string | null {
   }
 }
 
-/** De koppen van een ingesloten voorbeeld: alleen het CMS mag het insluiten, nooit in een cache. */
+/** De koppen van een ingesloten voorbeeld: alleen het CMS mag het insluiten, nooit in een cache. Het beheer van
+ *  het CMS kan op een ander adres draaien dan de API (CMS_BEHEER_URL, bv. https://cms.linkandlead.nl). */
 function insluitKoppen(): Record<string, string> {
-  const cms = cmsOrigin();
+  const toegestaan = [...new Set([origin(cmsUrl()), origin(process.env.CMS_BEHEER_URL)].filter(Boolean))];
   return {
     ...KOPPEN,
-    "Content-Security-Policy": `frame-ancestors 'self'${cms ? ` ${cms}` : ""}`,
+    "Content-Security-Policy": `frame-ancestors 'self'${toegestaan.map((o) => ` ${o}`).join("")}`,
   };
 }
 
