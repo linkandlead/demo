@@ -35,7 +35,7 @@ const KOPPEN = {
 } as const;
 
 /** Een origin voor frame-ancestors; alleen https (of localhost in ontwikkeling). */
-function origin(u: string | undefined): string | null {
+function origin(u: string | null | undefined): string | null {
   if (!u) return null;
   try {
     const url = new URL(u);
