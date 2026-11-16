@@ -65,6 +65,18 @@ Alle voorbeeldantwoorden zijn `no-store` en `noindex`.
    pas dan staat de knop aan. Het CMS zelf heeft daarvoor `VOORVERTONING_GEHEIM` (of
    `ADMIN_SESSIE_SECRET`) nodig; dat staat in het CMS-project, niet hier.
 
+## Klikken en typen in de pagina-editor (ingesloten voorbeeld)
+
+De pagina-editor van het CMS toont `/__voorvertoning?…&ingesloten=1` in een iframe (linkandlead-cms B-110). Alleen
+daar, met een geldig token, krijgt elk blok van het concept een omhulsel met `data-cms-sectie="<blok.id>"`
+(`display: contents`) en staat onderaan de pagina `voorvertoningKlikken` uit site-kit 1.21 als inline script
+(`src/lib/cms/voorvertoningklikken.ts`, B-115/B-127). Een klik kiest het blok in de editor; platte tekst is na de
+selectie van de editor direct te typen (Enter: klaar, Escape: terugzetten) en gaat als concept naar het CMS. De
+tekstvelden van het concept gaan mee, zodat ze vanzelf `data-cms-veld` krijgen. Links openen in het editorvenster
+geen andere pagina. Berichten gaan alleen naar de origin van het beheer (`CMS_BEHEER_URL`, anders `CMS_URL`). In
+de editor staat de eigen bewerkbalk (hieronder) uit. Gewone pagina's en het voorbeeld in een eigen tabblad krijgen
+geen attributen en geen script (e2e `ALLEEN=voorvertoning`).
+
 ## Bewerken op de site (opslaan als concept)
 
 Vanaf CMS-besluit B-090 (site-kit 1.16) kun je in het voorbeeld ook teksten aanpassen en opslaan. Wie de

@@ -2430,9 +2430,10 @@ export function Blokken({
         }
       // Onbekend bloktype: overslaan (veilige terugval).
     }
-    // Bewerkmodus (B-090): het blok in een omhulsel met de sectie-id, zodat de bewerkbalk de velden in dit
-    // blok kan vinden. display: contents (nova-extra.css), dus de opmaak verandert niet. Bezoekers nooit.
-    if (pagina.bewerkbaar && b.id && b.bewerken && uit.length > voor)
+    // Bewerkmodus (B-090) en het ingesloten voorbeeld in de editor (B-127): het blok in een omhulsel met de
+    // sectie-id, zodat de bewerkbalk of het klikscript de velden in dit blok kan vinden. display: contents
+    // (nova-extra.css), dus de opmaak verandert niet. Bezoekers nooit.
+    if (((pagina.bewerkbaar && b.bewerken) || pagina.ingesloten) && b.id && uit.length > voor)
       uit[voor] = (
         <div key={`sectie-${k}`} className="cms-sectie" data-cms-sectie={b.id}>
           {uit[voor]}
