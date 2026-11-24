@@ -704,7 +704,7 @@ function Kaarten({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
                 <span className="eyebrow">
                   {nr(k + 1)} / {tx(c, "eyebrow")}
                 </span>
-                <h3>{tx(i, "titel")}.</h3>
+                <h3 role="heading" aria-level={2}>{tx(i, "titel")}.</h3>
                 <p>{tx(i, "tekst")}</p>
                 {/* Geen <a> in een <a>: de knopvorm als span binnen de kaartlink. */}
                 <span className="btn btn-dark">
@@ -730,7 +730,7 @@ function Kaarten({ b, ctx, n }: { b: Blok; ctx: Ctx; n: number }) {
                   <Photo src={media(i, "beeld")} alt={tx(i, "beeld_alt")} />
                   <div className="image-overlay" />
                   <div className="image-caption">
-                    <h3>{tx(i, "titel")}</h3>
+                    <h3 role="heading" aria-level={2}>{tx(i, "titel")}</h3>
                     {link(i, "link") ? (
                       <span className="circle-arrow" aria-hidden="true">
                         ↗

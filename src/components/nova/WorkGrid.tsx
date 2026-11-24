@@ -49,7 +49,7 @@ export function WorkGrid({ cases }: { cases: Case[] }) {
               <PicCard item={x} />
               <div className="project-title">
                 <div>
-                  <h3>{x.name}</h3>
+                  <h3 role="heading" aria-level={2}>{x.name}</h3>
                   <p>{[x.type, x.year].filter(Boolean).join(" · ")}</p>
                 </div>
                 <span className="arrow" aria-hidden="true">
