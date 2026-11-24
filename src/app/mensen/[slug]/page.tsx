@@ -5,7 +5,7 @@ import { splitsOproep } from "@/components/nova/Blokken";
 import { JsonLd } from "@/components/nova/JsonLd";
 import { Page } from "@/components/nova/Page";
 import { Btn, Photo, mediaSrc } from "@/components/nova/ui";
-import { SITE_URL } from "@/content/cms-media";
+import { SITE_URL, STANDAARD_DEELBEELD } from "@/content/cms-media";
 import { getPeople } from "@/lib/cms/data";
 import { laadPagina } from "@/lib/cms/paginas";
 import { persoonSlug } from "@/lib/slug";
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/mensen/[slug]">):
     title: `${p.name}, ${p.role}`,
     description: beschrijving,
     alternates: { canonical: `/mensen/${persoonSlug(p.name)}` },
-    openGraph: { type: "profile", title: p.name, description: beschrijving, images: p.cover ? [{ url: mediaSrc(p.cover), alt: p.alt || p.name }] : [] },
+    openGraph: { type: "profile", title: p.name, description: beschrijving, images: [{ url: p.cover ? mediaSrc(p.cover) : STANDAARD_DEELBEELD, alt: p.alt || p.name }] },
   };
 }
 

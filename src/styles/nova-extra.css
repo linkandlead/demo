@@ -883,3 +883,18 @@ body:has(.rl-start, .rl-speler) .demo-fab, body:has(.rl-start, .rl-speler) .demo
   .rl-stroom li:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -15px; transform: none; }
   .rl-tegels { grid-template-columns: 1fr 1fr; }
 }
+
+/* Testrapport 24 nov 2026 (bevinding 13 en 23): geen zijwaarts scrollen op /playground (375 en 768 px) en /lab (768 px), en
+   voetlinks met een tikdoel van minstens 24 px hoog. nova.css blijft ongewijzigd; dit zijn aanvullingen.
+   Reden overflow: gridkolommen (1fr, repeat(3,1fr)) mogen niet smaller worden dan hun inhoud (min-width:auto), dus een
+   brede kolom duwde de pagina breder dan het scherm. Met min-width:0 krimpen ze mee. */
+.playground-layout > *,
+.showcase-table > * { min-width: 0; }
+.block-list button { overflow-wrap: anywhere; }
+@media (max-width: 1000px) { .showcase-table { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); } }
+/* Tikdoel: 15 px tekst + 10 px opvulling = 25 px; de negatieve marge houdt de regelafstand gelijk aan het ontwerp. */
+.footer-links a { display: inline-block; padding-block: 5px; margin-block: -5px; }
+/* Idem voor het hoofdmenu (vanaf 761 px): 14 px tekst + 10 px opvulling = 24 px. De streep onder het actieve item
+   (margin-top 5 px in nova.css) schuift mee met de opvulling; met margin-top 0 staat hij op dezelfde plek als in het ontwerp. */
+.primary-nav a { display: inline-block; padding-block: 5px; margin-block: -5px; }
+.primary-nav a.active::after { margin-top: 0; }

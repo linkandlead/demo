@@ -36,6 +36,9 @@ export const CMS_VIDEO = {
 
 export const SITE_URL = "https://demo.linkandlead.nl";
 
+/** Standaard deelbeeld (Open Graph, 1200×630: logo en naam op het hoofdbeeld van de homepage) voor pagina's zonder eigen beeld. */
+export const STANDAARD_DEELBEELD = "/brand/nova_deelbeeld.jpg";
+
 /** Beeldnaam (bv. "hero_arch") bij een CMS-URL, voor de alt-tekst. */
 export function naamBijCmsUrl(url: string): string | undefined {
   for (const [naam, u] of Object.entries(CMS_MEDIA)) if (u === url) return naam;

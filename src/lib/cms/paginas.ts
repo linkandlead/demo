@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { paginas as blauwdruk } from "@/content/blauwdruk";
+import { STANDAARD_DEELBEELD } from "@/content/cms-media";
 import { str } from "./valideer";
 import { cmsStatus } from "./data";
 import { haalConcept, voorbeeldStand } from "./concept";
@@ -75,7 +76,9 @@ export async function paginaMetadata(slug: string, absoluut = false): Promise<Me
   const p = await laadPagina(slug);
   if (!p) return {};
   const titel = str(p.titel);
-  const beeld = deelbeeld(p);
+  const eigenBeeld = deelbeeld(p);
+  // Een concept wordt niet geïndexeerd en deelt dus niet; alle andere pagina's krijgen het standaardbeeld als ze geen eigen beeld hebben.
+  const beeld = eigenBeeld ?? (p.bron === "concept" ? undefined : STANDAARD_DEELBEELD);
   return {
     title: titel ? (absoluut ? { absolute: titel } : titel) : undefined,
     description: p.beschrijving || undefined,
@@ -89,7 +92,7 @@ export async function paginaMetadata(slug: string, absoluut = false): Promise<Me
       description: p.beschrijving || undefined,
       ...(beeld ? { images: [{ url: beeld, alt: titel }] } : {}),
     },
-    twitter: { card: beeld ? "summary_large_image" : "summary", title: titel || undefined, description: p.beschrijving || undefined },
+    twitter: { card: beeld ? "summary_large_image" : "summary", title: titel || undefined, description: p.beschrijving || undefined, ...(beeld ? { images: [beeld] } : {}) },
     ...(p.bron === "concept" ? { robots: { index: false, follow: false } } : {}),
   };
 }
