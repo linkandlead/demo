@@ -1607,7 +1607,8 @@ function Formulier({ b, ctx, n, kaart }: { b: Blok; ctx: Ctx; n: number; kaart?:
         <div>
           <Contactformulier c={c} />
           <p className="demo-note" style={{ marginTop: 25 }}>
-            Je bericht wordt opgeslagen in de NOVA-demodatabase. Er wordt geen e-mail verstuurd.
+            Je bericht wordt opgeslagen in de NOVA-demodatabase.
+            {/\bgeen e-mail\b/i.test(`${tx(c, "voetnoot")} ${tx(c, "bevestigingstekst")}`) ? "" : " Er wordt geen e-mail verstuurd."}
           </p>
         </div>
       </div>

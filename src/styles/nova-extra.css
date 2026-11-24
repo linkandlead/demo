@@ -898,3 +898,6 @@ body:has(.rl-start, .rl-speler) .demo-fab, body:has(.rl-start, .rl-speler) .demo
    (margin-top 5 px in nova.css) schuift mee met de opvulling; met margin-top 0 staat hij op dezelfde plek als in het ontwerp. */
 .primary-nav a { display: inline-block; padding-block: 5px; margin-block: -5px; }
 .primary-nav a.active::after { margin-top: 0; }
+
+/* R13: toestemming bij het reviewformulier is verplicht; maak dat zichtbaar zonder het ontwerp te verschuiven. */
+.form-check .verplicht { color: #596476; font-size: 0.9em; }
