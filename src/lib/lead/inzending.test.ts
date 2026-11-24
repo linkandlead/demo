@@ -36,3 +36,12 @@ test("alleen een geldige uuid wordt als opruimcode bewaard", () => {
   if (goed.ok) assert.equal(goed.inzending.testcode, "0f8fad5b-d9cb-469f-a165-70867728950e");
   if (fout.ok) assert.equal(fout.inzending.testcode, undefined);
 });
+
+test("een te lange tekst wordt geweigerd in plaats van stil afgekapt", () => {
+  const r = valideerInzending({ soort: "contact", email: "a@b.nl", naam: "Jan", vraag: "x".repeat(2010), akkoord: "on" });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.match(r.fouten.vraag, /maximaal 2000 tekens \(10 te veel\)/);
+  const g = valideerInzending({ soort: "formulier", gegevens: { Doel: "y".repeat(1001) } });
+  assert.equal(g.ok, false);
+  if (!g.ok) assert.match(g.fouten["gegevens.Doel"], /maximaal 1000 tekens/);
+});

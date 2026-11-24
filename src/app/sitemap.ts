@@ -5,7 +5,8 @@ import { cmsStatus, getCases, getPartners, getPeople, getPosts } from "@/lib/cms
 import { persoonSlug } from "@/lib/slug";
 
 // sitemap.xml uit het CMS: alle pagina's, projecten, artikelen, makers en partners.
-export const revalidate = 3600;
+// Elke minuut vers (de CMS-inhoud zelf wordt ook per minuut ververst en direct na publiceren): een nieuwe pagina staat er snel in.
+export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const st = await cmsStatus();

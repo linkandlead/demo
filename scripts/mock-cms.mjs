@@ -72,10 +72,18 @@ const content = {
     config: { merk: {} },
     merk: {},
     navigatie: {},
-    redirects: [],
+    redirects: [{ van: "/oud-adres", naar: "/contact", status: 301 }],
     locale: "nl",
   },
   paginas: [
+    {
+      // Een pagina zonder eigen route in de site: komt via de route voor CMS-pagina's.
+      slug: "/nieuwe-cms-pagina",
+      titel: "Nieuwe CMS-pagina",
+      beschrijving: "Een pagina die alleen in het CMS bestaat.",
+      og_beeld: null,
+      blokken: [{ type: "tekst", bg: "wit", content: { heading: "Alleen in het CMS", tekst: "Deze pagina heeft geen eigen route." } }],
+    },
     {
       slug: "/",
       titel: "Home",

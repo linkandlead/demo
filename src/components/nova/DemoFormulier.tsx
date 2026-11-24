@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useRef,
   useState,
   type CSSProperties,
   type FormEvent,
@@ -35,6 +36,8 @@ export function DemoFormulier({
     tekst: string;
   } | null>(null);
   const [bezig, setBezig] = useState(false);
+  // Een ref, geen state: een tweede klik in dezelfde tik ziet `bezig` nog op false, maar de ref meteen op true.
+  const loopt = useRef(false);
   const [start] = useState(() => Date.now());
 
   async function verstuur(e: FormEvent<HTMLFormElement>) {
@@ -61,6 +64,8 @@ export function DemoFormulier({
       setStatus({ soort: "ok", tekst: demoTekst });
       return;
     }
+    if (loopt.current) return;
+    loopt.current = true;
     setBezig(true);
     try {
       const res = await fetch("/api/inzending", {
@@ -92,6 +97,7 @@ export function DemoFormulier({
         tekst: "Je lijkt offline te zijn. Controleer je verbinding.",
       });
     } finally {
+      loopt.current = false;
       setBezig(false);
     }
   }
