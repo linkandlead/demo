@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { splitsOproep } from "@/components/nova/Blokken";
 import { JsonLd } from "@/components/nova/JsonLd";
@@ -62,7 +63,7 @@ export default async function Maker({ params }: PageProps<"/mensen/[slug]">) {
             <nav aria-label="Kruimelpad" className="kruimelpad">
               <ol>
                 <li>
-                  <a href="/community">Community</a>
+                  <Link href="/community">Community</Link>
                 </li>
                 <li>
                   <span aria-current="page">{p.name}</span>
