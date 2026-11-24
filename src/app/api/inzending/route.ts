@@ -1,8 +1,9 @@
 import { lijktSpam } from "@/lib/lead/aanvraag";
 import { valideerInzending } from "@/lib/lead/inzending";
-import { bewaarInzending, magInzenden } from "@/lib/supabase/server";
+import { bewaarInzending, isRecentDubbel, magInzenden } from "@/lib/supabase/server";
 import { meldInzending } from "@/lib/lead/melding";
 import { stuurReviewNaarCms } from "@/lib/cms/review";
+import { stuurLeadNaarCms } from "@/lib/cms/lead";
 
 // NOVA-formulieren (contact, nieuwsbrief, formulierbouwer, review, NPS) → tabel `aanvragen` in de NOVA-demodatabase (Supabase).
 // Er wordt NIETS gemaild; inzendingen zijn alleen in het Supabase-dashboard te zien.
@@ -32,9 +33,14 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   const soort = v.inzending.soort;
-  const r = await bewaarInzending(v.inzending);
-  if (r === "opgeslagen") {
+  // Een dubbelklik of herhaald verzoek: dezelfde inzending van de afgelopen seconden telt één keer. De bezoeker krijgt
+  // gewoon de bevestiging; er wordt niets dubbel opgeslagen, gemeld of naar het CMS gestuurd.
+  const dubbel = !v.inzending.testcode && (await isRecentDubbel(v.inzending));
+  const r = dubbel ? "opgeslagen" : await bewaarInzending(v.inzending);
+  if (r === "opgeslagen" && !dubbel) {
     await meldInzending(v.inzending);
+    // Contact, nieuwsbrief en formulieren ook als lead in het CMS (best effort, niet bij testinzendingen).
+    await stuurLeadNaarCms(v.inzending);
     // Reviews ook ter goedkeuring naar het CMS (niet bij testinzendingen).
     if (soort === "review" && !v.inzending.testcode && v.inzending.naam && v.inzending.vraag)
       await stuurReviewNaarCms({ naam: v.inzending.naam, tekst: v.inzending.vraag, rating: v.inzending.score ?? 5 });

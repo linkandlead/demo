@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { splitsOproep } from "@/components/nova/Blokken";
 import { JsonLd } from "@/components/nova/JsonLd";
 import { Page } from "@/components/nova/Page";
 import { Btn } from "@/components/nova/ui";
-import { SITE_URL } from "@/content/cms-media";
+import { SITE_URL, STANDAARD_DEELBEELD } from "@/content/cms-media";
 import { getPartners } from "@/lib/cms/data";
 import { laadPagina } from "@/lib/cms/paginas";
 
@@ -25,7 +26,8 @@ export async function generateMetadata({ params }: PageProps<"/partners/[slug]">
     title: `${p.naam}, partner`,
     description: p.tekst,
     alternates: { canonical: `/partners/${p.slug}` },
-    openGraph: { type: "website", title: p.naam, description: p.tekst },
+    openGraph: { type: "website", title: p.naam, description: p.tekst, images: [{ url: STANDAARD_DEELBEELD, alt: p.naam }] },
+    twitter: { card: "summary_large_image", images: [STANDAARD_DEELBEELD] },
   };
 }
 
@@ -49,7 +51,7 @@ export default async function PartnerPagina({ params }: PageProps<"/partners/[sl
           <nav aria-label="Kruimelpad" className="kruimelpad">
             <ol>
               <li>
-                <a href="/community">Community</a>
+                <Link href="/community">Community</Link>
               </li>
               <li>
                 <span aria-current="page">{p.naam}</span>

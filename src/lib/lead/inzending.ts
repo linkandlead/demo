@@ -4,6 +4,9 @@ import type { Inzending } from "../supabase/server.ts";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const tekst = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+/** Het aantal tekens boven de limiet van een tekstveld (0 = past). Een te lange tekst wordt geweigerd in plaats van stil afgekapt. */
+const teveel = (v: unknown, max: number) => (typeof v === "string" ? Math.max(0, v.trim().length - max) : 0);
+const lengteFout = (naam: string, max: number, over: number) => `${naam}: maximaal ${max} tekens (${over} te veel).`;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -23,6 +26,15 @@ export function valideerInzending(body: Record<string, unknown>): Resultaat {
   const email = tekst(body.email, 254);
   const naam = [tekst(body.naam, 100), tekst(body.achternaam, 100)].filter(Boolean).join(" ");
   const vraag = tekst(body.vraag, 2000);
+  const tegenLang: Record<string, string> = {};
+  if (teveel(body.vraag, 2000)) tegenLang.vraag = lengteFout("Je bericht", 2000, teveel(body.vraag, 2000));
+  if (teveel(body.email, 254)) tegenLang.email = lengteFout("Het e-mailadres", 254, teveel(body.email, 254));
+  for (const veld of ["naam", "achternaam"] as const) if (teveel(body[veld], 100)) tegenLang[veld] = lengteFout("Je naam", 100, teveel(body[veld], 100));
+  for (const veld of ["bedrijf", "onderwerp"] as const) if (teveel(body[veld], 200)) tegenLang[veld] = lengteFout(veld === "bedrijf" ? "Het bedrijf" : "Het onderwerp", 200, teveel(body[veld], 200));
+  if (body.gegevens && typeof body.gegevens === "object")
+    for (const [k, v] of Object.entries(body.gegevens as Record<string, unknown>).slice(0, 20))
+      if (teveel(v, 1000)) tegenLang[`gegevens.${k}`] = lengteFout(`"${tekst(k, 80)}"`, 1000, teveel(v, 1000));
+  if (Object.keys(tegenLang).length) return { ok: false, fouten: tegenLang };
   const basis = { soort, bron_pagina: tekst(body.bron_pagina, 200) || undefined, testcode: testcode(body) };
 
   if (soort === "nps" || soort === "review") {

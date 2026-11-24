@@ -9,10 +9,20 @@ import { zichtbaar, type Veld } from "@/lib/lead/veldvoorwaarde";
 
 type Status = { soort: "ok" | "fout"; tekst: string } | null;
 
-export async function verstuurInzending(
-  data: Record<string, unknown>,
-  bevestiging: string,
-): Promise<{ status: NonNullable<Status>; fouten: Record<string, string> }> {
+type Uitkomst = { status: NonNullable<Status>; fouten: Record<string, string> };
+// Dezelfde inzending die nog onderweg is (een dubbelklik) wordt niet nog eens verstuurd: de tweede aanroep wacht op de eerste.
+const onderweg = new Map<string, Promise<Uitkomst>>();
+
+export function verstuurInzending(data: Record<string, unknown>, bevestiging: string): Promise<Uitkomst> {
+  const sleutel = JSON.stringify([data, bevestiging]);
+  const loopt = onderweg.get(sleutel);
+  if (loopt) return loopt;
+  const nieuw = verstuurEenmalig(data, bevestiging).finally(() => onderweg.delete(sleutel));
+  onderweg.set(sleutel, nieuw);
+  return nieuw;
+}
+
+async function verstuurEenmalig(data: Record<string, unknown>, bevestiging: string): Promise<Uitkomst> {
   try {
     const res = await fetch("/api/inzending", {
       method: "POST",

@@ -19,6 +19,7 @@ export type CmsPagina = {
   /** Deelbeeld (og:image) uit het CMS-veld og_beeld; alleen https of /media/. */
   ogBeeld?: string;
 };
+export type CmsRedirect = { van: string; naar: string; status: 301 | 302 | 307 | 308 };
 export type CmsLink = { titel: string; href: string };
 export type CmsNavigatie = {
   hoofd: CmsLink[];
@@ -32,6 +33,8 @@ export type CmsSite = {
   merk: Record<string, unknown>;
   designTokens: Record<string, string>;
   paginas: CmsPagina[];
+  /** Doorverwijzingen uit Beheer > Redirects (gesaneerd door het CMS). */
+  redirects: CmsRedirect[];
   records: Record<string, Record<string, unknown>[]>;
 };
 
@@ -90,6 +93,24 @@ export function valideerRespons(json: unknown): CmsSite | null {
     merk: isObj(site.merk) ? site.merk : {},
     designTokens: tokens,
     paginas,
+    redirects: redirectsUit(site.redirects),
     records,
   };
+}
+
+const REDIRECT_STATUSSEN = [301, 302, 307, 308] as const;
+
+/** Doorverwijzingen uit de respons: alleen een intern pad als bron en een intern pad of https-adres als doel. */
+function redirectsUit(v: unknown): CmsRedirect[] {
+  if (!Array.isArray(v)) return [];
+  const uit: CmsRedirect[] = [];
+  for (const r of v) {
+    if (!isObj(r)) continue;
+    const van = str(r.van).trim();
+    const naar = str(r.naar).trim();
+    if (!van.startsWith("/") || van.startsWith("//") || !/^(\/(?!\/)|https:\/\/)/.test(naar)) continue;
+    const status = REDIRECT_STATUSSEN.find((x) => x === Number(r.status)) ?? 301;
+    uit.push({ van, naar, status });
+  }
+  return uit.slice(0, 500);
 }

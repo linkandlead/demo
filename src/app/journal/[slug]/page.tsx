@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Page } from "@/components/nova/Page";
 import { JsonLd } from "@/components/nova/JsonLd";
-import { SITE_URL } from "@/content/cms-media";
+import { SITE_URL, STANDAARD_DEELBEELD } from "@/content/cms-media";
 import { Btn, Photo, SectionTitle, StoryCard, mediaSrc } from "@/components/nova/ui";
 import { altTeksten, artikelAlsTekst, artikelen } from "@/content/teksten";
 import { splitsOproep } from "@/components/nova/Blokken";
@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = (await getPosts()).items.find((p) => p.slug === slug);
   const beschrijving = post?.lead || (post ? artikelen[post.slug]?.intro : undefined);
-  const beeld = post ? mediaSrc(post.cover) : "";
+  const beeld = (post ? mediaSrc(post.cover) : "") || STANDAARD_DEELBEELD;
   return {
     title: post?.title ?? "Artikel",
     description: beschrijving,

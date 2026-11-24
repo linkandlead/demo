@@ -64,3 +64,24 @@ test("leest navigatie en huisstijl en laat onveilige links en kleuren weg", () =
   assert.deepEqual(site.navigatie.actie, { titel: "Neem contact op", href: "/contact" });
   assert.deepEqual(site.designTokens, { nacht: "#0B1127" });
 });
+
+test("leest doorverwijzingen en laat onveilige bronnen en doelen weg", () => {
+  const site = valideerRespons({
+    ok: true,
+    site: {
+      redirects: [
+        { van: "/oud", naar: "/nieuw", status: 301 },
+        { van: "/tijdelijk", naar: "https://voorbeeld.nl/x", status: 302 },
+        { van: "//kwaad", naar: "/x" },
+        { van: "/js", naar: "javascript:alert(1)" },
+        { van: "/geen-slash", naar: "//evil.nl" },
+      ],
+    },
+    paginas: [],
+  });
+  assert.ok(site);
+  assert.deepEqual(site.redirects, [
+    { van: "/oud", naar: "/nieuw", status: 301 },
+    { van: "/tijdelijk", naar: "https://voorbeeld.nl/x", status: 302 },
+  ]);
+});

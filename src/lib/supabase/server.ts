@@ -79,6 +79,20 @@ export type Inzending = {
   testcode?: string;
 };
 
+/** Is dezelfde inzending zojuist al opgeslagen (een dubbelklik, of een verzoek dat de browser herhaalt)? Gelijk = zelfde
+ *  soort, e-mailadres, naam, tekst en bronpagina binnen `seconden`. Dan telt de tweede niet mee. */
+export async function isRecentDubbel(i: Inzending, seconden = 20): Promise<boolean> {
+  const sb = supabase();
+  if (!sb) return false;
+  const vanaf = new Date(Date.now() - seconden * 1000).toISOString();
+  let q = sb.from("aanvragen").select("id").eq("soort", i.soort).gte("aangemaakt_op", vanaf).limit(1);
+  for (const [kolom, waarde] of [["email", i.email], ["naam", i.naam], ["vraag", i.vraag], ["bron_pagina", i.bron_pagina]] as const)
+    q = waarde === undefined ? q.is(kolom, null) : q.eq(kolom, waarde);
+  if (i.gegevens) q = q.eq("gegevens", i.gegevens);
+  const { data, error } = await q;
+  return !error && Array.isArray(data) && data.length > 0;
+}
+
 /** Slaat een inzending op in public.aanvragen. Er wordt niets gemaild. */
 export async function bewaarInzending(
   i: Inzending,
