@@ -1,6 +1,6 @@
 import { lijktSpam } from "@/lib/lead/aanvraag";
 import { valideerInzending } from "@/lib/lead/inzending";
-import { bewaarInzending, isRecentDubbel, magInzenden } from "@/lib/supabase/server";
+import { bewaarInzending, bewaarInzendingOntdubbeld, magInzenden } from "@/lib/supabase/server";
 import { meldInzending } from "@/lib/lead/melding";
 import { stuurReviewNaarCms } from "@/lib/cms/review";
 import { stuurLeadNaarCms } from "@/lib/cms/lead";
@@ -34,9 +34,11 @@ export async function POST(request: Request) {
     );
   const soort = v.inzending.soort;
   // Een dubbelklik of herhaald verzoek: dezelfde inzending van de afgelopen seconden telt één keer. De bezoeker krijgt
-  // gewoon de bevestiging; er wordt niets dubbel opgeslagen, gemeld of naar het CMS gestuurd.
-  const dubbel = !v.inzending.testcode && (await isRecentDubbel(v.inzending));
-  const r = dubbel ? "opgeslagen" : await bewaarInzending(v.inzending);
+  // gewoon de bevestiging; er wordt niets dubbel opgeslagen, gemeld of naar het CMS gestuurd. Testinzendingen (met
+  // opruimcode) worden nooit samengevoegd.
+  const uitkomst = v.inzending.testcode ? await bewaarInzending(v.inzending) : await bewaarInzendingOntdubbeld(v.inzending);
+  const dubbel = uitkomst === "dubbel";
+  const r = dubbel ? "opgeslagen" : uitkomst;
   if (r === "opgeslagen" && !dubbel) {
     await meldInzending(v.inzending);
     // Contact, nieuwsbrief en formulieren ook als lead in het CMS (best effort, niet bij testinzendingen).

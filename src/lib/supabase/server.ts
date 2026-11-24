@@ -79,20 +79,6 @@ export type Inzending = {
   testcode?: string;
 };
 
-/** Is dezelfde inzending zojuist al opgeslagen (een dubbelklik, of een verzoek dat de browser herhaalt)? Gelijk = zelfde
- *  soort, e-mailadres, naam, tekst en bronpagina binnen `seconden`. Dan telt de tweede niet mee. */
-export async function isRecentDubbel(i: Inzending, seconden = 20): Promise<boolean> {
-  const sb = supabase();
-  if (!sb) return false;
-  const vanaf = new Date(Date.now() - seconden * 1000).toISOString();
-  let q = sb.from("aanvragen").select("id").eq("soort", i.soort).gte("aangemaakt_op", vanaf).limit(1);
-  for (const [kolom, waarde] of [["email", i.email], ["naam", i.naam], ["vraag", i.vraag], ["bron_pagina", i.bron_pagina]] as const)
-    q = waarde === undefined ? q.is(kolom, null) : q.eq(kolom, waarde);
-  if (i.gegevens) q = q.eq("gegevens", i.gegevens);
-  const { data, error } = await q;
-  return !error && Array.isArray(data) && data.length > 0;
-}
-
 /** Slaat een inzending op in public.aanvragen. Er wordt niets gemaild. */
 export async function bewaarInzending(
   i: Inzending,
@@ -105,6 +91,26 @@ export async function bewaarInzending(
     return "fout";
   }
   return "opgeslagen";
+}
+
+/** Slaat een inzending op, tenzij dezelfde (soort, e-mail, naam, tekst, bronpagina) in de afgelopen 20 seconden al is
+ *  opgeslagen: een dubbelklik of een herhaald verzoek telt één keer. Controle en opslaan zijn één stap in de database
+ *  (functie inzending_opslaan), want met de publieke sleutel kan de site de tabel niet lezen. Bestaat de functie nog
+ *  niet (migratie niet toegepast), dan valt dit terug op gewoon opslaan. */
+export async function bewaarInzendingOntdubbeld(
+  i: Inzending,
+): Promise<"opgeslagen" | "dubbel" | "niet-ingesteld" | "fout"> {
+  const sb = supabase();
+  if (!sb) return "niet-ingesteld";
+  const p: Partial<Inzending> = { ...i };
+  delete p.testcode;
+  const { data, error } = await sb.rpc("inzending_opslaan", { p });
+  if (error) {
+    if (error.code === "PGRST202") return bewaarInzending(i);
+    console.error("Supabase: inzending opslaan mislukt", error.message);
+    return "fout";
+  }
+  return data === "dubbel" ? "dubbel" : data === "opgeslagen" ? "opgeslagen" : "fout";
 }
 
 /** Limiet per bezoeker (punt 18): SHA-256 van IP + dagelijks zout, nooit het IP zelf. Ontbreekt de
