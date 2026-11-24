@@ -1,5 +1,22 @@
 import type { NextConfig } from "next";
 
+// T21: Content-Security-Policy voor de publieke site. Next.js zet inline scripts en stijlen neer, dus die blijven
+// toegestaan; de winst zit in alles wat niet van de eigen site, een afbeeldingshost of een bekende videospeler komt.
+// frame-ancestors staat hier bewust niet in: X-Frame-Options regelt dat, en /__voorvertoning zet zijn eigen waarde.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.google.com https://maps.google.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
+
 const nextConfig: NextConfig = {
   // Aparte buildmap mogelijk voor tests (bv. een build tegen het nep-CMS).
   distDir: process.env.NEXT_DIST_DIR || ".next",
@@ -12,6 +29,7 @@ const nextConfig: NextConfig = {
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Content-Security-Policy", value: csp },
         ],
       },
       {

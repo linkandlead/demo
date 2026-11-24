@@ -252,7 +252,7 @@ export function ReviewFormulier({ knoptekst, bevestiging }: { knoptekst: string;
       <div className="form-field full">
         <label className="form-check" htmlFor="r-akkoord">
           <input id="r-akkoord" name="akkoord" type="checkbox" aria-invalid={fouten.akkoord ? true : undefined} />
-          Mijn review mag (na controle) op de website worden getoond.
+          Mijn review mag (na controle) op de website worden getoond. <span className="verplicht">(verplicht)</span>
         </label>
         <Fout id="r-akkoord-fout" tekst={fouten.akkoord} />
       </div>

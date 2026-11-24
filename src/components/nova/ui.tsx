@@ -194,7 +194,7 @@ export function PicCard({
             <span className="meta">
               {[item.type, item.year].filter(Boolean).join(" · ")}
             </span>
-            <h3>{item.name}</h3>
+            <h3 role="heading" aria-level={2}>{item.name}</h3>
           </div>
           <span className="circle-arrow" aria-hidden="true">
             ↗

@@ -149,7 +149,7 @@ export function Playground({ voorbeelden }: { voorbeelden: Overzicht }) {
           <span className="eyebrow">
             BLOKKENBIBLIOTHEEK · {blokken.length} BLOKKEN
           </span>
-          <h3>Kies een blok.</h3>
+          <h3 role="heading" aria-level={2}>Kies een blok.</h3>
           <div className="block-list" role="listbox" aria-label="CMS-blokken">
             {blokken.map((b) => (
               <button
