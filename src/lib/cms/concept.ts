@@ -1,7 +1,7 @@
 import "server-only";
 import { cookies, draftMode } from "next/headers";
 import { BEWERK_COOKIE, bewerktokenSecondenGeldig } from "./bewerken";
-import { cmsUrl } from "./client";
+import { cmsUrl, type CmsBlok } from "./client";
 import {
   beoordeelAntwoord,
   tokenSecondenGeldig,
@@ -43,21 +43,34 @@ export async function haalConcept(
 }
 
 /** Is het token geldig voor deze site? Het CMS beslist (`concept: true`). Bestaat het pad niet, dan
- *  controleren we met de homepage: het token geldt per site, niet per pagina. */
+ *  controleren we met de homepage: het token geldt per site, niet per pagina. `blokken`: de blokken van het
+ *  concept op dit pad (leeg als er hier geen CMS-pagina is), voor de tekstvelden van het ingesloten voorbeeld. */
+export async function controleerToken(
+  pad: string,
+  token: string,
+): Promise<{ geldig: boolean; blokken: CmsBlok[] }> {
+  const r = await haalConcept(pad, token);
+  if (r.soort === "concept") return { geldig: true, blokken: r.pagina.blokken };
+  if (r.soort === "niet-gevonden" && pad !== "/")
+    return { geldig: (await haalConcept("/", token)).soort === "concept", blokken: [] };
+  return { geldig: false, blokken: [] };
+}
+
 export async function tokenGeldig(
   pad: string,
   token: string,
 ): Promise<boolean> {
-  const r = await haalConcept(pad, token);
-  if (r.soort === "concept") return true;
-  if (r.soort === "niet-gevonden" && pad !== "/")
-    return (await haalConcept("/", token)).soort === "concept";
-  return false;
+  return (await controleerToken(pad, token)).geldig;
 }
+
+/** Cookie die alleen /__voorvertoning meestuurt als het de pagina voor het ingesloten voorbeeld bij deze site
+ *  ophaalt (&ingesloten=1, het iframe van de pagina-editor). Hij komt nooit in de browser en telt alleen in draft
+ *  mode: dan krijgen de blokken data-cms-sectie voor klikken en typen (linkandlead-cms B-127). */
+export const INGESLOTEN_COOKIE = "nova_ingesloten";
 
 export type VoorbeeldStand =
   | { aan: false }
-  | { aan: true; token: string | null; bewerken: boolean };
+  | { aan: true; token: string | null; bewerken: boolean; ingesloten: boolean };
 
 /** Draft mode en het token uit de cookie. Buiten draft mode wordt de cookie niet eens gelezen, zodat
  *  gewone pagina's statisch blijven en bezoekers niets anders zien dan voorheen. `bewerken` = er is ook
@@ -72,5 +85,6 @@ export async function voorbeeldStand(): Promise<VoorbeeldStand> {
     aan: true,
     token: geldig ? token : null,
     bewerken: geldig && bewerktokenSecondenGeldig(jar.get(BEWERK_COOKIE)?.value) > 0,
+    ingesloten: geldig && jar.get(INGESLOTEN_COOKIE)?.value === "1",
   };
 }
