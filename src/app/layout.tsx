@@ -4,7 +4,9 @@ import { magIndexeren } from "@/lib/indexeren";
 import { JsonLd } from "@/components/nova/JsonLd";
 import { DemoProvider } from "@/components/nova/DemoMode";
 import { SiteHeader } from "@/components/nova/SiteHeader";
+import { Meting } from "@/components/nova/Meting";
 import { VoorbeeldBalk } from "@/components/nova/VoorbeeldBalk";
+import { metingConfig } from "@/lib/meting/config";
 import { cmsInfo, siteInstellingen } from "@/lib/cms/data";
 import "@/styles/nova.css";
 import "@/styles/nova-extra.css";
@@ -29,6 +31,8 @@ export const viewport: Viewport = { themeColor: "#0B1127" };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [info, site] = await Promise.all([cmsInfo(), siteInstellingen()]);
+  // De demo meet bezoeken naar het CMS, met toestemming (besluit B5); zonder CMS-adres of met METING=uit niet.
+  const meting = metingConfig(process.env);
   // Huisstijlkleuren uit het CMS (gevalideerd als #hex) worden de CSS-variabelen van het ontwerp.
   const huisstijl = `:root{${Object.entries(site.cssVars)
     .map(([k, v]) => `${k}:${v}`)
@@ -65,6 +69,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           </main>
         </DemoProvider>
         <VoorbeeldBalk />
+        {meting ? <Meting basisUrl={meting.basisUrl} siteId={meting.siteId} /> : null}
       </body>
     </html>
   );

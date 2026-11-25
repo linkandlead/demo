@@ -322,6 +322,22 @@ http
       });
       return;
     }
+    if (url.pathname === "/api/spoor") {
+      // Spiegelt de meetbeacon van het CMS (src/routes/api/spoor.ts): CORS + log, zodat de test de beacons kan tellen.
+      const cors = { "access-control-allow-origin": req.headers.origin ?? "*", "access-control-allow-headers": "content-type", "access-control-allow-methods": "POST, OPTIONS" };
+      if (req.method === "OPTIONS") return res.writeHead(204, cors).end();
+      let body = "";
+      req.on("data", (c) => (body += c));
+      req.on("end", () => {
+        (globalThis.__spoor ??= []).push(body);
+        res.writeHead(204, cors).end();
+      });
+      return;
+    }
+    if (req.method === "GET" && url.pathname === "/test/spoor") {
+      res.writeHead(200, { "content-type": "application/json" });
+      return res.end(JSON.stringify(globalThis.__spoor ?? []));
+    }
     res.writeHead(404).end();
   })
   .listen(PORT, () => console.log(`nep-CMS op :${PORT}`));

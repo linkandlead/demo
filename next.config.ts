@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { cspVerbinding } from "./src/lib/meting/config";
 
 // T21: Content-Security-Policy voor de publieke site. Next.js zet inline scripts en stijlen neer, dus die blijven
 // toegestaan; de winst zit in alles wat niet van de eigen site, een afbeeldingshost of een bekende videospeler komt.
@@ -10,7 +11,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "media-src 'self' blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  `connect-src 'self' ${cspVerbinding(process.env).join(" ")}`.trim(),
   "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.google.com https://maps.google.com",
   "object-src 'none'",
   "base-uri 'self'",

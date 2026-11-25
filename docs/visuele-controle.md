@@ -130,3 +130,9 @@ afwijkingen t.o.v. de handgemaakte pagina's, omdat het CMS-blok er geen veld voo
   "STEMMEN UIT DE COMMUNITY" (meervoud) in plaats van "STEM UIT DE COMMUNITY".
 
 - **Achtergrondvideo in de header** (niet in het prototype): bij `media_type` = video met een mp4 ligt de video over de afbeelding (poster en terugval) en onder het ontwerpverloop, met een pauzeknop rechtsboven (WCAG 2.2.2). Bij prefers-reduced-motion alleen de afbeelding. In de blokkenverkenner bij de varianten "beeld rechts" en "achtergrondbeeld" (`public/media/nova-header.mp4`, gemaakt uit eigen NOVA-beelden); de homepage-inhoud is ongewijzigd.
+
+- **Bezoekmeting met toestemming** (B5, niet in het prototype): onderaan beeld een donkere banner
+  ("Liever niet" / "Akkoord") boven de demo-knop, en in de voet een link "Cookie-instellingen" die de
+  keuze wist en de vraag opnieuw toont. Alleen actief met `CMS_URL`; `METING=uit` zet het uit. Zonder
+  keuze of bij weigeren wordt niets verstuurd; niet in een iframe (editorvoorbeeld). Stijl in
+  `nova-extra.css` (`.meting-*`), `nova.css` is ongewijzigd.

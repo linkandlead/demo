@@ -901,3 +901,11 @@ body:has(.rl-start, .rl-speler) .demo-fab, body:has(.rl-start, .rl-speler) .demo
 
 /* R13: toestemming bij het reviewformulier is verplicht; maak dat zichtbaar zonder het ontwerp te verschuiven. */
 .form-check .verplicht { color: #596476; font-size: 0.9em; }
+
+/* B5: bezoekmeting met toestemming. Banner onderaan, boven de demo-knop en de link "Cookie-instellingen" in de voet;
+   geen onderdeel van het prototype, dus bewust klein en in de bestaande kleuren en knopstijlen. */
+.meting-banner { position: fixed; left: 16px; right: 16px; bottom: 84px; z-index: 60; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; background: var(--night); color: #fff; border-radius: 18px; box-shadow: 0 10px 40px rgba(0, 0, 0, .28); }
+.meting-tekst { display: flex; flex-direction: column; gap: 4px; max-width: 640px; font-size: 14px; line-height: 1.5; }
+.meting-knoppen { display: flex; gap: 10px; }
+.meting-banner .btn-ghost { border-color: rgba(255, 255, 255, .45); }
+.meting-instellingen { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
