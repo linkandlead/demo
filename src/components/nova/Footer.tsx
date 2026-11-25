@@ -2,6 +2,8 @@ import Link from "next/link";
 import { footerTekst } from "@/content/teksten";
 import { siteInstellingen } from "@/lib/cms/data";
 import type { Blok } from "@/lib/cms/paginas";
+import { metingConfig } from "@/lib/meting/config";
+import { CookieInstellingen } from "./Meting";
 import { Btn, Lines } from "./ui";
 
 const tx = (c: Record<string, unknown>, k: string) => (typeof c[k] === "string" ? (c[k] as string).trim() : "");
@@ -65,6 +67,7 @@ export async function Footer({ oproep }: { oproep: Blok | null }) {
           <div className="footer-end">
             <span>{footerTekst.copyright}</span>
             <span>{footerTekst.disclaimer}</span>
+            {metingConfig(process.env) ? <CookieInstellingen /> : null}
           </div>
         </div>
       </footer>
